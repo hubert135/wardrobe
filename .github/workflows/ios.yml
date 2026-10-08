@@ -34,7 +34,7 @@ jobs:
             -destination 'generic/platform=iOS' \
             -derivedDataPath build/DerivedData \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
-            build | xcbeautify
+            build | xcbeautify --renderer github-actions
 
       - name: Package .ipa
         run: |
@@ -59,9 +59,11 @@ jobs:
         run: brew install xcodegen xcbeautify
 
       - name: OutfitEngine tests
-        run: make test-engine
+        run: |
+          set -o pipefail
+          make test-engine 2>&1 | xcbeautify --renderer github-actions
 
       - name: App unit and UI tests
         run: |
           set -o pipefail
-          make test-app | xcbeautify
+          make test-app | xcbeautify --renderer github-actions
