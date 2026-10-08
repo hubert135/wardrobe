@@ -1,0 +1,31 @@
+{
+  "name": "wardrobe-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Stateless AI proxy for the Wardrobe iOS app",
+  "scripts": {
+    "dev": "tsx watch src/node.ts",
+    "start": "node dist/node.js",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "deploy:cloudflare": "wrangler deploy"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.132.0",
+    "@hono/node-server": "^2.1.3",
+    "hono": "^4.13.13",
+    "jose": "^6.2.12",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

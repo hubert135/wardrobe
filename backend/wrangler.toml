@@ -1,0 +1,15 @@
+name = "wardrobe-backend"
+main = "src/worker.ts"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+AI_MODEL = "claude-opus-5-5"
+AI_EFFORT = "low"
+APPLE_BUNDLE_IDS = "com.example.wardrobe"
+RATE_LIMIT_REQUESTS = "60"
+RATE_LIMIT_WINDOW_SECONDS = "600"
+
+# Secrets (not in this file):
+#   wrangler secret put ANTHROPIC_API_KEY
+#   wrangler secret put SESSION_SECRET

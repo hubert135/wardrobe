@@ -1,0 +1,67 @@
+name: iOS
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Unsigned Debug build for sideloading (e.g. Sideloadly on Windows signs it with your Apple ID).
+  ipa:
+    name: Build Wardrobe.ipa
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: brew install xcodegen xcbeautify
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build for iPhone (unsigned)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project Wardrobe.xcodeproj \
+            -scheme Wardrobe \
+            -configuration Debug \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build | xcbeautify
+
+      - name: Package .ipa
+        run: |
+          mkdir -p build/ipa/Payload
+          cp -R build/DerivedData/Build/Products/Debug-iphoneos/Wardrobe.app build/ipa/Payload/
+          cd build/ipa && zip -qry ../Wardrobe.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Wardrobe-ipa
+          path: build/Wardrobe.ipa
+          retention-days: 30
+
+  test:
+    name: Tests
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: brew install xcodegen xcbeautify
+
+      - name: OutfitEngine tests
+        run: make test-engine
+
+      - name: App unit and UI tests
+        run: |
+          set -o pipefail
+          make test-app | xcbeautify

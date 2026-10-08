@@ -1,0 +1,161 @@
+name: Wardrobe
+
+options:
+  bundleIdPrefix: com.example.wardrobe
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    # Set your team here (or pass DEVELOPMENT_TEAM=XXXXXXXXXX to make) for device builds,
+    # Sign in with Apple and WeatherKit.
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    # Backend base URL baked into Info.plist. The Simulator can reach the Mac's localhost.
+    API_BASE_URL: "http://localhost:8787"
+    # "mock" or "weatherkit". Switch to weatherkit after enabling the capability (see README).
+    WEATHER_PROVIDER: mock
+    APP_GROUP_ID: group.com.example.wardrobe
+
+packages:
+  OutfitEngine:
+    path: Packages/OutfitEngine
+
+targets:
+  Wardrobe:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Shared
+    dependencies:
+      - package: OutfitEngine
+      - target: WardrobeShare
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.wardrobe
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: App/Wardrobe.entitlements
+    entitlements:
+      path: App/Wardrobe.entitlements
+      properties:
+        com.apple.developer.applesignin:
+          - Default
+        com.apple.security.application-groups:
+          - $(APP_GROUP_ID)
+        # Uncomment after enabling WeatherKit for this App ID (see README):
+        # com.apple.developer.weatherkit: true
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Wardrobe
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIUserInterfaceStyle: Automatic
+        ITSAppUsesNonExemptEncryption: false
+        NSLocationWhenInUseUsageDescription: "Wardrobe uses your location to get today's weather so outfits match the temperature and rain."
+        NSLocalNetworkUsageDescription: "Wardrobe connects to the Wardrobe server on your local network when you run it on your own computer."
+        NSCameraUsageDescription: "Take photos of your clothes to add them to your closet."
+        NSPhotoLibraryUsageDescription: "Choose photos of your clothes or order screenshots to add them to your closet."
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+        WardrobeAPIBaseURL: $(API_BASE_URL)
+        WardrobeWeatherProvider: $(WEATHER_PROVIDER)
+        WardrobeAppGroup: $(APP_GROUP_ID)
+        CFBundleURLTypes:
+          - CFBundleURLName: com.example.wardrobe
+            CFBundleURLSchemes:
+              - wardrobe
+
+  WardrobeShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ShareExtension
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.wardrobe.share
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_ENTITLEMENTS: ShareExtension/WardrobeShare.entitlements
+    entitlements:
+      path: ShareExtension/WardrobeShare.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(APP_GROUP_ID)
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Add to Wardrobe
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        WardrobeAppGroup: $(APP_GROUP_ID)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsText: true
+              NSExtensionActivationSupportsImageWithMaxCount: 1
+
+  WardrobeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/WardrobeTests
+    dependencies:
+      - target: Wardrobe
+      - package: OutfitEngine
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.wardrobe.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Wardrobe.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Wardrobe
+        BUNDLE_LOADER: $(TEST_HOST)
+
+  WardrobeUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests/WardrobeUITests
+    dependencies:
+      - target: Wardrobe
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.wardrobe.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Wardrobe
+
+schemes:
+  Wardrobe:
+    build:
+      targets:
+        Wardrobe: all
+        WardrobeShare: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - WardrobeTests
+        - WardrobeUITests
+    archive:
+      config: Release
