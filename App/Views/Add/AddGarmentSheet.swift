@@ -392,7 +392,14 @@ struct ManualEntryView: View {
                     HStack { Spacer(); Text("Add to closet").bold(); Spacer() }
                 }
                 .disabled(draft.name.trimmingCharacters(in: .whitespaces).isEmpty)
-                .accessibilityIdentifier("manual.save")
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Add") { save(force: false) }
+                    .bold()
+                    .disabled(draft.name.trimmingCharacters(in: .whitespaces).isEmpty)
+                    .accessibilityIdentifier("manual.save")
             }
         }
         .onChange(of: draft.name) { _, _ in
