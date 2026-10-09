@@ -4,12 +4,19 @@ import UIKit
 /// Image persistence behind a protocol so a CloudKit/iCloud-backed store can replace it later.
 /// The database only keeps file names; the bytes live here.
 protocol ImageStore: AnyObject {
-    func save(_ data: Data, fileExtension: String) throws -> String
+    /// Saves bytes under a new unique name (optionally prefixed, e.g. "product-") and returns the name.
+    func save(_ data: Data, fileExtension: String, prefix: String) throws -> String
     func url(for fileName: String) -> URL
     func data(for fileName: String) -> Data?
     func image(for fileName: String) -> UIImage?
     func delete(_ fileName: String)
     func deleteAll()
+}
+
+extension ImageStore {
+    func save(_ data: Data, fileExtension: String) throws -> String {
+        try save(data, fileExtension: fileExtension, prefix: "")
+    }
 }
 
 /// Stores images in Application Support/Images with a small in-memory cache.
@@ -25,8 +32,8 @@ final class FileImageStore: ImageStore {
         cache.countLimit = 200
     }
 
-    func save(_ data: Data, fileExtension: String) throws -> String {
-        let name = UUID().uuidString + "." + fileExtension
+    func save(_ data: Data, fileExtension: String, prefix: String) throws -> String {
+        let name = prefix + UUID().uuidString + "." + fileExtension
         try data.write(to: url(for: name), options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
         return name
     }

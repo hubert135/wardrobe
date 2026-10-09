@@ -3,6 +3,7 @@ import { bodyLimit } from "hono/body-limit";
 import { cors } from "hono/cors";
 import { z } from "zod";
 import { AIOutputError, AIUnavailableError, generateWithRetry, type AIClient } from "./ai/client.js";
+import type { ProductPhotoRenderer } from "./ai/productPhoto.js";
 import { ANALYZE_GARMENT_SYSTEM, PARSE_ORDER_SYSTEM, RANK_OUTFITS_SYSTEM } from "./ai/prompts.js";
 import { appleTokenVerifier, issueSession, verifySession, type AppleTokenVerifier } from "./auth/tokens.js";
 import type { Config } from "./config.js";
@@ -11,10 +12,14 @@ import { RateLimiter, rateLimit } from "./middleware/rateLimit.js";
 import { AIAnalyzeOutputSchema, AnalyzeGarmentRequestSchema, normalizeAnalysis } from "./schemas/garments.js";
 import { AIOrderOutputSchema, normalizeOrder, ParseOrderRequestSchema } from "./schemas/orders.js";
 import { AIRankOutputSchema, normalizeRanking, RankOutfitsRequestSchema } from "./schemas/outfits.js";
+import { RenderProductPhotoRequestSchema } from "./schemas/render.js";
 
 export interface AppDependencies {
   config: Config;
-  ai: AIClient;
+  /** Claude client; null when ANTHROPIC_API_KEY is not set. */
+  ai: AIClient | null;
+  /** Image editing for store-style photos; null when OPENAI_API_KEY is not set. */
+  renderer?: ProductPhotoRenderer | null;
   /** Injected in tests; defaults to verification against Apple's public keys. */
   verifyAppleToken?: AppleTokenVerifier;
   now?: () => number;
@@ -32,7 +37,15 @@ function clientIP(c: Context): string {
 }
 
 export function createApp(deps: AppDependencies) {
-  const { config, ai } = deps;
+  const { config } = deps;
+  const renderer = deps.renderer ?? null;
+  const notConfigured = (what: string) =>
+    new ApiError(503, "ai_not_configured", `${what} is not set up on this server yet.`);
+  /** Claude client or a clean 503 when the server has no Anthropic key. */
+  const claude = (): AIClient => {
+    if (!deps.ai) throw notConfigured("Automatic recognition");
+    return deps.ai;
+  };
   const now = deps.now ?? Date.now;
   const verifyAppleToken = deps.verifyAppleToken ?? appleTokenVerifier(config.appleAudiences);
   const app = new Hono<Env>();
@@ -91,7 +104,7 @@ export function createApp(deps: AppDependencies) {
   app.post("/v1/garments/analyze", async (c) => {
     const body = await parseBody(c, AnalyzeGarmentRequestSchema);
     const result = await generateWithRetry(
-      ai,
+      claude(),
       {
         task: "garments.analyze",
         system: ANALYZE_GARMENT_SYSTEM,
@@ -110,6 +123,19 @@ export function createApp(deps: AppDependencies) {
     return c.json(result);
   });
 
+  const renderLimiter = new RateLimiter(config.renderRateLimit.requests, config.renderRateLimit.windowMs, now);
+
+  app.post(
+    "/v1/garments/render",
+    rateLimit(renderLimiter, (c) => `render:${(c as Context<Env>).get("userId")}`),
+    async (c) => {
+      if (!renderer) throw notConfigured("Store-style photos");
+      const body = await parseBody(c, RenderProductPhotoRequestSchema);
+      const image = await renderer.render({ image: body.image, garment: body.garment ?? null });
+      return c.json({ image });
+    },
+  );
+
   app.post("/v1/orders/parse", async (c) => {
     const body = await parseBody(c, ParseOrderRequestSchema);
     const text = body.text?.trim() || null;
@@ -120,7 +146,7 @@ export function createApp(deps: AppDependencies) {
         ]
       : [{ type: "text" as const, text: `Order confirmation:\n\n${text ?? ""}` }];
     const result = await generateWithRetry(
-      ai,
+      claude(),
       { task: "orders.parse", system: PARSE_ORDER_SYSTEM, content, schema: AIOrderOutputSchema, maxTokens: 8_000 },
       (raw) => normalizeOrder(raw, body.image ? null : text),
     );
@@ -131,7 +157,7 @@ export function createApp(deps: AppDependencies) {
     const body = await parseBody(c, RankOutfitsRequestSchema);
     const input = JSON.stringify({ context: body.context, garments: body.garments, candidates: body.candidates });
     const result = await generateWithRetry(
-      ai,
+      claude(),
       {
         task: "outfits.rank",
         system: RANK_OUTFITS_SYSTEM,

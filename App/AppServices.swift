@@ -70,6 +70,7 @@ final class AppServices {
     let purchaseImporter: PurchaseImporter
     let imageDownloader = ProductImageDownloader()
     let outfits: OutfitService
+    let productPhotos: ProductPhotoQueue
     let shop: ShopService
     let notifications = NotificationService()
     let router = AppRouter()
@@ -82,7 +83,8 @@ final class AppServices {
             ? FileImageStore(directory: FileManager.default.temporaryDirectory.appendingPathComponent("UITestImages"))
             : FileImageStore()
         self.imageStore = imageStore
-        repository = SwiftDataWardrobeRepository(context: container.mainContext, imageStore: imageStore)
+        let repository = SwiftDataWardrobeRepository(context: container.mainContext, imageStore: imageStore)
+        self.repository = repository
 
         let tokens = SessionTokenStore()
         self.tokens = tokens
@@ -104,6 +106,10 @@ final class AppServices {
         purchaseImporter = AIOrderImporter(api: api)
         outfits = OutfitService(api: api, isAIEnabled: { [weak auth] in auth?.isSignedIn ?? false })
         shop = ShopService()
+        productPhotos = ProductPhotoQueue(
+            api: api, repository: repository, imageStore: imageStore,
+            canUseAI: { [weak auth] in auth?.isSignedIn ?? false }
+        )
 
         prepareData()
     }

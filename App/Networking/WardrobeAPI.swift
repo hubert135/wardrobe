@@ -26,6 +26,8 @@ protocol WardrobeAPI: AnyObject {
     func analyzeGarment(image: ImagePayload) async throws -> [AnalyzedGarmentDTO]
     func parseOrder(text: String?, image: ImagePayload?) async throws -> [ParsedOrderItemDTO]
     func rankOutfits(_ request: RankOutfitsRequest) async throws -> RankOutfitsResponse
+    /// Turns a garment photo into an online-store style product photo (slow: up to ~2 minutes).
+    func renderProductPhoto(image: ImagePayload, garment: RenderGarmentHintsDTO?) async throws -> ImagePayload
 }
 
 /// Supplies the bearer token for authenticated requests.
@@ -39,6 +41,7 @@ final class HTTPWardrobeAPI: WardrobeAPI {
     private let baseURL: () -> URL?
     private let session: URLSession
     private weak var tokens: SessionTokenProvider?
+    private let timeout: TimeInterval
 
     private let encoder: JSONEncoder = {
         let encoder = JSONEncoder()
@@ -55,8 +58,10 @@ final class HTTPWardrobeAPI: WardrobeAPI {
     init(baseURL: @escaping () -> URL?, tokens: SessionTokenProvider?, timeout: TimeInterval = 45) {
         self.baseURL = baseURL
         self.tokens = tokens
+        self.timeout = timeout
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = timeout
+        // Idle timeout; individual requests set their own (product photos need much longer).
+        configuration.timeoutIntervalForRequest = 180
         configuration.waitsForConnectivity = false
         self.session = URLSession(configuration: configuration)
     }
@@ -83,10 +88,18 @@ final class HTTPWardrobeAPI: WardrobeAPI {
         try await post("v1/outfits/rank", body: request)
     }
 
-    private func post<Body: Encodable, Response: Decodable>(_ path: String, body: Body, authenticated: Bool = true) async throws -> Response {
+    func renderProductPhoto(image: ImagePayload, garment: RenderGarmentHintsDTO?) async throws -> ImagePayload {
+        let response: RenderProductPhotoResponse = try await post(
+            "v1/garments/render", body: RenderProductPhotoRequest(image: image, garment: garment), timeout: 180
+        )
+        return response.image
+    }
+
+    private func post<Body: Encodable, Response: Decodable>(_ path: String, body: Body, authenticated: Bool = true, timeout: TimeInterval? = nil) async throws -> Response {
         guard let baseURL = baseURL() else { throw APIError.notConfigured }
         var request = URLRequest(url: baseURL.appendingPathComponent(path))
         request.httpMethod = "POST"
+        request.timeoutInterval = timeout ?? self.timeout
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if authenticated {
             guard let token = tokens?.sessionToken else { throw APIError.unauthorized }
@@ -155,4 +168,5 @@ final class OfflineWardrobeAPI: WardrobeAPI {
     func analyzeGarment(image: ImagePayload) async throws -> [AnalyzedGarmentDTO] { throw APIError.offline }
     func parseOrder(text: String?, image: ImagePayload?) async throws -> [ParsedOrderItemDTO] { throw APIError.offline }
     func rankOutfits(_ request: RankOutfitsRequest) async throws -> RankOutfitsResponse { throw APIError.offline }
+    func renderProductPhoto(image: ImagePayload, garment: RenderGarmentHintsDTO?) async throws -> ImagePayload { throw APIError.offline }
 }

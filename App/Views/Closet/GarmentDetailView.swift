@@ -55,6 +55,8 @@ struct GarmentDetailView: View {
                     }
             }
 
+            storePhotoSection(garment)
+
             if garment.status == .pendingReview {
                 Section {
                     Button {
@@ -143,6 +145,52 @@ struct GarmentDetailView: View {
         }
     }
 
+    @ViewBuilder
+    private func storePhotoSection(_ garment: Garment) -> some View {
+        let queue = services.productPhotos
+        if garment.sourceImageFile != nil {
+            Section {
+                if queue.isWorking(on: garment.id) {
+                    HStack(spacing: 12) {
+                        ProgressView()
+                        VStack(alignment: .leading) {
+                            Text("Creating store photo…")
+                            Text("This takes up to a minute. You can leave this screen.")
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                    }
+                } else if garment.productImageFile != nil {
+                    Picker("Show", selection: Binding(
+                        get: { garment.prefersOriginalPhoto },
+                        set: { garment.prefersOriginalPhoto = $0; garment.touch(); services.repository.save() }
+                    )) {
+                        Text("Store photo").tag(false)
+                        Text("My photo").tag(true)
+                    }
+                    .pickerStyle(.segmented)
+                    Button {
+                        queue.enqueue([garment.id])
+                    } label: {
+                        Label("Regenerate store photo", systemImage: "arrow.triangle.2.circlepath")
+                    }
+                } else {
+                    Button {
+                        queue.enqueue([garment.id])
+                    } label: {
+                        Label("Create store photo", systemImage: "wand.and.stars")
+                    }
+                }
+                if let failure = queue.failures[garment.id] {
+                    Text(failure).font(.footnote).foregroundStyle(.orange)
+                }
+            } header: {
+                Text("Store photo")
+            } footer: {
+                Text("AI turns your photo into an online-store style picture on a white background. Check that colors and details match; you can always switch back to your own photo.")
+            }
+        }
+    }
+
     private func summary(_ garment: Garment) -> some View {
         Section("Details") {
             LabeledContent("Category", value: garment.category.displayName)
@@ -176,10 +224,13 @@ struct GarmentDetailView: View {
         guard let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) else { return }
         let processor = PhotoProcessor(imageStore: services.imageStore, remover: services.backgroundRemover)
         guard let stored = await processor.store(image) else { return }
-        for file in [garment.originalImageFile, garment.cutoutImageFile].compactMap({ $0 }) { services.imageStore.delete(file) }
+        for file in garment.allImageFiles { services.imageStore.delete(file) }
         garment.originalImageFile = stored.original
         garment.cutoutImageFile = stored.cutout
+        garment.productImageFile = nil
+        garment.prefersOriginalPhoto = false
         garment.touch()
         services.repository.save()
+        services.productPhotos.enqueueNew([garment.id])
     }
 }

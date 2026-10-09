@@ -113,6 +113,7 @@ struct ClosetView: View {
 }
 
 struct GarmentTile: View {
+    @Environment(AppServices.self) private var services
     var garment: Garment
 
     var body: some View {
@@ -120,6 +121,19 @@ struct GarmentTile: View {
             GarmentImageView(garment: garment, maxPixels: 300)
                 .aspectRatio(1, contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(alignment: .bottomLeading) {
+                    if services.productPhotos.isWorking(on: garment.id) {
+                        HStack(spacing: 4) {
+                            ProgressView().controlSize(.mini)
+                            Text("Store photo").font(.caption2)
+                        }
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .padding(6)
+                        .accessibilityLabel("Creating store photo")
+                    }
+                }
                 .overlay(alignment: .topTrailing) {
                     if garment.status == .pendingReview {
                         Image(systemName: "exclamationmark.circle.fill")

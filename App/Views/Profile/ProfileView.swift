@@ -29,6 +29,7 @@ private struct ProfileForm: View {
     @State private var isDeletePresented = false
     @State private var notificationError: String?
     @AppStorage(ServerSettings.overrideKey) private var serverAddress = ""
+    @AppStorage(ProductPhotoSettings.enabledKey) private var storePhotosEnabled = true
 
     var body: some View {
         Form {
@@ -114,6 +115,14 @@ private struct ProfileForm: View {
                 Text("Notifications")
             } footer: {
                 Text("\"Your outfits for today are ready\" at the time you choose.")
+            }
+
+            Section {
+                Toggle("Create store photos", isOn: $storePhotosEnabled)
+            } header: {
+                Text("Photos")
+            } footer: {
+                Text("New photos are turned into online-store style pictures on a white background by AI (OpenAI). Costs about $0.05 per photo on your server's OpenAI account.")
             }
 
             Section("Appearance") {

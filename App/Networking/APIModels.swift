@@ -44,6 +44,27 @@ struct AnalyzeGarmentResponse: Codable {
     var garments: [AnalyzedGarmentDTO]
 }
 
+// MARK: Store-style product photos
+
+struct RenderGarmentHintsDTO: Codable, Equatable {
+    var name: String?
+    var category: String
+    var subcategory: String?
+    var primaryColor: String
+    var secondaryColor: String?
+    var pattern: String?
+    var material: String?
+}
+
+struct RenderProductPhotoRequest: Codable {
+    var image: ImagePayload
+    var garment: RenderGarmentHintsDTO?
+}
+
+struct RenderProductPhotoResponse: Codable {
+    var image: ImagePayload
+}
+
 // MARK: Order parsing
 
 struct ParseOrderRequest: Codable {

@@ -61,7 +61,7 @@ final class SwiftDataWardrobeRepository: WardrobeRepository {
     }
 
     func delete(_ garment: Garment) {
-        for file in [garment.originalImageFile, garment.cutoutImageFile].compactMap({ $0 }) { imageStore.delete(file) }
+        for file in garment.allImageFiles { imageStore.delete(file) }
         context.delete(garment)
         save()
     }

@@ -1,5 +1,5 @@
 import { serve } from "@hono/node-server";
-import { createAppFromEnv } from "./env.js";
+import { createAppFromEnv, describeFeatures } from "./env.js";
 
 try {
   process.loadEnvFile?.(".env");
@@ -12,4 +12,5 @@ const port = Number(process.env.PORT ?? 8787);
 
 serve({ fetch: app.fetch, port }, (info) => {
   console.log(`Wardrobe backend listening on http://localhost:${info.port}`);
+  for (const line of describeFeatures(process.env)) console.log(`  ${line}`);
 });

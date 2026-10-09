@@ -126,6 +126,7 @@ See [`backend/README.md`](backend/README.md) for endpoints, local run, tests and
 ## Privacy
 
 - Photos and all closet data stay on the device (Application Support, SwiftData). Nothing is synced.
+- When "Create store photos" is on (Profile), each new garment photo (cutout on white, ≤ 1600 px) is also sent through the backend to OpenAI to create the store-style picture. Your own photo is always kept on the device.
 - Sent to the Wardrobe backend, only when you use the feature:
   - one compressed photo per garment for recognition (≤ 1600 px JPEG, background removed on device first)
   - order text or an order screenshot for import

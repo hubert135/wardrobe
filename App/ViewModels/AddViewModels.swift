@@ -26,14 +26,19 @@ struct GarmentSaver {
     func save(_ drafts: [GarmentDraft], skipping skipped: Set<UUID> = []) -> Int {
         let owner = services.auth.appleUserID ?? "local"
         var count = 0
+        var newPhotoGarments: [UUID] = []
         for draft in drafts {
             if skipped.contains(draft.id) {
                 discardImages(of: draft)
                 continue
             }
-            services.repository.insert(draft.makeGarment(ownerID: owner))
+            let garment = draft.makeGarment(ownerID: owner)
+            services.repository.insert(garment)
+            if draft.source == .photo, garment.sourceImageFile != nil { newPhotoGarments.append(garment.id) }
             count += 1
         }
+        // Store-style photos are created in the background after saving.
+        services.productPhotos.enqueueNew(newPhotoGarments)
         return count
     }
 

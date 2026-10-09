@@ -1,4 +1,5 @@
 import { AIOutputError, type AIClient, type StructuredRequest } from "../src/ai/client.js";
+import type { ProductPhotoRenderer } from "../src/ai/productPhoto.js";
 import { createApp } from "../src/app.js";
 import { loadConfig, type Env } from "../src/config.js";
 import type { AIGarmentSchema } from "../src/schemas/garments.js";
@@ -34,8 +35,22 @@ export const testEnv: Env = {
   RATE_LIMIT_WINDOW_SECONDS: "60",
 };
 
-export function makeApp(ai: AIClient, overrides: Env = {}, verifyAppleToken?: (token: string) => Promise<string>) {
-  return createApp({ config: loadConfig({ ...testEnv, ...overrides }), ai, verifyAppleToken });
+export function makeApp(
+  ai: AIClient | null,
+  overrides: Env = {},
+  verifyAppleToken?: (token: string) => Promise<string>,
+  renderer: ProductPhotoRenderer | null = null,
+) {
+  return createApp({ config: loadConfig({ ...testEnv, ...overrides }), ai, verifyAppleToken, renderer });
+}
+
+/** Records render calls and returns a fixed JPEG payload. */
+export class FakeRenderer implements ProductPhotoRenderer {
+  readonly calls: Array<Parameters<ProductPhotoRenderer["render"]>[0]> = [];
+  async render(input: Parameters<ProductPhotoRenderer["render"]>[0]) {
+    this.calls.push(input);
+    return { mediaType: "image/jpeg" as const, data: "B".repeat(200) };
+  }
 }
 
 export async function devSession(app: ReturnType<typeof makeApp>): Promise<string> {

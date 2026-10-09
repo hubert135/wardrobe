@@ -11,6 +11,7 @@ All AI endpoints need `Authorization: Bearer <sessionToken>` and are rate limite
 | `GET /health` | | `{ status: "ok" }` |
 | `POST /v1/auth/session` | `{ identityToken }` (Sign in with Apple JWT) | `{ sessionToken, userId, expiresAt }` |
 | `POST /v1/garments/analyze` | `{ image: { mediaType, data(base64) } }` | `{ garments: [{ name, category, subcategory, primaryColor, secondaryColor, pattern, material, formality, seasons, brand, confidence }] }`, or `422 no_garment_found` |
+| `POST /v1/garments/render` | `{ image, garment? }` (garment = recognition hints) | `{ image: { mediaType: "image/jpeg", data } }`: an online-store style photo on white, made by OpenAI GPT Image |
 | `POST /v1/orders/parse` | `{ text }` or `{ image }` | `{ items: [{ name, brand, category, color, size, price, currency, purchaseDate, imageUrl }] }` |
 | `POST /v1/outfits/rank` | `{ context, garments, candidates, count }` | `{ outfits: [{ candidateId, garmentIds, title, reasoning }] }` |
 
@@ -20,6 +21,8 @@ How every AI call works:
 2. Claude is called with structured outputs (`output_config.format`) generated from a Zod schema.
 3. The output is normalized: values clamped, text trimmed, unknown candidate ids dropped, and image URLs that don't appear in the input dropped.
 4. If the output is invalid (schema mismatch, refusal, truncation, or nothing valid left after normalizing), the call is **retried once**. A second failure returns `502 ai_invalid_output`. If the provider is down, the response is `503 ai_unavailable`.
+
+Each AI provider is optional: without `ANTHROPIC_API_KEY` the Claude endpoints return `503 ai_not_configured`, and without `OPENAI_API_KEY` so does `/v1/garments/render`. The server prints which features are on when it starts. Store photos use `IMAGE_MODEL` (default `gpt-image-2`) at `IMAGE_QUALITY` (default `medium`, about $0.05 per photo) and have their own rate limit (30 per user per hour). The prompt is `buildProductPhotoPrompt` in `src/ai/productPhoto.ts`.
 
 The model name lives in one config value, `AI_MODEL` (default `claude-opus-5-5`). Effort is `AI_EFFORT` (default `low`). Requests opt into Anthropic's server-side refusal fallback (`fallbacks: "default"`). Prompts are in `src/ai/prompts.ts`.
 

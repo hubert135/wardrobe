@@ -44,6 +44,10 @@ final class Garment {
     var sourceRaw: String = GarmentSource.manual.rawValue
     var originalImageFile: String?
     var cutoutImageFile: String?
+    /// AI-generated online-store style photo (white background), if created.
+    var productImageFile: String?
+    /// The user chose to show their own photo even though a store photo exists.
+    var prefersOriginalPhoto: Bool = false
     var statusRaw: String = GarmentStatus.confirmed.rawValue
     var wearCount: Int = 0
     var lastWornAt: Date?
@@ -128,8 +132,16 @@ final class Garment {
         return price / Double(max(wearCount, 1))
     }
 
-    /// Image to show: the cutout if background removal worked, otherwise the original photo.
-    var displayImageFile: String? { cutoutImageFile ?? originalImageFile }
+    /// Image to show: the store photo (unless the user prefers their own), then the cutout, then the original.
+    var displayImageFile: String? {
+        if !prefersOriginalPhoto, let productImageFile { return productImageFile }
+        return cutoutImageFile ?? originalImageFile
+    }
+
+    /// The user's own photo used as the source for a store photo (the cutout isolates the garment best).
+    var sourceImageFile: String? { cutoutImageFile ?? originalImageFile }
+
+    var allImageFiles: [String] { [originalImageFile, cutoutImageFile, productImageFile].compactMap { $0 } }
 
     var engineGarment: EngineGarment {
         EngineGarment(

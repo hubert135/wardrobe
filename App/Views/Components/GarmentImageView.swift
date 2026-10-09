@@ -40,14 +40,17 @@ struct GarmentImageView: View {
 
     @State private var image: UIImage?
 
+    /// AI store photos already have a white studio background.
+    private var isStorePhoto: Bool { fileName?.hasPrefix(ProductPhotoQueue.filePrefix) ?? false }
+
     var body: some View {
         ZStack {
-            if showsCanvas { Theme.canvas }
+            if showsCanvas { isStorePhoto ? Color.white : Theme.canvas }
             if let image {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
-                    .padding(8)
+                    .padding(isStorePhoto ? 4 : 8)
             } else {
                 Image(uiImage: ThumbnailLoader.placeholder(category: category, color: color))
                     .resizable()
