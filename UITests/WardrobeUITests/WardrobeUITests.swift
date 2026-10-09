@@ -40,7 +40,7 @@ final class WardrobeUITests: XCTestCase {
 
         // 4. It shows up in History.
         app.tabBars.buttons["Outfits"].tap()
-        app.buttons["History"].firstMatch.tap()
+        app.segmentedControls.buttons["History"].tap()
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "&")).firstMatch.waitForExistence(timeout: 5))
     }
 }

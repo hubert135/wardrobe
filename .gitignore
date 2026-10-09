@@ -23,3 +23,6 @@ backend/.wrangler/
 backend/.vercel/
 
 .DS_Store
+
+# Downloaded app builds
+*.ipa

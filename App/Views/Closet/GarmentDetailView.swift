@@ -114,7 +114,6 @@ struct GarmentDetailView: View {
                 Text("Archived items stay in your history but are never suggested.")
             }
         }
-        .paperBackground()
         .navigationTitle(garment.displayName)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

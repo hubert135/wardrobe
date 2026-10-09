@@ -91,7 +91,8 @@ struct PhotoImportView: View {
                     Label("Choose up to \(PhotoImportViewModel.maxPhotos) photos", systemImage: "photo.on.rectangle")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.primary)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
                 if CameraView.isAvailable {
                     Button {
                         isCameraPresented = true
@@ -252,7 +253,8 @@ struct DraftReviewView: View {
             } label: {
                 Text("Confirm all").bold().frame(maxWidth: .infinity)
             }
-            .buttonStyle(.primary)
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
             .padding()
             .background(.bar)
             .disabled(drafts.isEmpty || isWorking)

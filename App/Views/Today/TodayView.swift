@@ -12,25 +12,28 @@ struct TodayView: View {
                 if let model {
                     TodayContent(model: model)
                 } else {
-                    ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+                    ProgressView()
                 }
             }
-            .background(Theme.paper.ignoresSafeArea())
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(greeting)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { router.openAdd() } label: {
-                        Image(systemName: "plus")
-                            .font(.body.weight(.semibold))
-                            .foregroundStyle(Theme.ink)
-                    }
-                    .accessibilityLabel("Add garment")
+                    Button { router.openAdd() } label: { Image(systemName: "plus") }
+                        .accessibilityLabel("Add garment")
                 }
             }
         }
         .task {
             if model == nil { model = TodayViewModel(services: services) }
             await model?.loadWeather()
+        }
+    }
+
+    private var greeting: String {
+        switch Calendar.current.component(.hour, from: Date()) {
+        case 5..<12: "Good morning"
+        case 12..<18: "Good afternoon"
+        default: "Good evening"
         }
     }
 }
@@ -41,12 +44,10 @@ private struct TodayContent: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
-                PageHeader(
-                    eyebrow: Date().formatted(.dateTime.weekday(.wide).day().month(.wide)),
-                    title: "Today's look",
-                    subtitle: greeting
-                )
+            VStack(alignment: .leading, spacing: Theme.spacing) {
+                Text(Date().formatted(.dateTime.weekday(.wide).day().month(.wide)))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
 
                 WeatherCardView(
                     snapshot: model.weather?.snapshot,
@@ -58,29 +59,25 @@ private struct TodayContent: View {
                     ErrorBanner(message: error) { Task { await model.loadWeather(force: true) } }
                 }
 
-                VStack(alignment: .leading, spacing: 12) {
-                    EyebrowText("Occasion")
-                    ChipRow(options: Occasion.allCases, selection: $model.occasion, title: \.displayName)
-                        .accessibilityIdentifier("today.occasion")
-                    EyebrowText("Style")
-                        .padding(.top, 6)
-                    ChipRow(options: Style.allCases, selection: $model.style, title: \.displayName)
-                }
+                contextSelector
 
                 Button {
                     Task { await model.suggest() }
                 } label: {
-                    Label(model.suggestions.isEmpty ? "Suggest outfits" : "Suggest again", systemImage: "sparkles")
+                    Label("Suggest outfits", systemImage: "sparkles")
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
                 }
-                .buttonStyle(.primary)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
                 .disabled(model.phase == .loading)
                 .accessibilityIdentifier("today.suggest")
 
                 results
             }
-            .padding(.horizontal, Theme.pagePadding)
-            .padding(.bottom, 32)
+            .padding()
         }
+        .background(Color(uiColor: .systemGroupedBackground))
         .refreshable { await model.refresh() }
         .sensoryFeedback(.success, trigger: model.wearFeedback)
         .sensoryFeedback(.impact(weight: .light), trigger: model.favoriteFeedback)
@@ -91,14 +88,21 @@ private struct TodayContent: View {
         }
     }
 
-    private var greeting: String {
-        let part: String = switch Calendar.current.component(.hour, from: Date()) {
-        case 5..<12: "Good morning"
-        case 12..<18: "Good afternoon"
-        default: "Good evening"
+    private var contextSelector: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Picker("Occasion", selection: $model.occasion) {
+                ForEach(Occasion.allCases) { Text($0.displayName).tag($0) }
+            }
+            .pickerStyle(.menu)
+            .accessibilityIdentifier("today.occasion")
+
+            Picker("Style", selection: $model.style) {
+                ForEach(Style.allCases) { Text($0.displayName).tag($0) }
+            }
+            .pickerStyle(.segmented)
         }
-        let name = model.userName.trimmingCharacters(in: .whitespaces)
-        return name.isEmpty ? part + "." : "\(part), \(name)."
+        .padding()
+        .card()
     }
 
     @ViewBuilder
@@ -111,7 +115,7 @@ private struct TodayContent: View {
         case .notEnoughGarments(let count):
             let remaining = max(model.minimumClosetSize - count, 0)
             EmptyStateView(
-                symbol: "hanger",
+                symbol: "tshirt",
                 title: "Add a few more pieces",
                 message: "Add \(remaining) more garment\(remaining == 1 ? "" : "s") to unlock your first outfits. Good outfits need options.",
                 actionTitle: "Add garments",
@@ -124,22 +128,18 @@ private struct TodayContent: View {
                 message: "No combination in your closet matches this occasion and weather. Try another style, or check Shop for what's missing."
             )
         case .loaded:
-            VStack(alignment: .leading, spacing: 8) {
-                EyebrowText("\(model.suggestions.count) looks for \(model.occasion.displayName.lowercased())")
-            }
-            ForEach(Array(model.suggestions.enumerated()), id: \.element.id) { index, suggestion in
+            ForEach(model.suggestions) { suggestion in
                 OutfitCard(
                     title: suggestion.outfit.title,
                     reasoning: suggestion.outfit.reasoning,
                     tiles: model.tiles(for: suggestion),
                     isFavorite: suggestion.isFavorite,
                     isWorn: suggestion.isWornToday,
-                    badge: String(format: "Look %02d", index + 1),
-                    onWear: { withAnimation(.spring) { model.wear(suggestion) } },
+                    onWear: { model.wear(suggestion) },
                     onFavorite: { model.toggleFavorite(suggestion) },
-                    onSwap: { slot in withAnimation(.snappy) { model.swap(slot, in: suggestion) } }
+                    onSwap: { slot in withAnimation { model.swap(slot, in: suggestion) } }
                 )
-                .transition(.opacity.combined(with: .move(edge: .bottom)))
+                .transition(.opacity)
             }
         }
     }

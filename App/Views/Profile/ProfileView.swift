@@ -148,7 +148,6 @@ private struct ProfileForm: View {
             }
             #endif
         }
-        .paperBackground()
         .onChange(of: profile.notificationsEnabled) { _, _ in Task { await updateNotifications() } }
         .onChange(of: profile.notificationHour) { _, _ in Task { await updateNotifications() } }
         .onChange(of: profile.notificationMinute) { _, _ in Task { await updateNotifications() } }

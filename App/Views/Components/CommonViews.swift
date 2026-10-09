@@ -10,18 +10,13 @@ struct EmptyStateView: View {
 
     var body: some View {
         ContentUnavailableView {
-            Label {
-                Text(title).font(Theme.serif(.title2))
-            } icon: {
-                Image(systemName: symbol).foregroundStyle(Theme.accent)
-            }
+            Label(title, systemImage: symbol)
         } description: {
             Text(message)
         } actions: {
             if let actionTitle, let action {
                 Button(actionTitle, action: action)
-                    .buttonStyle(.primary)
-                    .frame(maxWidth: 260)
+                    .buttonStyle(.borderedProminent)
             }
         }
     }
@@ -44,7 +39,7 @@ struct ErrorBanner: View {
             }
         }
         .padding()
-        .background(Theme.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: Theme.smallCornerRadius, style: .continuous))
+        .background(.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 }
@@ -67,17 +62,13 @@ struct SkeletonBlock: View {
 
 struct OutfitCardSkeleton: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            SkeletonBlock(height: 320)
-            VStack(alignment: .leading, spacing: 12) {
-                SkeletonBlock(height: 12).frame(width: 70)
-                SkeletonBlock(height: 24).frame(width: 220)
-                SkeletonBlock(height: 14)
-                SkeletonBlock(height: 50)
-            }
-            .padding(20)
+        VStack(alignment: .leading, spacing: 12) {
+            SkeletonBlock(height: 240)
+            SkeletonBlock(height: 18).frame(width: 180)
+            SkeletonBlock(height: 14)
+            SkeletonBlock(height: 40)
         }
-        .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .padding()
         .card()
         .accessibilityLabel("Loading outfits")
     }
@@ -143,41 +134,16 @@ struct Chip: View {
                     Circle().fill(swatch).frame(width: 14, height: 14)
                         .overlay(Circle().stroke(Color.primary.opacity(0.15)))
                 }
-                Text(title).font(.subheadline.weight(isSelected ? .semibold : .regular))
+                Text(title).font(.subheadline)
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 9)
-            .background(isSelected ? Theme.ink : Theme.surface, in: Capsule())
-            .overlay(Capsule().stroke(isSelected ? Color.clear : Theme.ink.opacity(0.12), lineWidth: 1))
-            .foregroundStyle(isSelected ? Theme.paper : Theme.ink)
-            .animation(.snappy(duration: 0.2), value: isSelected)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(isSelected ? Theme.accent.opacity(0.15) : Color.secondary.opacity(0.08), in: Capsule())
+            .overlay(Capsule().stroke(isSelected ? Theme.accent : .clear, lineWidth: 1.5))
+            .foregroundStyle(isSelected ? Theme.accent : .primary)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-}
-
-/// Horizontally scrolling single-select chips (occasion, style, category).
-struct ChipRow<Value: Hashable>: View {
-    var options: [Value]
-    @Binding var selection: Value
-    var title: (Value) -> String
-    /// How far the row extends past its container's horizontal padding (edge-to-edge scrolling).
-    var bleed: CGFloat = Theme.pagePadding
-
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(options, id: \.self) { option in
-                    Chip(title: title(option), isSelected: selection == option, swatch: nil) {
-                        selection = option
-                    }
-                }
-            }
-            .padding(.horizontal, bleed)
-        }
-        .padding(.horizontal, -bleed)
-        .sensoryFeedback(.selection, trigger: selection)
     }
 }
 
