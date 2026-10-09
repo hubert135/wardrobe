@@ -30,6 +30,7 @@ final class TodayViewModel {
     }
 
     var minimumClosetSize: Int { services.outfits.engine.config.minimumClosetSize }
+    var userName: String { services.repository.profile().name }
 
     func loadWeather(force: Bool = false) async {
         isLoadingWeather = true

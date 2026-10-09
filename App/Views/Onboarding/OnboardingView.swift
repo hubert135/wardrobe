@@ -30,6 +30,7 @@ struct OnboardingView: View {
                     stepThree.tag(2)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
+                .background(Theme.paper.ignoresSafeArea())
                 .animation(.default, value: step)
             }
             .navigationTitle("Welcome to Wardrobe")
@@ -46,12 +47,12 @@ struct OnboardingView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 Text("Your closet, dressed for the day.")
-                    .font(.largeTitle.bold())
+                    .font(Theme.serif(.largeTitle, weight: .bold))
                 Text("Wardrobe learns what you own and suggests outfits that fit the weather and your plans.")
                     .foregroundStyle(.secondary)
 
                 VStack(alignment: .leading, spacing: 12) {
-                    Label("Account", systemImage: "person.crop.circle").font(.headline)
+                    Label("Account", systemImage: "person.crop.circle").font(Theme.serif(.headline))
                     if auth.isSignedIn {
                         Label("Signed in with Apple", systemImage: "checkmark.seal.fill").foregroundStyle(.green)
                     } else {
@@ -72,7 +73,7 @@ struct OnboardingView: View {
                 .padding().card()
 
                 VStack(alignment: .leading, spacing: 12) {
-                    Label("Weather", systemImage: "location").font(.headline)
+                    Label("Weather", systemImage: "location").font(Theme.serif(.headline))
                     Text("Allow location so outfits match today's temperature and rain.")
                         .font(.subheadline).foregroundStyle(.secondary)
                     Button("Allow location") {
@@ -85,7 +86,7 @@ struct OnboardingView: View {
 
                 if let profile = profiles.first {
                     VStack(alignment: .leading, spacing: 12) {
-                        Label("Your style", systemImage: "sparkles").font(.headline)
+                        Label("Your style", systemImage: "sparkles").font(Theme.serif(.headline))
                         ChipSelector(
                             options: Style.allCases,
                             selection: Binding(get: { Set(profile.preferredStyles) }, set: { new in profile.preferredStyles = Style.allCases.filter(new.contains) }),
@@ -100,8 +101,7 @@ struct OnboardingView: View {
                 } label: {
                     Text("Continue").bold().frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .buttonStyle(.primary)
             }
             .padding()
         }
@@ -116,7 +116,7 @@ struct OnboardingView: View {
                 .font(.system(size: 64))
                 .foregroundStyle(Theme.accent)
             Text("Add your first \(targetCount) garments")
-                .font(.title2.bold())
+                .font(Theme.serif(.title, weight: .bold))
             ProgressView(value: Double(min(activeCount, targetCount)), total: Double(targetCount))
                 .padding(.horizontal, 40)
             Text(progressText)
@@ -132,8 +132,7 @@ struct OnboardingView: View {
             } label: {
                 Label("Add garments", systemImage: "plus").frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+            .buttonStyle(.primary)
             #if DEBUG
             Button("Load sample closet") {
                 SeedData.seed(SeedData.sampleCloset, into: services.repository, imageStore: services.imageStore)
@@ -165,7 +164,7 @@ struct OnboardingView: View {
     private var stepThree: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.spacing) {
-                Text("Your first outfits").font(.title2.bold())
+                Text("Your first outfits").font(Theme.serif(.title, weight: .bold))
                 if let today {
                     switch today.phase {
                     case .loading, .idle:
@@ -197,8 +196,7 @@ struct OnboardingView: View {
                 } label: {
                     Text("Start using Wardrobe").bold().frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .buttonStyle(.primary)
                 .accessibilityIdentifier("onboarding.finish")
             }
             .padding()

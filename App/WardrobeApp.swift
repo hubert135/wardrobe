@@ -5,6 +5,10 @@ import SwiftUI
 struct WardrobeApp: App {
     @State private var services = AppServices()
 
+    init() {
+        Theme.applyNavigationAppearance()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()

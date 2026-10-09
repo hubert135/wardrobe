@@ -73,6 +73,7 @@ struct StatisticsView: View {
                 }
             }
         }
+        .paperBackground()
         .navigationTitle("Statistics")
     }
 

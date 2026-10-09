@@ -96,6 +96,7 @@ private struct ShopContent: View {
                 }
             }
         }
+        .paperBackground()
         .refreshable { await model.load(force: true) }
         .task { await model.load() }
         .sheet(item: $selectedGap) { gap in
@@ -142,7 +143,7 @@ private struct GapRow: View {
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text("+\(gap.unlockedOutfitCount)").font(.title3.bold()).foregroundStyle(Theme.accent)
+                Text("+\(gap.unlockedOutfitCount)").font(Theme.serif(.title2, weight: .bold)).foregroundStyle(Theme.accent)
                 Text(isSaved ? "on list" : "outfits").font(.caption2).foregroundStyle(.secondary)
             }
         }
@@ -163,7 +164,7 @@ private struct GapDetailSheet: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("+\(gap.unlockedOutfitCount) new outfits").font(.title2.bold()).foregroundStyle(Theme.accent)
+                        Text("+\(gap.unlockedOutfitCount) new outfits").font(Theme.serif(.title, weight: .bold)).foregroundStyle(Theme.accent)
                         Text(gap.reason).foregroundStyle(.secondary)
                     }
                     Button {

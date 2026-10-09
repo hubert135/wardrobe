@@ -9,11 +9,9 @@ struct OutfitsView: View {
         @Bindable var router = router
         NavigationStack {
             VStack(spacing: 0) {
-                Picker("Section", selection: $router.outfitsSegment) {
-                    ForEach(OutfitsSegment.allCases) { Text($0.rawValue).tag($0) }
-                }
-                .pickerStyle(.segmented)
-                .padding([.horizontal, .top])
+                ChipRow(options: OutfitsSegment.allCases, selection: $router.outfitsSegment, title: \.rawValue, bleed: 0)
+                    .padding(.horizontal, Theme.pagePadding)
+                    .padding(.vertical, 8)
 
                 switch router.outfitsSegment {
                 case .favorites: FavoritesList()
@@ -21,7 +19,7 @@ struct OutfitsView: View {
                 case .builder: BuilderView()
                 }
             }
-            .background(Color(uiColor: .systemGroupedBackground))
+            .background(Theme.paper.ignoresSafeArea())
             .navigationTitle("Outfits")
         }
     }
@@ -99,7 +97,7 @@ private struct HistoryList: View {
                     }
                 }
             }
-            .scrollContentBackground(.hidden)
+            .paperBackground()
         }
     }
 }
@@ -143,7 +141,7 @@ private struct BuilderContent: View {
             VStack(alignment: .leading, spacing: Theme.spacing) {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
-                        Text("Start from").font(.headline)
+                        Text("Start from").font(Theme.serif(.title3))
                         Spacer()
                         Button(model.anchorIDs.isEmpty ? "Choose pieces" : "Change") { isPickerPresented = true }
                     }
@@ -165,14 +163,10 @@ private struct BuilderContent: View {
                     Picker("Occasion", selection: $model.occasion) {
                         ForEach(Occasion.allCases) { Text($0.displayName).tag($0) }
                     }
-                    Picker("Style", selection: $model.style) {
-                        ForEach(Style.allCases) { Text($0.displayName).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
-                    Picker("Season", selection: $model.season) {
-                        ForEach(Season.allCases) { Text($0.displayName).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
+                    EyebrowText("Style")
+                    ChipRow(options: Style.allCases, selection: $model.style, title: \.displayName, bleed: 16)
+                    EyebrowText("Season")
+                    ChipRow(options: Season.allCases, selection: $model.season, title: \.displayName, bleed: 16)
                     Toggle("Include items to buy", isOn: $model.includeMissing)
                 }
                 .padding()
@@ -181,10 +175,9 @@ private struct BuilderContent: View {
                 Button {
                     withAnimation { model.run() }
                 } label: {
-                    Label("Build outfits", systemImage: "wand.and.stars").frame(maxWidth: .infinity)
+                    Label("Build outfits", systemImage: "wand.and.stars")
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .buttonStyle(.primary)
 
                 if model.hasRun && model.results.isEmpty {
                     EmptyStateView(
@@ -209,7 +202,7 @@ private struct BuilderContent: View {
                     )
                 }
             }
-            .padding()
+            .padding(Theme.pagePadding)
         }
         .sensoryFeedback(.impact(weight: .light), trigger: model.favoriteFeedback)
         .sensoryFeedback(.success, trigger: model.wearFeedback)

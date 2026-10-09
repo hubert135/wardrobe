@@ -35,7 +35,13 @@ struct ClosetView: View {
     @State private var filter = ClosetFilter()
     @State private var isFilterPresented = false
 
-    private let columns = [GridItem(.adaptive(minimum: 104), spacing: 12)]
+    private let columns = [GridItem(.adaptive(minimum: 104), spacing: 14)]
+
+    /// Categories the user actually owns, for the quick filter row.
+    private var quickCategories: [GarmentCategory] {
+        let owned = Set(garments.filter { $0.status != .archived }.map(\.category))
+        return GarmentCategory.allCases.filter(owned.contains)
+    }
 
     private var pending: [Garment] { garments.filter { $0.status == .pendingReview } }
     private var visible: [Garment] {
@@ -55,16 +61,19 @@ struct ClosetView: View {
                     )
                     .padding(.top, 60)
                 } else {
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 24) {
+                        ChipRow(options: [GarmentCategory?.none] + quickCategories.map { Optional($0) }, selection: $filter.category) {
+                            $0?.displayName ?? "All"
+                        }
                         if !pending.isEmpty && filter.status == nil && searchText.isEmpty {
                             section(title: "Needs review", subtitle: "Check these details before they're used in outfits.", items: pending)
                         }
                         section(title: filter.isActive ? "Filtered" : "All garments", subtitle: "\(visible.count) items", items: visible)
                     }
-                    .padding()
+                    .padding(Theme.pagePadding)
                 }
             }
-            .background(Color(uiColor: .systemGroupedBackground))
+            .background(Theme.paper.ignoresSafeArea())
             .navigationTitle("Closet")
             .navigationDestination(for: UUID.self) { id in
                 GarmentDetailView(garmentID: id)
@@ -93,9 +102,9 @@ struct ClosetView: View {
     private func section(title: String, subtitle: String, items: [Garment]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
-                Text(title).font(.title3.bold())
+                Text(title).font(Theme.serif(.title2))
                 Spacer()
-                Text(subtitle).font(.caption).foregroundStyle(.secondary)
+                EyebrowText(subtitle)
             }
             if items.isEmpty {
                 Text("Nothing matches these filters.").foregroundStyle(.secondary)
@@ -116,10 +125,10 @@ struct GarmentTile: View {
     var garment: Garment
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             GarmentImageView(garment: garment, maxPixels: 300)
-                .aspectRatio(1, contentMode: .fit)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .aspectRatio(0.8, contentMode: .fit)
+                .clipShape(RoundedRectangle(cornerRadius: Theme.smallCornerRadius, style: .continuous))
                 .overlay(alignment: .topTrailing) {
                     if garment.status == .pendingReview {
                         Image(systemName: "exclamationmark.circle.fill")
@@ -127,10 +136,16 @@ struct GarmentTile: View {
                             .padding(6)
                     }
                 }
-            Text(garment.displayName)
-                .font(.caption)
-                .lineLimit(2)
-                .foregroundStyle(.primary)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(garment.displayName)
+                    .font(.caption.weight(.medium))
+                    .lineLimit(1)
+                    .foregroundStyle(Theme.ink)
+                Text(garment.brand.isEmpty ? garment.category.displayName : garment.brand)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(garment.displayName)\(garment.status == .pendingReview ? ", needs review" : "")")
