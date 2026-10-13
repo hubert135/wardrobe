@@ -65,7 +65,7 @@ struct OnboardingView: View {
                             }
                         }
                         .frame(height: 48)
-                        Text("Needed for automatic recognition and AI outfit ranking. You can do it later in Profile.")
+                        Text("Optional: everything works without an account.")
                             .font(.footnote).foregroundStyle(.secondary)
                     }
                 }

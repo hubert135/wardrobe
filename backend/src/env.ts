@@ -21,6 +21,7 @@ export function describeFeatures(env: Env): string[] {
   return [
     `Recognition, order import, outfit ranking (Claude ${config.aiModel}): ${config.anthropicApiKey ? "on" : "off - set ANTHROPIC_API_KEY"}`,
     `Store-style photos (OpenAI ${config.imageModel}, ${config.imageQuality} quality): ${config.openaiApiKey ? "on" : "off - set OPENAI_API_KEY"}`,
+    `Automatic device sessions (no sign-in needed): ${config.allowDeviceSessions ? "on" : "off - set ALLOW_DEVICE_SESSIONS=true"}`,
     `Development sign-in: ${config.authDevBypass ? "on" : "off"}`,
   ];
 }

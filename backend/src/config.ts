@@ -15,6 +15,11 @@ export interface Config {
   appleAudiences: string[];
   /** Accept the identity token "dev" without Apple verification. Never enable in production. */
   authDevBypass: boolean;
+  /**
+   * Let the app connect without any sign-in: each device gets its own automatic session, so
+   * rate limits still apply per device. For production, pair this with Apple App Attest.
+   */
+  allowDeviceSessions: boolean;
   rateLimit: { requests: number; windowMs: number };
   /** OpenAI image editing for store-style product photos. Optional: the endpoint returns 503 without it. */
   openaiApiKey: string | null;
@@ -52,6 +57,7 @@ export function loadConfig(env: Env): Config {
       .map((s) => s.trim())
       .filter(Boolean),
     authDevBypass: env.AUTH_DEV_BYPASS === "true",
+    allowDeviceSessions: env.ALLOW_DEVICE_SESSIONS === "true",
     rateLimit: {
       requests: Number(env.RATE_LIMIT_REQUESTS ?? 60),
       windowMs: Number(env.RATE_LIMIT_WINDOW_SECONDS ?? 600) * 1000,

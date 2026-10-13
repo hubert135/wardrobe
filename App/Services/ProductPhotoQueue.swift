@@ -69,10 +69,11 @@ final class ProductPhotoQueue {
 
     private func process(_ id: UUID) async {
         guard canUseAI() else {
-            failures[id] = "Sign in (Profile) to create store photos."
+            failures[id] = "Store photos aren't available right now."
             return
         }
         guard let garment = repository.garment(id: id),
+              garment.originalImageFile != nil,
               let sourceFile = garment.sourceImageFile,
               let source = imageStore.image(for: sourceFile),
               let jpeg = ImageProcessing.uploadJPEG(source) else {

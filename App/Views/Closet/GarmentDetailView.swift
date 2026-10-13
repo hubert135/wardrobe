@@ -148,7 +148,8 @@ struct GarmentDetailView: View {
     @ViewBuilder
     private func storePhotoSection(_ garment: Garment) -> some View {
         let queue = services.productPhotos
-        if garment.sourceImageFile != nil {
+        // Only real photos (sample garments use drawn placeholders).
+        if garment.originalImageFile != nil {
             Section {
                 if queue.isWorking(on: garment.id) {
                     HStack(spacing: 12) {

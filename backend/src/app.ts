@@ -28,6 +28,7 @@ export interface AppDependencies {
 type Env = { Variables: { userId: string } };
 
 const SessionRequestSchema = z.object({ identityToken: z.string().min(1).max(10_000) });
+const DeviceSessionRequestSchema = z.object({ deviceId: z.uuid() });
 
 /** ISO-8601 without milliseconds (what Swift's `.iso8601` decoder expects). */
 const isoSeconds = (date: Date) => date.toISOString().replace(/\.\d{3}Z$/, "Z");
@@ -78,6 +79,17 @@ export function createApp(deps: AppDependencies) {
         throw new ApiError(401, "invalid_identity_token", "Sign in with Apple could not be verified. Please try again.");
       }
     }
+    const session = await issueSession(userId, config.sessionSecret, config.sessionTtlDays, new Date(now()));
+    return c.json({ sessionToken: session.token, userId, expiresAt: isoSeconds(session.expiresAt) });
+  });
+
+  // Automatic session per device (no sign-in), when the server allows it.
+  app.post("/v1/auth/device", rateLimit(sessionLimiter, clientIP), async (c) => {
+    if (!config.allowDeviceSessions) {
+      throw new ApiError(403, "device_sessions_disabled", "This server requires signing in.");
+    }
+    const { deviceId } = await parseBody(c, DeviceSessionRequestSchema);
+    const userId = `device:${deviceId.toLowerCase()}`;
     const session = await issueSession(userId, config.sessionSecret, config.sessionTtlDays, new Date(now()));
     return c.json({ sessionToken: session.token, userId, expiresAt: isoSeconds(session.expiresAt) });
   });

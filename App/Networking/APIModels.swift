@@ -14,6 +14,11 @@ struct SessionRequest: Codable {
     var identityToken: String
 }
 
+/// Automatic session for this device (no sign-in).
+struct DeviceSessionRequest: Codable {
+    var deviceId: String
+}
+
 struct SessionResponse: Codable {
     var sessionToken: String
     var userId: String

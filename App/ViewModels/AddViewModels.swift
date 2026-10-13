@@ -87,8 +87,7 @@ final class PhotoImportViewModel {
         defer { isProcessing = false }
 
         let processor = PhotoProcessor(imageStore: services.imageStore, remover: services.backgroundRemover)
-        let canRecognize = services.auth.isSignedIn
-        if !canRecognize { notice = "Sign in (Profile) to fill in details automatically. You can edit them by hand for now." }
+        let canRecognize = !services.options.isUITesting
 
         for image in images {
             let thumbnail = ImageProcessing.normalized(image, maxDimension: 300)
@@ -177,10 +176,6 @@ final class OrderImportViewModel {
 
     func parse() async {
         guard canParse else { return }
-        guard services.auth.isSignedIn else {
-            errorMessage = "Sign in (Profile) to import orders. Reading orders uses AI on our server."
-            return
-        }
         errorMessage = nil
         isParsing = true
         defer { isParsing = false }

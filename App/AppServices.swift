@@ -104,11 +104,13 @@ final class AppServices {
         backgroundRemover = VisionBackgroundRemover()
         recognizer = AIGarmentRecognizer(api: api)
         purchaseImporter = AIOrderImporter(api: api)
-        outfits = OutfitService(api: api, isAIEnabled: { [weak auth] in auth?.isSignedIn ?? false })
+        // AI features need no sign-in: the API client creates an automatic device session.
+        let aiAvailable = !options.isUITesting
+        outfits = OutfitService(api: api, isAIEnabled: { aiAvailable })
         shop = ShopService()
         productPhotos = ProductPhotoQueue(
             api: api, repository: repository, imageStore: imageStore,
-            canUseAI: { [weak auth] in auth?.isSignedIn ?? false }
+            canUseAI: { aiAvailable }
         )
 
         prepareData()

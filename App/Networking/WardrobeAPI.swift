@@ -33,6 +33,9 @@ protocol WardrobeAPI: AnyObject {
 /// Supplies the bearer token for authenticated requests.
 protocol SessionTokenProvider: AnyObject {
     var sessionToken: String? { get }
+    /// Stable random id for this installation, used for automatic sessions.
+    var deviceID: String { get }
+    func store(_ token: String?)
     func sessionExpired()
 }
 
@@ -95,13 +98,34 @@ final class HTTPWardrobeAPI: WardrobeAPI {
         return response.image
     }
 
+    /// Sends a request. Authenticated calls get an automatic device session when there is none,
+    /// and retry once with a fresh one if the server says the session expired. No sign-in needed.
     private func post<Body: Encodable, Response: Decodable>(_ path: String, body: Body, authenticated: Bool = true, timeout: TimeInterval? = nil) async throws -> Response {
+        do {
+            return try await perform(path, body: body, authenticated: authenticated, timeout: timeout)
+        } catch APIError.unauthorized where authenticated {
+            tokens?.store(nil)
+            try await createDeviceSession()
+            return try await perform(path, body: body, authenticated: authenticated, timeout: timeout)
+        }
+    }
+
+    private func createDeviceSession() async throws {
+        guard let tokens else { throw APIError.unauthorized }
+        let session: SessionResponse = try await perform(
+            "v1/auth/device", body: DeviceSessionRequest(deviceId: tokens.deviceID), authenticated: false, timeout: nil
+        )
+        tokens.store(session.sessionToken)
+    }
+
+    private func perform<Body: Encodable, Response: Decodable>(_ path: String, body: Body, authenticated: Bool, timeout: TimeInterval?) async throws -> Response {
         guard let baseURL = baseURL() else { throw APIError.notConfigured }
         var request = URLRequest(url: baseURL.appendingPathComponent(path))
         request.httpMethod = "POST"
         request.timeoutInterval = timeout ?? self.timeout
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if authenticated {
+            if tokens?.sessionToken == nil { try await createDeviceSession() }
             guard let token = tokens?.sessionToken else { throw APIError.unauthorized }
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }

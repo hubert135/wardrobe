@@ -193,7 +193,7 @@ private struct ProfileForm: View {
         } header: {
             Text("Account")
         } footer: {
-            Text("Signing in enables automatic recognition, order import and AI-ranked outfits.")
+            Text("Optional. All features work without an account; signing in will later let you sync your closet across devices.")
         }
     }
 

@@ -179,3 +179,27 @@ describe("misc", () => {
     expect(response.status).toBe(404);
   });
 });
+
+describe("device sessions", () => {
+  const deviceId = "6f1c1a52-8d2e-4a40-9a2b-3c4d5e6f7a8b";
+
+  it("issue a session per device when enabled", async () => {
+    const app = makeApp(new FakeAI(), { ALLOW_DEVICE_SESSIONS: "true" });
+    const response = await post(app, "/v1/auth/device", { deviceId });
+    expect(response.status).toBe(200);
+    const body = (await response.json()) as { sessionToken: string; userId: string };
+    expect(body.userId).toBe(`device:${deviceId}`);
+    // The session works on AI endpoints.
+    expect((await post(app, "/v1/garments/analyze", { image: { mediaType: "image/jpeg" } }, body.sessionToken)).status).toBe(400);
+  });
+
+  it("are refused when disabled", async () => {
+    const app = makeApp(new FakeAI());
+    expect((await post(app, "/v1/auth/device", { deviceId })).status).toBe(403);
+  });
+
+  it("require a UUID", async () => {
+    const app = makeApp(new FakeAI(), { ALLOW_DEVICE_SESSIONS: "true" });
+    expect((await post(app, "/v1/auth/device", { deviceId: "not-a-uuid" })).status).toBe(400);
+  });
+});

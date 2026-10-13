@@ -7,6 +7,7 @@ import Observation
 final class SessionTokenStore: SessionTokenProvider {
     private let keychain: KeychainStore
     private let key = "backend.session"
+    private let deviceKey = "backend.deviceID"
     var onExpired: (() -> Void)?
 
     init(keychain: KeychainStore = KeychainStore()) {
@@ -16,6 +17,13 @@ final class SessionTokenStore: SessionTokenProvider {
     var sessionToken: String? { keychain.string(for: key) }
 
     func store(_ token: String?) { keychain.set(token, for: key) }
+
+    var deviceID: String {
+        if let existing = keychain.string(for: deviceKey) { return existing }
+        let id = UUID().uuidString
+        keychain.set(id, for: deviceKey)
+        return id
+    }
 
     func sessionExpired() {
         store(nil)
@@ -38,7 +46,7 @@ final class AuthService {
     init(tokens: SessionTokenStore, api: WardrobeAPI) {
         self.tokens = tokens
         self.api = api
-        self.isSignedIn = tokens.sessionToken != nil
+        self.isSignedIn = UserDefaults.standard.string(forKey: "auth.appleUserID") != nil && tokens.sessionToken != nil
         tokens.onExpired = { [weak self] in self?.isSignedIn = false }
     }
 
