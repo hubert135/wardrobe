@@ -29,6 +29,8 @@ private struct ProfileForm: View {
     @State private var isDeletePresented = false
     @State private var notificationError: String?
     @AppStorage(ServerSettings.overrideKey) private var serverAddress = ""
+    @State private var connectionResult: String?
+    @State private var isTestingConnection = false
     @AppStorage(ProductPhotoSettings.enabledKey) private var storePhotosEnabled = true
 
     var body: some View {
@@ -42,6 +44,25 @@ private struct ProfileForm: View {
                     .autocorrectionDisabled()
                 if !serverAddress.isEmpty, ServerSettings.normalized(serverAddress) == nil {
                     Text("This doesn't look like a valid address.").font(.footnote).foregroundStyle(.orange)
+                }
+                Button {
+                    isTestingConnection = true
+                    connectionResult = nil
+                    Task {
+                        connectionResult = await ServerSettings.testConnection()
+                        isTestingConnection = false
+                    }
+                } label: {
+                    HStack {
+                        Text("Test connection")
+                        if isTestingConnection { Spacer(); ProgressView() }
+                    }
+                }
+                .disabled(isTestingConnection)
+                if let connectionResult {
+                    Text(connectionResult)
+                        .font(.footnote)
+                        .foregroundStyle(connectionResult.hasSuffix("✓") ? .green : .orange)
                 }
             } header: {
                 Text("Server")

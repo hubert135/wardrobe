@@ -10,7 +10,7 @@ enum APIError: LocalizedError, Equatable {
 
     var errorDescription: String? {
         switch self {
-        case .offline: "You're offline. Check your connection and try again."
+        case .offline: "Can't reach the Wardrobe server. Check that your computer is on, the iPhone is on the same Wi-Fi, and the address in Profile → Server is right."
         case .unauthorized: "Your session has expired. Sign in again in Profile."
         case .rateLimited: "Too many requests right now. Try again in a minute."
         case .server(_, let message): message
@@ -174,6 +174,30 @@ enum ServerSettings {
     static var baseURL: URL? {
         if let override = UserDefaults.standard.string(forKey: overrideKey).flatMap(normalized) { return override }
         return HTTPWardrobeAPI.configuredBaseURL()
+    }
+
+    /// Calls GET /health and explains the result in plain words (Profile → Test connection).
+    static func testConnection() async -> String {
+        guard let base = baseURL else { return "No server address is set." }
+        var request = URLRequest(url: base.appendingPathComponent("health"), timeoutInterval: 8)
+        request.httpMethod = "GET"
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+            return status == 200 ? "Connected to \(base.absoluteString) ✓" : "The server at \(base.absoluteString) answered with error \(status)."
+        } catch let error as URLError {
+            let reason: String = switch error.code {
+            case .timedOut: "no answer in time. On the iPhone, check Settings → Apps → Wardrobe → Local Network is on, and that your computer's firewall allows Node.js."
+            case .cannotConnectToHost: "the computer refused the connection. Is the Wardrobe server running?"
+            case .cannotFindHost: "the address could not be found. Check it for typos."
+            case .notConnectedToInternet: "the iPhone has no network connection."
+            case .appTransportSecurityRequiresSecureConnection: "iOS blocked an insecure connection to this address."
+            default: error.localizedDescription
+            }
+            return "Can't reach \(base.absoluteString): \(reason) (code \(error.code.rawValue))"
+        } catch {
+            return "Can't reach \(base.absoluteString): \(error.localizedDescription)"
+        }
     }
 
     /// Accepts "192.168.1.20:8787" as well as full URLs.
