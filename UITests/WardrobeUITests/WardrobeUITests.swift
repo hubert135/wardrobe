@@ -14,8 +14,12 @@ final class WardrobeUITests: XCTestCase {
 
         // 1. Add the 8th garment manually.
         app.tabBars.buttons["Closet"].tap()
-        app.buttons["closet.add"].tap()
-        app.segmentedControls.buttons["Manual"].tap()
+        let add = app.buttons["closet.add"]
+        XCTAssertTrue(add.waitForExistence(timeout: 10))
+        add.tap()
+        let manual = app.segmentedControls.buttons["Manual"]
+        XCTAssertTrue(manual.waitForExistence(timeout: 10))
+        manual.tap()
 
         let name = app.textFields["garment.name"]
         XCTAssertTrue(name.waitForExistence(timeout: 5))
@@ -26,7 +30,9 @@ final class WardrobeUITests: XCTestCase {
 
         // 2. Generate outfits.
         app.tabBars.buttons["Today"].tap()
-        app.buttons["today.suggest"].tap()
+        let suggest = app.buttons["today.suggest"]
+        XCTAssertTrue(suggest.waitForExistence(timeout: 10))
+        suggest.tap()
 
         // 3. Wear the first one.
         let wear = app.buttons.matching(identifier: "outfit.wear").firstMatch
