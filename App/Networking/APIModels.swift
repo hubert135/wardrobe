@@ -62,7 +62,8 @@ struct RenderGarmentHintsDTO: Codable, Equatable {
 }
 
 struct RenderProductPhotoRequest: Codable {
-    var image: ImagePayload
+    /// nil: create the photo from the garment description alone.
+    var image: ImagePayload?
     var garment: RenderGarmentHintsDTO?
 }
 

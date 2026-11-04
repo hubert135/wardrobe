@@ -19,9 +19,10 @@ final class StyleRecipeTests: XCTestCase {
         ]
     )
 
-    private var sweater: EngineGarment { Fixtures.garment(.sweater, "navy", formality: 3, material: "merino wool") }
-    private var chinos: EngineGarment { Fixtures.garment(.chinos, "beige", formality: 3) }
-    private var boots: EngineGarment { Fixtures.garment(.shoes, "brown", formality: 3, material: "leather", subcategory: "chelsea boots") }
+    // Stored, so each test sees the same garments (and ids) every time it refers to them.
+    let sweater = Fixtures.garment(.sweater, "navy", formality: 3, material: "merino wool")
+    let chinos = Fixtures.garment(.chinos, "beige", formality: 3)
+    let boots = Fixtures.garment(.shoes, "brown", formality: 3, material: "leather", subcategory: "chelsea boots")
 
     func testPieceScoring() {
         let piece = recipe.pieces[0]
