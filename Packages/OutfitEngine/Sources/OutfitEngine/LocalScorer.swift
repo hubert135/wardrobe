@@ -83,29 +83,45 @@ public struct LocalScorer: Sendable {
     }
 
     public func rank(_ candidates: [OutfitCandidate], in context: OutfitContext) -> [ScoredCandidate] {
-        candidates
-            .map { ScoredCandidate(candidate: $0, score: score($0, in: context)) }
-            .sorted { $0.score == $1.score ? $0.candidate.id < $1.candidate.id : $0.score > $1.score }
+        // Check which recipes apply once, not for every candidate.
+        var scoringContext = context
+        let matcher = RecipeMatcher()
+        scoringContext.recipes = context.recipes.filter { matcher.applies($0, to: context) }
+        // Ids are computed once per candidate (building them inside the sort was very slow on big closets).
+        let keyed = candidates.map { (ScoredCandidate(candidate: $0, score: score($0, in: scoringContext)), $0.id) }
+        return keyed
+            .sorted { $0.0.score == $1.0.score ? $0.1 < $1.1 : $0.0.score > $1.0.score }
+            .map(\.0)
     }
 
     /// Greedy selection of high-scoring but visibly different outfits: each round picks the candidate
     /// with the best score after a penalty for every garment it shares beyond one with an earlier pick.
-    public func selectDiverse(_ ranked: [ScoredCandidate], count: Int, overlapPenalty: Double = 1.0) -> [ScoredCandidate] {
-        guard count > 0 else { return [] }
+    /// Only the best `poolLimit` candidates are considered, and overlaps are updated incrementally,
+    /// so this stays fast even with thousands of candidates.
+    public func selectDiverse(_ ranked: [ScoredCandidate], count: Int, overlapPenalty: Double = 1.0, poolLimit: Int = 400) -> [ScoredCandidate] {
+        guard count > 0, !ranked.isEmpty else { return [] }
+        let pool = Array(ranked.prefix(max(poolLimit, count)))
+        let garmentSets = pool.map { Set($0.candidate.garmentIDs) }
+        var maxOverlap = [Int](repeating: 0, count: pool.count)
+        var taken = [Bool](repeating: false, count: pool.count)
         var picked: [ScoredCandidate] = []
-        var remaining = ranked
-        while picked.count < count, !remaining.isEmpty {
-            var bestIndex = 0
+
+        while picked.count < min(count, pool.count) {
+            var bestIndex = -1
             var bestValue = -Double.infinity
-            for (index, item) in remaining.enumerated() {
-                let overlap = picked.map { $0.candidate.sharedGarmentCount(with: item.candidate) }.max() ?? 0
-                let value = item.score - overlapPenalty * Double(max(0, overlap - 1))
+            for index in pool.indices where !taken[index] {
+                let value = pool[index].score - overlapPenalty * Double(max(0, maxOverlap[index] - 1))
                 if value > bestValue {
                     bestValue = value
                     bestIndex = index
                 }
             }
-            picked.append(remaining.remove(at: bestIndex))
+            guard bestIndex >= 0 else { break }
+            taken[bestIndex] = true
+            picked.append(pool[bestIndex])
+            for index in pool.indices where !taken[index] {
+                maxOverlap[index] = max(maxOverlap[index], garmentSets[index].intersection(garmentSets[bestIndex]).count)
+            }
         }
         return picked
     }

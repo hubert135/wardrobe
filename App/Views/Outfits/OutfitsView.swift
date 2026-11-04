@@ -122,14 +122,14 @@ private struct BuilderView: View {
             if let anchor = router.builderAnchorID, let model {
                 model.anchorIDs = [anchor]
                 router.builderAnchorID = nil
-                model.run()
+                Task { await model.run() }
             }
         }
         .onChange(of: router.builderAnchorID) { _, anchor in
             guard let anchor, let model else { return }
             model.anchorIDs = [anchor]
             router.builderAnchorID = nil
-            model.run()
+            Task { await model.run() }
         }
     }
 }
@@ -179,12 +179,17 @@ private struct BuilderContent: View {
                 .card()
 
                 Button {
-                    withAnimation { model.run() }
+                    Task { await model.run() }
                 } label: {
-                    Label("Build outfits", systemImage: "wand.and.stars").frame(maxWidth: .infinity)
+                    if model.isBuilding {
+                        ProgressView().frame(maxWidth: .infinity)
+                    } else {
+                        Label("Build outfits", systemImage: "wand.and.stars").frame(maxWidth: .infinity)
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
+                .disabled(model.isBuilding)
 
                 if model.hasRun && model.results.isEmpty {
                     EmptyStateView(

@@ -36,7 +36,11 @@ final class OutfitService {
     }
 
     func suggestions(closet: [EngineGarment], context: OutfitContext, count: Int) async -> ([EngineOutfit], OutfitSuggestion.Origin) {
-        let shortlist = engine.shortlist(closet: closet, context: context, limit: 30)
+        // Heavy combinatorics run off the main thread so the screen stays responsive.
+        let engine = self.engine
+        let shortlist = await Task.detached(priority: .userInitiated) {
+            engine.shortlist(closet: closet, context: context, limit: 30)
+        }.value
         guard !shortlist.isEmpty else { return ([], .local) }
         let local = { () -> [EngineOutfit] in
             self.engine.scorer.selectDiverse(shortlist, count: count).map {
@@ -77,8 +81,11 @@ final class OutfitService {
 
     /// Builder: anchors in `context`, optional missing pieces. Ranked locally (missing pieces
     /// are hypothetical, so there is nothing reliable for the AI to add).
-    func build(closet: [EngineGarment], context: OutfitContext, includeMissing: Bool, count: Int = 5) -> [EngineOutfit] {
-        engine.build(closet: closet, context: context, includeMissing: includeMissing, count: count)
+    func build(closet: [EngineGarment], context: OutfitContext, includeMissing: Bool, count: Int = 5) async -> [EngineOutfit] {
+        let engine = self.engine
+        return await Task.detached(priority: .userInitiated) {
+            engine.build(closet: closet, context: context, includeMissing: includeMissing, count: count)
+        }.value
     }
 }
 

@@ -30,7 +30,11 @@ final class BuilderViewModel {
         anchorIDs.compactMap { services.repository.garment(id: $0) }.sorted { $0.category.slot ?? .accessory < $1.category.slot ?? .accessory }
     }
 
-    func run() {
+    private(set) var isBuilding = false
+
+    func run() async {
+        isBuilding = true
+        defer { isBuilding = false }
         let garments = services.repository.garments(includeArchived: false)
         garmentsByID = Dictionary(uniqueKeysWithValues: garments.map { ($0.id, $0) })
         let profile = services.repository.profile()
@@ -39,7 +43,7 @@ final class BuilderViewModel {
             preferences: profile.stylePreferences, anchorGarmentIDs: anchorIDs,
             recipes: services.stylebook.recipes
         )
-        let outfits = services.outfits.build(closet: garments.map(\.engineGarment), context: context, includeMissing: includeMissing, count: 5)
+        let outfits = await services.outfits.build(closet: garments.map(\.engineGarment), context: context, includeMissing: includeMissing, count: 5)
         results = outfits.map {
             OutfitSuggestion(
                 outfit: $0, occasion: occasion, style: style, season: season, weather: nil, origin: .local,
