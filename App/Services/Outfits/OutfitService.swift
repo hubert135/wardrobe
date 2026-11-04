@@ -35,9 +35,16 @@ final class OutfitService {
         self.isAIEnabled = isAIEnabled
     }
 
-    func suggestions(closet: [EngineGarment], context: OutfitContext, count: Int) async -> ([EngineOutfit], OutfitSuggestion.Origin) {
+    func suggestions(closet: [EngineGarment], context: OutfitContext, count: Int, recentRecipeIDs: [String] = []) async -> ([EngineOutfit], OutfitSuggestion.Origin) {
         // Heavy combinatorics run off the main thread so the screen stays responsive.
         let engine = self.engine
+        // With a style guide, its recipes drive the suggestions.
+        if !context.recipes.isEmpty {
+            let outfits = await Task.detached(priority: .userInitiated) {
+                engine.suggestWithRecipes(closet: closet, context: context, count: count, recentlyShown: recentRecipeIDs)
+            }.value
+            return (outfits, .local)
+        }
         let shortlist = await Task.detached(priority: .userInitiated) {
             engine.shortlist(closet: closet, context: context, limit: 30)
         }.value

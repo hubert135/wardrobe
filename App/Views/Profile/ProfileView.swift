@@ -177,9 +177,9 @@ private struct ProfileForm: View {
                     Button {
                         isLoadingSample = true
                         Task {
-                            let removed = StylebookSampleCloset.removeDrawnSamples(from: services)
+                            let removed = StylebookSampleCloset.removePreviousSamples(from: services)
                             let added = await StylebookSampleCloset.load(into: services)
-                            sampleResult = "Added \(added) products with real photos" + (removed > 0 ? ", removed \(removed) drawn samples." : ".")
+                            sampleResult = "Added \(added) products with real photos" + (removed > 0 ? ", replaced \(removed) earlier sample garments." : ".")
                             isLoadingSample = false
                         }
                     } label: {
@@ -195,7 +195,7 @@ private struct ProfileForm: View {
                 } header: {
                     Text("Style guide")
                 } footer: {
-                    Text("Recipes and products from your e-book, served by your own server. The sample closet uses the e-book's product photos and replaces the drawn sample garments.")
+                    Text("Recipes and products from your e-book, served by your own server. The sample closet uses the e-book's product photos and replaces earlier sample garments; your own clothes stay.")
                 }
             }
 

@@ -66,7 +66,10 @@ final class TodayViewModel {
         phase = .loading
         if weather == nil { await loadWeather() }
         let context = makeContext(profile: profile)
-        let (outfits, origin) = await services.outfits.suggestions(closet: closet, context: context, count: 3)
+        let (outfits, origin) = await services.outfits.suggestions(
+            closet: closet, context: context, count: 3, recentRecipeIDs: Self.recentRecipeIDs
+        )
+        Self.remember(shownRecipes: outfits.compactMap { $0.recipe?.id })
         suggestions = outfits.map { outfit in
             OutfitSuggestion(
                 outfit: outfit, occasion: occasion, style: style, season: context.season ?? .autumn,
@@ -101,6 +104,22 @@ final class TodayViewModel {
             suggestions[index].isFavorite = true
         }
         favoriteFeedback += 1
+    }
+
+    // MARK: Rotation
+
+    private static let recentRecipesKey = "today.recentRecipeIDs"
+
+    /// Recipes shown recently (most recent last), so each "Suggest" brings different ones.
+    static var recentRecipeIDs: [String] {
+        UserDefaults.standard.stringArray(forKey: recentRecipesKey) ?? []
+    }
+
+    private static func remember(shownRecipes ids: [String]) {
+        guard !ids.isEmpty else { return }
+        var recent = recentRecipeIDs.filter { !ids.contains($0) } + ids
+        if recent.count > 15 { recent.removeFirst(recent.count - 15) }
+        UserDefaults.standard.set(recent, forKey: recentRecipesKey)
     }
 
     func swap(_ slot: Slot, in suggestion: OutfitSuggestion) {

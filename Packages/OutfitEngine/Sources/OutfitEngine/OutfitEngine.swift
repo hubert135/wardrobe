@@ -8,6 +8,7 @@ public struct OutfitEngine: Sendable {
     public var scorer: LocalScorer
     public var accessories: AccessoryMatcher
     public var writer: ReasoningWriter
+    public var recipeBuilder: RecipeOutfitBuilder
 
     public init(config: EngineConfig = .default) {
         self.config = config
@@ -17,6 +18,7 @@ public struct OutfitEngine: Sendable {
         self.scorer = LocalScorer(rules: rules)
         self.accessories = AccessoryMatcher(rules: rules)
         self.writer = ReasoningWriter(rules: rules)
+        self.recipeBuilder = RecipeOutfitBuilder(rules: rules)
     }
 
     /// Whether the closet is big enough to produce meaningful outfits.
@@ -33,6 +35,58 @@ public struct OutfitEngine: Sendable {
     }
 
     /// Fully offline suggestions: deterministic candidates, local scoring, template wording.
+    /// Style-guide first: recreates the recipes that fit the chosen style with the user's own garments,
+    /// rotating away from recipes shown recently. Returns fewer than `count` when few recipes fit.
+    public func recipeSuggestions(
+        closet: [EngineGarment],
+        context: OutfitContext,
+        count: Int,
+        recentlyShown: [String] = [],
+        allowMissing: Bool = false
+    ) -> [EngineOutfit] {
+        recipeBuilder.suggestions(closet: closet, context: context, count: count, recentlyShown: recentlyShown, allowMissing: allowMissing)
+            .map { fill in
+                let full = accessories.attach(to: fill.candidate, from: closet, context: context)
+                return EngineOutfit(
+                    candidate: full,
+                    title: recipeTitle(fill.recipe),
+                    reasoning: recipeReasoning(fill, context: context),
+                    score: fill.quality,
+                    missing: fill.missing,
+                    recipe: fill.recipe
+                )
+            }
+    }
+
+    /// Recipe-first, topped up with generic combinations if few recipes fit.
+    public func suggestWithRecipes(closet: [EngineGarment], context: OutfitContext, count: Int, recentlyShown: [String] = []) -> [EngineOutfit] {
+        var outfits = recipeSuggestions(closet: closet, context: context, count: count, recentlyShown: recentlyShown)
+        if outfits.count < count {
+            for extra in suggest(closet: closet, context: context, count: count + outfits.count)
+            where outfits.count < count && !outfits.contains(where: { $0.candidate.sharedGarmentCount(with: extra.candidate) >= 3 }) {
+                outfits.append(extra)
+            }
+        }
+        return outfits
+    }
+
+    private func recipeTitle(_ recipe: StyleRecipe) -> String {
+        let lower = recipe.title.lowercased()
+        return lower.prefix(1).uppercased() + lower.dropFirst()
+    }
+
+    private func recipeReasoning(_ fill: RecipeFill, context: OutfitContext) -> String {
+        var text = fill.recipe.summary.isEmpty ? "A combination from your style guide." : fill.recipe.summary
+        if let weather = context.weather, rules.requiresOuterwear(context), let outer = fill.candidate.pieces[.outerwear],
+           !fill.recipe.requiredPieces.contains(where: { $0.slot == .outerwear }) {
+            text += " Add the \(outer.shortLabel) for the \(Int(weather.feelsLikeC.rounded()))°C chill."
+        }
+        if fill.quality < 0.95, fill.missing.isEmpty {
+            text += " Closest match from your closet."
+        }
+        return text
+    }
+
     public func suggest(closet: [EngineGarment], context: OutfitContext, count: Int = 3) -> [EngineOutfit] {
         let candidates = builder.build(closet: closet, context: context)
         let picked = scorer.selectDiverse(scorer.rank(candidates, in: context), count: count)
@@ -107,18 +161,25 @@ public struct OutfitEngine: Sendable {
         catalog: [HypotheticalItem] = StarterCatalog.items,
         count: Int = 5
     ) -> [EngineOutfit] {
+        let fromRecipes = recipeSuggestions(closet: closet, context: context, count: count, allowMissing: includeMissing)
+        guard fromRecipes.count < count else { return fromRecipes }
         let missingItems = includeMissing ? catalog.filter { !$0.isOwned(in: closet) } : []
         let extras = missingItems.map(\.asGarment)
         let candidates = builder.build(closet: closet, context: context, extras: extras, maxHypotheticals: includeMissing ? 1 : 0)
         let picked = scorer.selectDiverse(scorer.rank(candidates, in: context), count: count)
         let itemsByID = Dictionary(uniqueKeysWithValues: missingItems.map { ($0.id, $0) })
 
-        return picked.map { scored in
+        let generic = picked.map { scored in
             var missing: [Slot: HypotheticalItem] = [:]
             for garment in scored.candidate.hypotheticalGarments {
                 if let slot = garment.slot, let item = itemsByID[garment.id] { missing[slot] = item }
             }
             return finalize(scored.candidate, score: scored.score, closet: closet, context: context, missing: missing)
         }
+        var outfits = fromRecipes
+        for extra in generic where outfits.count < count && !outfits.contains(where: { $0.candidate.sharedGarmentCount(with: extra.candidate) >= 3 }) {
+            outfits.append(extra)
+        }
+        return outfits
     }
 }
