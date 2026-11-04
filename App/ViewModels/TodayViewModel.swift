@@ -5,7 +5,7 @@ import OutfitEngine
 @MainActor
 @Observable
 final class TodayViewModel {
-    enum Phase: Equatable { case idle, loading, loaded, notEnoughGarments(count: Int), noMatches }
+    enum Phase: Equatable { case idle, loading, loaded, notEnoughGarments(usable: Int, uncategorized: Int), noMatches }
 
     var occasion: Occasion = .work
     var style: Style = .smartCasual
@@ -55,7 +55,11 @@ final class TodayViewModel {
         let closet = garments.map(\.engineGarment)
         guard services.outfits.engine.hasEnoughGarments(closet) else {
             suggestions = []
-            phase = .notEnoughGarments(count: closet.count)
+            // Garments without a category ("Other") can't be placed in an outfit.
+            phase = .notEnoughGarments(
+                usable: closet.filter { $0.slot != nil }.count,
+                uncategorized: closet.filter { $0.slot == nil }.count
+            )
             return
         }
 

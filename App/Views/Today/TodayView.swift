@@ -43,6 +43,7 @@ private struct TodayContent: View {
     @Environment(AppRouter.self) private var router
 
     var body: some View {
+        ScrollViewReader { proxy in
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.spacing) {
                 Text(Date().formatted(.dateTime.weekday(.wide).day().month(.wide)))
@@ -73,9 +74,17 @@ private struct TodayContent: View {
                 .disabled(model.phase == .loading)
                 .accessibilityIdentifier("today.suggest")
 
-                results
+                VStack(alignment: .leading, spacing: Theme.spacing) {
+                    results
+                }
+                .id("results")
             }
             .padding()
+        }
+        .onChange(of: model.phase) { _, phase in
+            guard phase != .idle else { return }
+            withAnimation { proxy.scrollTo("results", anchor: .top) }
+        }
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .refreshable { await model.refresh() }
@@ -112,15 +121,25 @@ private struct TodayContent: View {
             EmptyView()
         case .loading:
             ForEach(0..<2, id: \.self) { _ in OutfitCardSkeleton() }
-        case .notEnoughGarments(let count):
-            let remaining = max(model.minimumClosetSize - count, 0)
-            EmptyStateView(
-                symbol: "tshirt",
-                title: "Add a few more pieces",
-                message: "Add \(remaining) more garment\(remaining == 1 ? "" : "s") to unlock your first outfits. Good outfits need options.",
-                actionTitle: "Add garments",
-                action: { router.openAdd() }
-            )
+        case .notEnoughGarments(let usable, let uncategorized):
+            let remaining = max(model.minimumClosetSize - usable, 0)
+            if uncategorized > 0 {
+                EmptyStateView(
+                    symbol: "tag",
+                    title: "Some garments need a category",
+                    message: "\(uncategorized) of your garments \(uncategorized == 1 ? "has" : "have") no category yet (shirt, trousers, shoes…), so they can't be used in outfits. Open them in Closet → Needs review and tap Edit. You need \(remaining) more usable garment\(remaining == 1 ? "" : "s").",
+                    actionTitle: "Open Closet",
+                    action: { router.selectedTab = .closet }
+                )
+            } else {
+                EmptyStateView(
+                    symbol: "tshirt",
+                    title: "Add a few more pieces",
+                    message: "Add \(remaining) more garment\(remaining == 1 ? "" : "s") to unlock your first outfits. Good outfits need options.",
+                    actionTitle: "Add garments",
+                    action: { router.openAdd() }
+                )
+            }
         case .noMatches:
             EmptyStateView(
                 symbol: "cloud.sun",
