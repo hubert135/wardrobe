@@ -139,6 +139,8 @@ public struct OutfitContext: Sendable, Hashable {
     public var anchorGarmentIDs: Set<UUID>
     /// Gap analysis counts combinations regardless of what was worn recently.
     public var ignoresRecentWear: Bool
+    /// Style-guide recipes; outfits that follow one rank higher and are labeled with it.
+    public var recipes: [StyleRecipe]
 
     public init(
         occasion: Occasion? = nil,
@@ -148,7 +150,8 @@ public struct OutfitContext: Sendable, Hashable {
         date: Date = Date(),
         preferences: StylePreferences = .none,
         anchorGarmentIDs: Set<UUID> = [],
-        ignoresRecentWear: Bool = false
+        ignoresRecentWear: Bool = false,
+        recipes: [StyleRecipe] = []
     ) {
         self.occasion = occasion
         self.style = style
@@ -158,6 +161,7 @@ public struct OutfitContext: Sendable, Hashable {
         self.preferences = preferences
         self.anchorGarmentIDs = anchorGarmentIDs
         self.ignoresRecentWear = ignoresRecentWear
+        self.recipes = recipes
     }
 
     /// Allowed formality: occasion range intersected with style range.
@@ -265,13 +269,16 @@ public struct EngineOutfit: Sendable, Hashable, Identifiable {
     public var score: Double
     /// Specs for hypothetical pieces, keyed by slot.
     public var missing: [Slot: HypotheticalItem]
+    /// The style-guide recipe this outfit follows, if any.
+    public var recipe: StyleRecipe?
 
-    public init(candidate: OutfitCandidate, title: String, reasoning: String, score: Double, missing: [Slot: HypotheticalItem] = [:]) {
+    public init(candidate: OutfitCandidate, title: String, reasoning: String, score: Double, missing: [Slot: HypotheticalItem] = [:], recipe: StyleRecipe? = nil) {
         self.candidate = candidate
         self.title = title
         self.reasoning = reasoning
         self.score = score
         self.missing = missing
+        self.recipe = recipe
     }
 
     public var pieces: [Slot: EngineGarment] { candidate.pieces }

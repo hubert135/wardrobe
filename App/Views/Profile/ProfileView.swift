@@ -271,6 +271,7 @@ private struct ProfileForm: View {
         RankingCache().clear()
         auth.signOut()
         services.repository.deleteEverything()
+        services.stylebook.deleteCache()
         // A fresh profile brings back onboarding.
         _ = services.repository.profile()
     }

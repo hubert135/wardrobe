@@ -26,3 +26,6 @@ backend/.vercel/
 
 # Downloaded app builds
 *.ipa
+
+# Private style e-book data (paid content, never published)
+backend/data/

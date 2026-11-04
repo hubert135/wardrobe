@@ -20,6 +20,8 @@ export interface AppDependencies {
   ai: AIClient | null;
   /** Image editing for store-style photos; null when OPENAI_API_KEY is not set. */
   renderer?: ProductPhotoRenderer | null;
+  /** Returns the private style-guide JSON (built from the user's e-book), or null if there is none. */
+  loadStylebook?: () => Promise<string | null>;
   /** Injected in tests; defaults to verification against Apple's public keys. */
   verifyAppleToken?: AppleTokenVerifier;
   now?: () => number;
@@ -109,6 +111,14 @@ export function createApp(deps: AppDependencies) {
   };
 
   const aiLimiter = new RateLimiter(config.rateLimit.requests, config.rateLimit.windowMs, now);
+  // Style guide: private recipes and shop links from the user's own e-book (never part of the repo).
+  app.get("/v1/stylebook", requireSession, async (c) => {
+    const json = deps.loadStylebook ? await deps.loadStylebook() : null;
+    if (!json) throw new ApiError(404, "stylebook_not_found", "No style guide has been imported on this server.");
+    c.header("Cache-Control", "no-store");
+    return c.body(json, 200, { "Content-Type": "application/json; charset=utf-8" });
+  });
+
   for (const path of ["/v1/garments/*", "/v1/orders/*", "/v1/outfits/*"]) {
     app.use(path, requireSession, rateLimit(aiLimiter, (c) => (c as Context<Env>).get("userId")));
   }

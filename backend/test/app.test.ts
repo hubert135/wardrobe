@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { AIOutputError, AIUnavailableError } from "../src/ai/client.js";
 import { RateLimiter } from "../src/middleware/rateLimit.js";
-import { devSession, FakeAI, fakeImage, makeApp, post, sampleGarment } from "./helpers.js";
+import { createApp } from "../src/app.js";
+import { loadConfig } from "../src/config.js";
+import { devSession, FakeAI, fakeImage, makeApp, post, sampleGarment, testEnv } from "./helpers.js";
 
 describe("auth", () => {
   it("issues a session for the dev token when bypass is enabled", async () => {
@@ -201,5 +203,33 @@ describe("device sessions", () => {
   it("require a UUID", async () => {
     const app = makeApp(new FakeAI(), { ALLOW_DEVICE_SESSIONS: "true" });
     expect((await post(app, "/v1/auth/device", { deviceId: "not-a-uuid" })).status).toBe(400);
+  });
+});
+
+describe("GET /v1/stylebook", () => {
+  const get = (app: ReturnType<typeof makeApp>, token: string) =>
+    app.request("/v1/stylebook", { headers: { authorization: `Bearer ${token}` } });
+
+  it("serves the private style guide to signed-in devices", async () => {
+    const app = createApp({
+      config: loadConfig(testEnv),
+      ai: new FakeAI(),
+      loadStylebook: async () => JSON.stringify({ version: "v1", recipes: [] }),
+    });
+    const token = await devSession(app as never);
+    const response = await get(app as never, token);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ version: "v1", recipes: [] });
+  });
+
+  it("returns 404 when no style guide was imported", async () => {
+    const app = makeApp(new FakeAI());
+    const token = await devSession(app);
+    expect((await get(app, token)).status).toBe(404);
+  });
+
+  it("requires a session", async () => {
+    const app = makeApp(new FakeAI());
+    expect((await app.request("/v1/stylebook")).status).toBe(401);
   });
 });

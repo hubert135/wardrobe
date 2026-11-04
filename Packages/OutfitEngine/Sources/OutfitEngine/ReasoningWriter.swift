@@ -15,7 +15,13 @@ public struct ReasoningWriter: Sendable {
         return sentence.prefix(1).uppercased() + sentence.dropFirst()
     }
 
-    public func reasoning(for candidate: OutfitCandidate, in context: OutfitContext) -> String {
+    public func reasoning(for candidate: OutfitCandidate, in context: OutfitContext, recipe: StyleRecipe? = nil) -> String {
+        let sentence = baseReasoning(for: candidate, in: context)
+        guard let recipe else { return sentence }
+        return "Follows recipe \(recipe.id) from your style guide. " + sentence
+    }
+
+    private func baseReasoning(for candidate: OutfitCandidate, in context: OutfitContext) -> String {
         let pieces = candidate.pieces
         let upper = pieces[.outerwear] ?? pieces[.top]
         let accents = rules.accentColors(in: candidate.garments)

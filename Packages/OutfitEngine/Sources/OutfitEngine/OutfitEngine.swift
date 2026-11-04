@@ -50,12 +50,14 @@ public struct OutfitEngine: Sendable {
         missing: [Slot: HypotheticalItem] = [:]
     ) -> EngineOutfit {
         let full = accessories.attach(to: candidate, from: closet, context: context)
+        let recipe = RecipeMatcher().bestMatch(for: full, in: context)?.recipe
         return EngineOutfit(
             candidate: full,
             title: title ?? writer.title(for: full),
-            reasoning: reasoning ?? writer.reasoning(for: full, in: context),
+            reasoning: reasoning ?? writer.reasoning(for: full, in: context, recipe: recipe),
             score: score ?? scorer.score(full, in: context),
-            missing: missing
+            missing: missing,
+            recipe: recipe
         )
     }
 
@@ -85,12 +87,14 @@ public struct OutfitEngine: Sendable {
         let candidate = OutfitCandidate(pieces: pieces)
         var missing = outfit.missing
         missing[slot] = nil
+        let recipe = RecipeMatcher().bestMatch(for: candidate, in: context)?.recipe
         return EngineOutfit(
             candidate: candidate,
             title: writer.title(for: candidate),
-            reasoning: writer.reasoning(for: candidate, in: context),
+            reasoning: writer.reasoning(for: candidate, in: context, recipe: recipe),
             score: scorer.score(candidate, in: context),
-            missing: missing
+            missing: missing,
+            recipe: recipe
         )
     }
 

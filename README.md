@@ -180,3 +180,17 @@ Decisions the spec left open, with the default chosen:
 | 6. Order import | Paste text, screenshot, Share Extension, image download, duplicates | |
 | 7. Shop | Gap ranking, 3 tiers, search links in Safari view, budget/brand filters, wishlist, "Bought" → closet | Fixed currency rates |
 | 8. Profile + polish | Preferences, stats, notifications, appearance, export, delete, onboarding, haptics, skeletons, empty/error states, README | |
+
+## Style guide (private e-book recipes)
+
+Outfit recipes and shop links from a style e-book you own can drive suggestions: outfits that follow a recipe rank higher and are labeled "Style guide · recipe NN", and **Shop → From your style guide** shows how much of each recipe you own plus the e-book's products (shop, price, link) in three budgets.
+
+The e-book is paid content, so its data never goes into this repository: `backend/data/` is git-ignored. To (re)import:
+
+```bash
+pip install pymupdf
+python tools/stylebook/import_ebook.py "path/to/ebook.pdf"   # recipes, products, prices, shops -> backend/data/stylebook.raw.json
+python tools/stylebook/build_stylebook.py                     # + backend/data/stylebook.annotations.json -> backend/data/stylebook.json
+```
+
+`stylebook.annotations.json` holds the engine-readable formula of each recipe (piece slots, categories, colors, materials). The local server serves `stylebook.json` at `GET /v1/stylebook`; the app caches it, so it keeps working away from home.

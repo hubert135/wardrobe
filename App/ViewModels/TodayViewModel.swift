@@ -121,7 +121,8 @@ final class TodayViewModel {
             season: Season.from(date: now),
             weather: weather?.snapshot?.engineWeather,
             date: now,
-            preferences: profile.stylePreferences
+            preferences: profile.stylePreferences,
+            recipes: services.stylebook.recipes
         )
     }
 }

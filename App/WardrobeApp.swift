@@ -36,6 +36,7 @@ struct RootView: View {
         .onChange(of: scenePhase, initial: true) { _, phase in
             guard phase == .active else { return }
             services.checkPendingImports()
+            Task { await services.stylebook.refresh() }
             Task { await services.auth.verifyCredentialState() }
         }
     }

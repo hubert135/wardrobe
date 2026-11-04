@@ -36,7 +36,8 @@ final class BuilderViewModel {
         let profile = services.repository.profile()
         let context = OutfitContext(
             occasion: occasion, style: style, season: season, weather: nil, date: Date(),
-            preferences: profile.stylePreferences, anchorGarmentIDs: anchorIDs
+            preferences: profile.stylePreferences, anchorGarmentIDs: anchorIDs,
+            recipes: services.stylebook.recipes
         )
         let outfits = services.outfits.build(closet: garments.map(\.engineGarment), context: context, includeMissing: includeMissing, count: 5)
         results = outfits.map {

@@ -28,6 +28,8 @@ protocol WardrobeAPI: AnyObject {
     func rankOutfits(_ request: RankOutfitsRequest) async throws -> RankOutfitsResponse
     /// Turns a garment photo into an online-store style product photo (slow: up to ~2 minutes).
     func renderProductPhoto(image: ImagePayload, garment: RenderGarmentHintsDTO?) async throws -> ImagePayload
+    /// The private style guide (recipes and shop links) imported on the user's server.
+    func stylebook() async throws -> StylebookDTO
 }
 
 /// Supplies the bearer token for authenticated requests.
@@ -98,9 +100,19 @@ final class HTTPWardrobeAPI: WardrobeAPI {
         return response.image
     }
 
-    /// Sends a request. Authenticated calls get an automatic device session when there is none,
-    /// and retry once with a fresh one if the server says the session expired. No sign-in needed.
+    func stylebook() async throws -> StylebookDTO {
+        try await send("v1/stylebook", body: Optional<NoBody>.none, authenticated: true, timeout: 60)
+    }
+
+    private struct NoBody: Encodable {}
+
     private func post<Body: Encodable, Response: Decodable>(_ path: String, body: Body, authenticated: Bool = true, timeout: TimeInterval? = nil) async throws -> Response {
+        try await send(path, body: Optional(body), authenticated: authenticated, timeout: timeout)
+    }
+
+    /// Sends a request (POST with a body, GET without). Authenticated calls get an automatic device session
+    /// when there is none, and retry once with a fresh one if the server says the session expired.
+    private func send<Body: Encodable, Response: Decodable>(_ path: String, body: Body?, authenticated: Bool, timeout: TimeInterval?) async throws -> Response {
         do {
             return try await perform(path, body: body, authenticated: authenticated, timeout: timeout)
         } catch APIError.unauthorized where authenticated {
@@ -118,10 +130,10 @@ final class HTTPWardrobeAPI: WardrobeAPI {
         tokens.store(session.sessionToken)
     }
 
-    private func perform<Body: Encodable, Response: Decodable>(_ path: String, body: Body, authenticated: Bool, timeout: TimeInterval?) async throws -> Response {
+    private func perform<Body: Encodable, Response: Decodable>(_ path: String, body: Body?, authenticated: Bool, timeout: TimeInterval?) async throws -> Response {
         guard let baseURL = baseURL() else { throw APIError.notConfigured }
         var request = URLRequest(url: baseURL.appendingPathComponent(path))
-        request.httpMethod = "POST"
+        request.httpMethod = body == nil ? "GET" : "POST"
         request.timeoutInterval = timeout ?? self.timeout
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if authenticated {
@@ -129,7 +141,7 @@ final class HTTPWardrobeAPI: WardrobeAPI {
             guard let token = tokens?.sessionToken else { throw APIError.unauthorized }
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-        request.httpBody = try encoder.encode(body)
+        if let body { request.httpBody = try encoder.encode(body) }
 
         let result: (Data, URLResponse)
         do {
@@ -217,4 +229,5 @@ final class OfflineWardrobeAPI: WardrobeAPI {
     func parseOrder(text: String?, image: ImagePayload?) async throws -> [ParsedOrderItemDTO] { throw APIError.offline }
     func rankOutfits(_ request: RankOutfitsRequest) async throws -> RankOutfitsResponse { throw APIError.offline }
     func renderProductPhoto(image: ImagePayload, garment: RenderGarmentHintsDTO?) async throws -> ImagePayload { throw APIError.offline }
+    func stylebook() async throws -> StylebookDTO { throw APIError.offline }
 }

@@ -52,6 +52,11 @@ public struct LocalScorer: Sendable {
 
         // Owned outfits are preferred over ones that need a purchase.
         score -= 0.4 * Double(candidate.hypotheticalGarments.count)
+
+        // Proven combinations from the user's style guide.
+        if let match = RecipeMatcher().bestMatch(for: candidate, in: context) {
+            score += 2.5 * match.quality
+        }
         return score
     }
 

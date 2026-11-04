@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
@@ -12,10 +13,15 @@ try {
 // Local server: print each request (method, path, status, time) so connection problems are easy to spot.
 const app = new Hono();
 app.use("*", logger());
-app.route("/", createAppFromEnv(process.env));
+const stylebookPath = process.env.STYLEBOOK_PATH ?? "data/stylebook.json";
+const loadStylebook = () => readFile(stylebookPath, "utf8").catch(() => null);
+app.route("/", createAppFromEnv(process.env, { loadStylebook }));
 const port = Number(process.env.PORT ?? 8787);
 
 serve({ fetch: app.fetch, port }, (info) => {
   console.log(`Wardrobe backend listening on http://localhost:${info.port}`);
   for (const line of describeFeatures(process.env)) console.log(`  ${line}`);
+  loadStylebook().then((json) =>
+    console.log(`  Style guide: ${json ? `${JSON.parse(json).recipes.length} recipes from ${stylebookPath}` : "none (see tools/stylebook)"}`),
+  );
 });

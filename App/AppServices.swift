@@ -71,6 +71,7 @@ final class AppServices {
     let imageDownloader = ProductImageDownloader()
     let outfits: OutfitService
     let productPhotos: ProductPhotoQueue
+    let stylebook: StylebookStore
     let shop: ShopService
     let notifications = NotificationService()
     let router = AppRouter()
@@ -108,6 +109,7 @@ final class AppServices {
         let aiAvailable = !options.isUITesting
         outfits = OutfitService(api: api, isAIEnabled: { aiAvailable })
         shop = ShopService()
+        stylebook = StylebookStore(api: api)
         productPhotos = ProductPhotoQueue(
             api: api, repository: repository, imageStore: imageStore,
             canUseAI: { aiAvailable }
