@@ -4,43 +4,61 @@ import type { ImagePayload } from "../schemas/common.js";
 import type { RenderGarmentHints } from "../schemas/render.js";
 import { AIUnavailableError } from "./client.js";
 
-/** Turns a phone photo of a garment into an online-store style product photo. */
+/**
+ * Produces an online-store style product photo: from the user's photo when there is one,
+ * otherwise from the garment description alone (an illustration of that kind of garment).
+ */
 export interface ProductPhotoRenderer {
-  render(input: { image: ImagePayload; garment: RenderGarmentHints | null }): Promise<ImagePayload>;
+  render(input: { image: ImagePayload | null; garment: RenderGarmentHints | null }): Promise<ImagePayload>;
 }
 
 /** Thrown when no image provider is configured (no OPENAI_API_KEY). */
 export class RendererNotConfiguredError extends Error {}
 
+function describe(garment: RenderGarmentHints | null): string | null {
+  if (!garment) return null;
+  return [
+    garment.primaryColor,
+    garment.secondaryColor ? `with ${garment.secondaryColor}` : null,
+    garment.pattern && garment.pattern !== "solid" ? garment.pattern : null,
+    garment.material,
+    garment.subcategory || garment.category,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+const PRESENTATION = [
+  "Presentation: front view, centered, upright and symmetrical, neatly shaped as if worn by an invisible mannequin (ghost mannequin), sleeves relaxed along the body, smooth and wrinkle-free, natural proportions. Trousers and shorts are shown front-facing at full length; shoes are shown as a pair in a three-quarter side view; small accessories are laid out neatly.",
+  "Pure white seamless background, soft even studio lighting, a very subtle soft shadow below the item, the item filling most of the frame with a small even margin.",
+  "No person, no hanger, no mannequin visible, no props, no text, no watermark, no border.",
+];
+
 /**
- * The instruction for the image model. Fidelity first: the garment must stay the same garment;
+ * The instruction for editing the user's photo. Fidelity first: the garment must stay the same garment;
  * only the presentation changes.
  */
 export function buildProductPhotoPrompt(garment: RenderGarmentHints | null): string {
-  const described = garment
-    ? [
-        garment.primaryColor,
-        garment.secondaryColor ? `with ${garment.secondaryColor}` : null,
-        garment.pattern && garment.pattern !== "solid" ? garment.pattern : null,
-        garment.material,
-        garment.subcategory || garment.category,
-      ]
-        .filter(Boolean)
-        .join(" ")
-    : null;
-
+  const described = describe(garment);
   return [
     "Create a professional e-commerce product photo of the clothing item in the input photo, like the product images in a premium online fashion store.",
     described
       ? `The item is a ${described}${garment?.name ? ` ("${garment.name}")` : ""}. If the photo shows several items, show only this one. If this description conflicts with the photo, follow the photo.`
       : null,
     "Keep the garment exactly as it is: the same colors and shades, pattern, knit or fabric texture, stitching, buttons, zips, pockets, collar and cuffs, and any logo, label or print in the same place and size. Do not add, remove or redesign details, and do not change the color.",
-    "Presentation: front view, centered, upright and symmetrical, neatly shaped as if worn by an invisible mannequin (ghost mannequin), sleeves relaxed along the body, smooth and wrinkle-free, natural proportions. Trousers and shorts are shown front-facing at full length; shoes are shown as a pair in a three-quarter side view; small accessories are laid out neatly.",
-    "Pure white seamless background, soft even studio lighting, a very subtle soft shadow below the item, the item filling most of the frame with a small even margin.",
-    "No person, no hanger, no mannequin visible, no props, no text, no watermark, no border.",
+    ...PRESENTATION,
   ]
     .filter(Boolean)
     .join("\n");
+}
+
+/** The instruction when there is no photo: a clean, unbranded product shot matching the description. */
+export function buildDescribedProductPrompt(garment: RenderGarmentHints): string {
+  return [
+    `Create a professional e-commerce product photo of a men's ${describe(garment)}${garment.name ? ` ("${garment.name}")` : ""}, like the product images in a premium online fashion store.`,
+    "A classic, well-made, timeless design in exactly this color, with no visible logos or brand names.",
+    ...PRESENTATION,
+  ].join("\n");
 }
 
 export interface OpenAIRendererOptions {
@@ -58,21 +76,27 @@ export class OpenAIProductPhotoRenderer implements ProductPhotoRenderer {
     this.client = new OpenAI({ apiKey: options.apiKey, timeout: options.timeoutMs ?? 150_000, maxRetries: 1 });
   }
 
-  async render(input: { image: ImagePayload; garment: RenderGarmentHints | null }): Promise<ImagePayload> {
-    const extension = input.image.mediaType.split("/")[1] ?? "jpeg";
-    const file = await toFile(Buffer.from(input.image.data, "base64"), `garment.${extension}`, { type: input.image.mediaType });
+  async render(input: { image: ImagePayload | null; garment: RenderGarmentHints | null }): Promise<ImagePayload> {
+    const common = {
+      model: this.options.model,
+      size: "1024x1536",
+      quality: this.options.quality,
+      background: "opaque",
+      output_format: "jpeg",
+      output_compression: 90,
+      n: 1,
+    } as const;
     try {
-      const response = await this.client.images.edit({
-        model: this.options.model,
-        image: file,
-        prompt: buildProductPhotoPrompt(input.garment),
-        size: "1024x1536",
-        quality: this.options.quality,
-        background: "opaque",
-        output_format: "jpeg",
-        output_compression: 90,
-        n: 1,
-      });
+      let response: OpenAI.ImagesResponse;
+      if (input.image) {
+        const extension = input.image.mediaType.split("/")[1] ?? "jpeg";
+        const file = await toFile(Buffer.from(input.image.data, "base64"), `garment.${extension}`, { type: input.image.mediaType });
+        response = await this.client.images.edit({ ...common, image: file, prompt: buildProductPhotoPrompt(input.garment) });
+      } else if (input.garment) {
+        response = await this.client.images.generate({ ...common, prompt: buildDescribedProductPrompt(input.garment) });
+      } else {
+        throw new AIUnavailableError("Nothing to render: no photo and no description", false);
+      }
       const data = response.data?.[0]?.b64_json;
       if (!data) throw new AIUnavailableError("The image model returned no image", true);
       return { mediaType: "image/jpeg", data };

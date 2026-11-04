@@ -21,8 +21,10 @@ import urllib.request
 from pathlib import Path
 
 import fitz  # PyMuPDF
+from PIL import Image
 
 OUT_DIR = Path(__file__).resolve().parents[2] / "backend" / "data"
+IMAGE_DIR = OUT_DIR / "images"
 
 BUDGETS = {
     "WERSJA STANDARD": "standard",
@@ -131,26 +133,140 @@ def labelled_items(lines: list[tuple[str, fitz.Rect]]) -> list[dict]:
     return items
 
 
+FAMILIES = {
+    "knit": ["swet", "sweater", "jumper", "knit", "golf", "turtleneck", "roll-neck", "rollneck", "kardigan", "cardigan", "pullover", "troyer"],
+    "polo": ["polo", "rugby"],
+    "tee": ["koszulk", "t-shirt", "tshirt", "-tee", "longsleeve", "long-sleeve"],
+    "shirt": ["koszul", "shirt", "overshirt"],
+    "sweat": ["bluz", "hoodie", "sweatshirt"],
+    "outer": ["kurtk", "jacket", "parka", "plaszcz", "coat", "trench", "trencz", "peacoat", "kamizelk", "vest", "gilet", "bomber", "harrington", "wiatrowk"],
+    "tailored": ["marynark", "blazer", "garnitur", "suit"],
+    "bottom": ["spodn", "trouser", "pants", "chino", "sztruks", "cord", "jogger", "jeans", "denim"],
+    "shoes": ["buty", "shoe", "sneaker", "trzewik", "boot", "sztyblet", "chelsea", "derby", "loafer", "mokasyn", "oksford", "brogs", "chukka", "polbut", "obuwie"],
+    "cap": ["czapk", "beanie", "-cap"],
+    "bag": ["torb", "-bag", "plecak", "backpack", "weekend"],
+    "belt": ["pasek", "belt"],
+    "scarf": ["szal", "scarf"],
+    "gloves": ["rekawicz", "glove"],
+    "tie": ["krawat", "-tie"],
+    "bandana": ["bandan", "chust"],
+    "hat": ["kapelusz", "fedora"],
+}
+LABEL_FAMILY = {
+    "SWETER": "knit", "GOLF": "knit", "KARDIGAN": "knit", "POLO": "polo", "RUGBY SHIRT": "polo",
+    "TSHIRT": "tee", "LONGSLEEVE": "tee", "KOSZULA": "shirt", "BLUZA": "sweat",
+    "KURTKA": "outer", "PARKA": "outer", "PŁASZCZ": "outer", "TRENCZ": "outer", "PEACOAT": "outer", "WIERZCHNIA": "outer", "KAMIZELKA": "outer",
+    "MARYNARKA": "tailored", "GARNITUR": "tailored",
+    "SPODNIE": "bottom", "SZTRUKSY": "bottom", "CHINOSY": "bottom", "JOGGERY": "bottom", "JEANSY": "bottom",
+    "SNEAKERSY": "shoes", "BUTY": "shoes", "TRZEWIKI": "shoes", "SZTYBLETY": "shoes", "DERBY": "shoes", "LOAFERSY": "shoes",
+    "LOAFERS": "shoes", "MOKASYNY": "shoes", "OXFORDY": "shoes",
+    "CZAPKA": "cap", "TORBA": "bag", "PLECAK": "bag", "PASEK": "belt", "SZAL": "scarf", "RĘKAWICZKI": "gloves",
+    "KRAWAT": "tie", "BANDANA": "bandana", "KAPELUSZ": "hat",
+}
+# A knitted vest or overshirt can legitimately sit in either family.
+COMPATIBLE = {
+    ("outer", "knit"), ("knit", "outer"), ("shirt", "outer"), ("outer", "shirt"), ("polo", "tee"), ("tee", "polo"),
+    ("polo", "knit"), ("knit", "polo"), ("polo", "sweat"), ("tee", "sweat"), ("scarf", "bandana"), ("bandana", "scarf"),
+}
+# Brand names that contain product words.
+BRAND_NOISE = ("polo-ralph-lauren", "polo ralph lauren", "ralph-lauren-polo", "sunset-suits", "suitsupply")
+
+
+def url_family(url: str) -> str | None:
+    path = urllib.parse.unquote(urllib.parse.urlparse(url).path).lower()
+    path = path.translate(str.maketrans("ąćęłńóśźż", "acelnoszz"))
+    for brand in BRAND_NOISE:
+        path = path.replace(brand, " ")
+    for family in ("tee", "shoes", "sweat", "bottom", "knit", "tailored", "outer", "polo", "shirt", "cap", "bag", "belt", "scarf", "gloves", "tie", "bandana", "hat"):
+        if any(keyword in path for keyword in FAMILIES[family]):
+            return family
+    return None
+
+
 def match_links(items: list[dict], links: list[dict]) -> None:
-    """Assigns each item the nearest product link (one-to-one, closest pairs first)."""
+    """Assigns each item a product link (one-to-one): close on the page and, when the shop URL says what it
+    sells, of the same kind as the label."""
     def distance(box: fitz.Rect, rect: fitz.Rect) -> float:
         cx, cy = (box.x0 + box.x1) / 2, (box.y0 + box.y1) / 2
         dx = max(rect.x0 - cx, 0, cx - rect.x1)
         dy = max(rect.y0 - cy, 0, cy - rect.y1)
         return (dx * dx + dy * dy) ** 0.5
 
-    pairs = sorted(
-        ((distance(item["box"], fitz.Rect(link["from"])), i, j) for i, item in enumerate(items) for j, link in enumerate(links)),
-        key=lambda p: p[0],
-    )
-    used_items, used_links = set(), set()
-    for dist, i, j in pairs:
-        if i in used_items or j in used_links:
+    def cost(item: dict, link: dict) -> float:
+        dist = distance(item["box"], fitz.Rect(link["from"]))
+        label = LABEL_FAMILY.get(item["label"])
+        family = url_family(resolve(link["uri"]))
+        if label and family and label != family and (label, family) not in COMPATIBLE:
+            dist += 400  # the shop URL clearly sells something else
+        return dist
+
+    if not items or not links:
+        return
+    costs = [[cost(item, link) for link in links] for item in items]
+    no_link = 600.0  # an item may stay without a link if that is cheaper overall
+    # Exact minimum-cost assignment by dynamic programming over used links (pages have at most ~12 links).
+    best: dict[int, tuple[float, list[int | None]]] = {0: (0.0, [])}
+    for i in range(len(items)):
+        nxt: dict[int, tuple[float, list[int | None]]] = {}
+        for used, (total, chosen) in best.items():
+            options = [(total + no_link, used, chosen + [None])]
+            options += [(total + costs[i][j], used | (1 << j), chosen + [j]) for j in range(len(links)) if not used & (1 << j)]
+            for value, mask, picks in options:
+                if mask not in nxt or value < nxt[mask][0]:
+                    nxt[mask] = (value, picks)
+        best = nxt
+    _, picks = min(best.values(), key=lambda v: v[0])
+    for i, j in enumerate(picks):
+        if j is None:
             continue
-        used_items.add(i)
-        used_links.add(j)
         items[i]["url"] = links[j]["uri"]
-        items[i]["matchDistance"] = round(dist, 1)
+        items[i]["rect"] = fitz.Rect(links[j]["from"])
+        items[i]["matchDistance"] = round(costs[i][j], 1)
+
+
+def save_product_image(doc: fitz.Document, page: fitz.Page, rect: fitz.Rect, name: str) -> str | None:
+    """Saves the product photo under a link (the image that overlaps the link area most) as a JPEG on white."""
+    best_xref, best_overlap = None, 0.0
+    for info in page.get_image_info(xrefs=True):
+        xref = info.get("xref")
+        if not xref:
+            continue
+        overlap = fitz.Rect(info["bbox"]) & rect
+        area = 0.0 if overlap.is_empty else overlap.get_area()
+        if area > best_overlap:
+            best_xref, best_overlap = xref, area
+    if not best_xref or best_overlap < 0.3 * rect.get_area():
+        return None
+    pix = fitz.Pixmap(doc, best_xref)
+    if pix.n - pix.alpha >= 4:  # CMYK
+        pix = fitz.Pixmap(fitz.csRGB, pix)
+    smask = doc.extract_image(best_xref).get("smask") or 0
+    if smask and not pix.alpha:
+        # Transparent product cutouts store their alpha channel separately.
+        pix = fitz.Pixmap(pix, fitz.Pixmap(doc, smask))
+    mode = "RGBA" if pix.alpha else "RGB"
+    image = Image.frombytes(mode, (pix.width, pix.height), pix.samples)
+    if mode == "RGBA":
+        white = Image.new("RGB", image.size, (255, 255, 255))
+        white.paste(image, mask=image.split()[3])
+        image = white
+    image.thumbnail((900, 900))
+    IMAGE_DIR.mkdir(parents=True, exist_ok=True)
+    file_name = f"{name}.jpg"
+    image.save(IMAGE_DIR / file_name, "JPEG", quality=85)
+    return file_name
+
+
+def with_images(doc: fitz.Document, page: fitz.Page, items: list[dict], prefix: str) -> list[dict]:
+    result = []
+    for index, item in enumerate(items):
+        entry = product(item)
+        if "rect" in item:
+            image = save_product_image(doc, page, item["rect"], f"{prefix}-{index + 1}")
+            if image:
+                entry["image"] = image
+        result.append(entry)
+    return result
 
 
 def product(item: dict) -> dict:
@@ -187,12 +303,13 @@ def main(pdf_path: str) -> None:
             total = next((int(m.group(1)) for t in texts if (m := re.search(r"RAZEM:\s*(\d+)", t))), None)
             items = labelled_items(lines)
             match_links(items, links)
-            recipe["budgets"][budget] = {"total": total, "items": [product(i) for i in items]}
+            recipe["budgets"][budget] = {"total": total, "items": with_images(doc, page, items, f"r{number}-{budget}")}
         elif any("INNE OPCJE" in t for t in texts) and links:
             heading = next((t for t, box in lines if box.y0 < 120 and LABEL.match(t) and "INNE OPCJE" not in t), "")
             items = labelled_items(lines)
             match_links(items, links)
-            alternatives.append({"page": page_index + 1, "title": heading, "options": [product(i) | {"brand": i["label"]} for i in items]})
+            options = with_images(doc, page, items, f"alt{page_index + 1}")
+            alternatives.append({"page": page_index + 1, "title": heading, "options": [o | {"brand": i["label"]} for o, i in zip(options, items)]})
         print(f"page {page_index + 1}: {'recipe ' + number + ' ' + budget if budget and number else ('alternatives' if alternatives and alternatives[-1]['page'] == page_index + 1 else '-')}")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)

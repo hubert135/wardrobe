@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { AIUnavailableError } from "../src/ai/client.js";
-import { buildProductPhotoPrompt } from "../src/ai/productPhoto.js";
+import { buildDescribedProductPrompt, buildProductPhotoPrompt } from "../src/ai/productPhoto.js";
 import { RenderProductPhotoResponseSchema } from "../src/schemas/render.js";
 import { devSession, FakeAI, FakeRenderer, fakeImage, makeApp, post } from "./helpers.js";
 
@@ -82,5 +82,30 @@ describe("product photo prompt", () => {
     const prompt = buildProductPhotoPrompt(null);
     expect(prompt).not.toContain("The item is a");
     expect(prompt).toMatch(/ghost mannequin/i);
+  });
+});
+
+describe("product photos without a source photo", () => {
+  it("are created from the description alone", async () => {
+    const renderer = new FakeRenderer();
+    const app = makeApp(new FakeAI(), {}, undefined, renderer);
+    const token = await devSession(app);
+    const response = await post(app, "/v1/garments/render", { garment: hints }, token);
+    expect(response.status).toBe(200);
+    expect(renderer.calls[0]!.image).toBeNull();
+    expect(renderer.calls[0]!.garment).toMatchObject({ category: "sweater" });
+  });
+
+  it("need at least a photo or a description", async () => {
+    const app = makeApp(new FakeAI(), {}, undefined, new FakeRenderer());
+    const token = await devSession(app);
+    expect((await post(app, "/v1/garments/render", {}, token)).status).toBe(400);
+  });
+
+  it("use a prompt that describes the garment and avoids logos", () => {
+    const prompt = buildDescribedProductPrompt(hints as never);
+    expect(prompt).toContain("men's black with green patterned lambswool crew neck sweater");
+    expect(prompt).toMatch(/no visible logos/i);
+    expect(prompt).toMatch(/white seamless background/i);
   });
 });

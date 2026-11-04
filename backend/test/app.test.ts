@@ -233,3 +233,30 @@ describe("GET /v1/stylebook", () => {
     expect((await app.request("/v1/stylebook")).status).toBe(401);
   });
 });
+
+describe("GET /v1/stylebook/images/:name", () => {
+  const make = () =>
+    createApp({
+      config: loadConfig(testEnv),
+      ai: new FakeAI(),
+      loadStylebookImage: async (name) => (name === "r05-standard-1.jpg" ? new Uint8Array([0xff, 0xd8, 0xff]) : null),
+    });
+
+  it("serves product photos as JPEG", async () => {
+    const app = make();
+    const token = await devSession(app as never);
+    const response = await app.request("/v1/stylebook/images/r05-standard-1.jpg", { headers: { authorization: `Bearer ${token}` } });
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("image/jpeg");
+  });
+
+  it("rejects anything that is not a plain file name", async () => {
+    const app = make();
+    const token = await devSession(app as never);
+    for (const name of ["..%2F.env", "x.png", "UPPER.jpg"]) {
+      const response = await app.request(`/v1/stylebook/images/${name}`, { headers: { authorization: `Bearer ${token}` } });
+      expect([400, 404]).toContain(response.status);
+    }
+    expect((await app.request("/v1/stylebook/images/r05-standard-1.jpg")).status).toBe(401);
+  });
+});

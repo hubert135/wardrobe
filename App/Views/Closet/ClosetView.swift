@@ -34,6 +34,12 @@ struct ClosetView: View {
     @State private var searchText = ""
     @State private var filter = ClosetFilter()
     @State private var isFilterPresented = false
+    @Environment(AppServices.self) private var services
+
+    /// Garments still shown with a drawing or a plain photo.
+    private var withoutProductPhoto: [Garment] {
+        garments.filter { $0.productImageFile == nil && ProductPhotoQueue.canCreatePhoto(for: $0) }
+    }
 
     private let columns = [GridItem(.adaptive(minimum: 104), spacing: 12)]
 
@@ -56,6 +62,7 @@ struct ClosetView: View {
                     .padding(.top, 60)
                 } else {
                     VStack(alignment: .leading, spacing: 20) {
+                        productPhotoBanner
                         if !pending.isEmpty && filter.status == nil && searchText.isEmpty {
                             section(title: "Needs review", subtitle: "Check these details before they're used in outfits.", items: pending)
                         }
@@ -87,6 +94,37 @@ struct ClosetView: View {
                 ClosetFilterSheet(filter: $filter)
                     .presentationDetents([.medium, .large])
             }
+        }
+    }
+
+    @ViewBuilder
+    private var productPhotoBanner: some View {
+        let queue = services.productPhotos
+        let waiting = withoutProductPhoto.filter { queue.isWorking(on: $0.id) }.count
+        let missing = withoutProductPhoto.filter { !queue.isWorking(on: $0.id) }
+        if waiting > 0 {
+            HStack(spacing: 12) {
+                ProgressView()
+                Text("Creating product photos… \(waiting) left").font(.subheadline)
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Theme.cardBackground, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        } else if !missing.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                Label("\(missing.count) garment\(missing.count == 1 ? "" : "s") without a product photo", systemImage: "photo.badge.plus")
+                    .font(.subheadline.weight(.semibold))
+                Text("Turn them into store-style photos so outfits look like a shop. About $\(String(format: "%.2f", Double(missing.count) * 0.05)) on your OpenAI account.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button("Create product photos") {
+                    queue.enqueue(missing.map(\.id))
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Theme.cardBackground, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         }
     }
 

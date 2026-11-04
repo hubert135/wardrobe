@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { basename, dirname, join } from "node:path";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
@@ -15,7 +16,9 @@ const app = new Hono();
 app.use("*", logger());
 const stylebookPath = process.env.STYLEBOOK_PATH ?? "data/stylebook.json";
 const loadStylebook = () => readFile(stylebookPath, "utf8").catch(() => null);
-app.route("/", createAppFromEnv(process.env, { loadStylebook }));
+const imagesDir = join(dirname(stylebookPath), "images");
+const loadStylebookImage = (name: string) => readFile(join(imagesDir, basename(name))).catch(() => null);
+app.route("/", createAppFromEnv(process.env, { loadStylebook, loadStylebookImage }));
 const port = Number(process.env.PORT ?? 8787);
 
 serve({ fetch: app.fetch, port }, (info) => {

@@ -4,7 +4,10 @@ import { createApp } from "./app.js";
 import { loadConfig, type Env } from "./config.js";
 
 /** Builds the production app from environment variables (Node, Workers, Vercel). */
-export function createAppFromEnv(env: Env, options: { loadStylebook?: () => Promise<string | null> } = {}) {
+export function createAppFromEnv(
+  env: Env,
+  options: { loadStylebook?: () => Promise<string | null>; loadStylebookImage?: (name: string) => Promise<Uint8Array | null> } = {},
+) {
   const config = loadConfig(env);
   const ai = config.anthropicApiKey
     ? new AnthropicAIClient({ apiKey: config.anthropicApiKey, model: config.aiModel, effort: config.aiEffort })
@@ -12,7 +15,7 @@ export function createAppFromEnv(env: Env, options: { loadStylebook?: () => Prom
   const renderer = config.openaiApiKey
     ? new OpenAIProductPhotoRenderer({ apiKey: config.openaiApiKey, model: config.imageModel, quality: config.imageQuality })
     : null;
-  return createApp({ config, ai, renderer, loadStylebook: options.loadStylebook });
+  return createApp({ config, ai, renderer, loadStylebook: options.loadStylebook, loadStylebookImage: options.loadStylebookImage });
 }
 
 /** One line per feature so it's obvious at startup what this server can do. */

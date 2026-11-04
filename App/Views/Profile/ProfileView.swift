@@ -30,6 +30,8 @@ private struct ProfileForm: View {
     @State private var notificationError: String?
     @AppStorage(ServerSettings.overrideKey) private var serverAddress = ""
     @State private var connectionResult: String?
+    @State private var isLoadingSample = false
+    @State private var sampleResult: String?
     @State private var isTestingConnection = false
     @AppStorage(ProductPhotoSettings.enabledKey) private var storePhotosEnabled = true
 
@@ -167,6 +169,34 @@ private struct ProfileForm: View {
                 Text("Your data")
             } footer: {
                 Text("Photos stay on this iPhone. Only photos you add for recognition, order text and anonymous outfit attributes are sent to the Wardrobe server, and nothing is stored there.")
+            }
+
+            if let stylebook = services.stylebook.stylebook {
+                Section {
+                    LabeledContent("Recipes", value: "\(stylebook.recipes.count)")
+                    Button {
+                        isLoadingSample = true
+                        Task {
+                            let removed = StylebookSampleCloset.removeDrawnSamples(from: services)
+                            let added = await StylebookSampleCloset.load(into: services)
+                            sampleResult = "Added \(added) products with real photos" + (removed > 0 ? ", removed \(removed) drawn samples." : ".")
+                            isLoadingSample = false
+                        }
+                    } label: {
+                        HStack {
+                            Text("Load sample closet with real products")
+                            if isLoadingSample { Spacer(); ProgressView() }
+                        }
+                    }
+                    .disabled(isLoadingSample)
+                    if let sampleResult {
+                        Text(sampleResult).font(.footnote).foregroundStyle(.secondary)
+                    }
+                } header: {
+                    Text("Style guide")
+                } footer: {
+                    Text("Recipes and products from your e-book, served by your own server. The sample closet uses the e-book's product photos and replaces the drawn sample garments.")
+                }
             }
 
             #if DEBUG

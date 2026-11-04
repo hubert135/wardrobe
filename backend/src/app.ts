@@ -22,6 +22,8 @@ export interface AppDependencies {
   renderer?: ProductPhotoRenderer | null;
   /** Returns the private style-guide JSON (built from the user's e-book), or null if there is none. */
   loadStylebook?: () => Promise<string | null>;
+  /** Returns a product photo from the style guide by file name, or null. */
+  loadStylebookImage?: (name: string) => Promise<Uint8Array | null>;
   /** Injected in tests; defaults to verification against Apple's public keys. */
   verifyAppleToken?: AppleTokenVerifier;
   now?: () => number;
@@ -119,6 +121,15 @@ export function createApp(deps: AppDependencies) {
     return c.body(json, 200, { "Content-Type": "application/json; charset=utf-8" });
   });
 
+  app.get("/v1/stylebook/images/:name", requireSession, async (c) => {
+    const name = c.req.param("name") ?? "";
+    // Only plain generated file names: never a path.
+    if (!/^[a-z0-9-]{1,80}\.jpg$/.test(name)) throw new ApiError(400, "invalid_request", "Invalid image name.");
+    const bytes = deps.loadStylebookImage ? await deps.loadStylebookImage(name) : null;
+    if (!bytes) throw new ApiError(404, "not_found", "Image not found.");
+    return c.body(bytes as Uint8Array<ArrayBuffer>, 200, { "Content-Type": "image/jpeg", "Cache-Control": "private, max-age=604800" });
+  });
+
   for (const path of ["/v1/garments/*", "/v1/orders/*", "/v1/outfits/*"]) {
     app.use(path, requireSession, rateLimit(aiLimiter, (c) => (c as Context<Env>).get("userId")));
   }
@@ -153,7 +164,7 @@ export function createApp(deps: AppDependencies) {
     async (c) => {
       if (!renderer) throw notConfigured("Store-style photos");
       const body = await parseBody(c, RenderProductPhotoRequestSchema);
-      const image = await renderer.render({ image: body.image, garment: body.garment ?? null });
+      const image = await renderer.render({ image: body.image ?? null, garment: body.garment ?? null });
       return c.json({ image });
     },
   );

@@ -268,6 +268,9 @@ private struct ProductRow: View {
             if let url = product.url.flatMap(URL.init(string:)) { open(url) }
         } label: {
             HStack(spacing: 12) {
+                StylebookProductImage(name: product.image, maxPixels: 200)
+                    .frame(width: 48, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 6) {
                         Text(product.label.capitalized).font(.subheadline.weight(.semibold))

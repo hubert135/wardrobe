@@ -49,6 +49,8 @@ struct StylebookProductDTO: Codable, Equatable, Hashable {
     /// Index into the recipe's pieces.
     var pieceIndex: Int?
     var brand: String?
+    /// File name of the product photo on the user's server.
+    var image: String?
 }
 
 struct StylebookAlternativeDTO: Codable, Equatable {
@@ -114,12 +116,15 @@ final class StylebookStore {
 
     private let api: WardrobeAPI
     private let fileURL: URL
+    private let imagesDirectory: URL
     private var lastAttempt: Date?
 
     init(api: WardrobeAPI, fileURL: URL? = nil) {
         self.api = api
-        self.fileURL = fileURL ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("stylebook.json")
+        let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        self.fileURL = fileURL ?? support.appendingPathComponent("stylebook.json")
+        self.imagesDirectory = support.appendingPathComponent("StylebookImages", isDirectory: true)
+        try? FileManager.default.createDirectory(at: imagesDirectory, withIntermediateDirectories: true)
         if let data = try? Data(contentsOf: self.fileURL), let cached = try? JSONDecoder().decode(StylebookDTO.self, from: data) {
             apply(cached)
         }
@@ -144,7 +149,18 @@ final class StylebookStore {
         }
     }
 
+    /// Local copy of a product photo, downloaded from the user's server the first time it is needed.
+    func imageFile(named name: String) async -> URL? {
+        guard name.range(of: #"^[a-z0-9-]{1,80}\.jpg$"#, options: .regularExpression) != nil else { return nil }
+        let url = imagesDirectory.appendingPathComponent(name)
+        if FileManager.default.fileExists(atPath: url.path) { return url }
+        guard let data = try? await api.stylebookImage(named: name), !data.isEmpty else { return nil }
+        try? data.write(to: url, options: .atomic)
+        return url
+    }
+
     func deleteCache() {
+        try? FileManager.default.removeItem(at: imagesDirectory)
         try? FileManager.default.removeItem(at: fileURL)
         stylebook = nil
         recipes = []

@@ -15,10 +15,15 @@ export const RenderGarmentHintsSchema = z.object({
 
 export type RenderGarmentHints = z.infer<typeof RenderGarmentHintsSchema>;
 
-export const RenderProductPhotoRequestSchema = z.object({
-  image: ImagePayloadSchema,
-  garment: RenderGarmentHintsSchema.nullish(),
-});
+/** Either the user's photo (optionally with hints) or, for garments without a photo, a description alone. */
+export const RenderProductPhotoRequestSchema = z
+  .object({
+    image: ImagePayloadSchema.nullish(),
+    garment: RenderGarmentHintsSchema.nullish(),
+  })
+  .refine((value) => value.image != null || value.garment != null, {
+    message: "Send a photo or a garment description",
+  });
 
 export const RenderProductPhotoResponseSchema = z.object({
   image: ImagePayloadSchema,

@@ -67,22 +67,31 @@ final class ProductPhotoQueue {
         }
     }
 
+    /// Garments that can get a product photo: from their own photo, or from a known category and color.
+    static func canCreatePhoto(for garment: Garment) -> Bool {
+        garment.status != .archived && (garment.originalImageFile != nil || garment.category != .other)
+    }
+
     private func process(_ id: UUID) async {
         guard canUseAI() else {
-            failures[id] = "Store photos aren't available right now."
+            failures[id] = "Product photos aren't available right now."
             return
         }
-        guard let garment = repository.garment(id: id),
-              garment.originalImageFile != nil,
-              let sourceFile = garment.sourceImageFile,
-              let source = imageStore.image(for: sourceFile),
-              let jpeg = ImageProcessing.uploadJPEG(source) else {
-            failures[id] = "There is no photo of this garment to work from."
+        guard let garment = repository.garment(id: id), Self.canCreatePhoto(for: garment) else {
+            failures[id] = "Choose a category for this garment first."
             return
+        }
+
+        // With a real photo: edit that photo. Without one: draw the garment from its description.
+        var payload: ImagePayload?
+        if garment.originalImageFile != nil, let sourceFile = garment.sourceImageFile,
+           let source = imageStore.image(for: sourceFile), let jpeg = ImageProcessing.uploadJPEG(source) {
+            payload = ImageProcessing.payload(jpeg)
         }
         // Only describe the garment when the details are trustworthy (recognized or checked by the user);
         // unrecognized photos carry default values that could make the model recolor the garment.
-        let hintsAreReliable = garment.category != .other && (garment.status == .confirmed || (garment.confidence ?? 0) >= 0.5)
+        let hintsAreReliable = garment.category != .other
+            && (payload == nil || garment.status == .confirmed || (garment.confidence ?? 0) >= 0.5)
         let hints: RenderGarmentHintsDTO? = !hintsAreReliable ? nil : RenderGarmentHintsDTO(
             name: garment.name.isEmpty ? nil : garment.name,
             category: garment.category.rawValue,
@@ -92,11 +101,15 @@ final class ProductPhotoQueue {
             pattern: garment.pattern.rawValue,
             material: garment.material.isEmpty ? nil : garment.material
         )
+        guard payload != nil || hints != nil else {
+            failures[id] = "Choose a category for this garment first."
+            return
+        }
 
         do {
-            let result = try await api.renderProductPhoto(image: ImageProcessing.payload(jpeg), garment: hints)
+            let result = try await api.renderProductPhoto(image: payload, garment: hints)
             guard let data = Data(base64Encoded: result.data), UIImage(data: data) != nil else {
-                failures[id] = "The store photo could not be read. Try again."
+                failures[id] = "The product photo could not be read. Try again."
                 return
             }
             let name = try imageStore.save(data, fileExtension: "jpg", prefix: Self.filePrefix)
@@ -111,7 +124,7 @@ final class ProductPhotoQueue {
             garment.touch()
             repository.save()
         } catch {
-            failures[id] = (error as? LocalizedError)?.errorDescription ?? "The store photo could not be created. Try again."
+            failures[id] = (error as? LocalizedError)?.errorDescription ?? "The product photo could not be created. Try again."
         }
     }
 }
