@@ -115,14 +115,20 @@ public struct RecipeMatcher: Sendable {
         var result: [Int: EngineGarment] = [:]
         var used = Set<UUID>()
         for (index, piece) in recipe.pieces.enumerated() where !piece.optional {
-            let best = closet
-                .filter { !$0.isArchived && !used.contains($0.id) }
-                .compactMap { garment in score(piece, garment: garment).map { (garment, $0) } }
-                .filter { $0.1 >= 0.9 } // right category and color
-                .max { $0.1 == $1.1 ? $0.0.wearCount < $1.0.wearCount : $0.1 < $1.1 }
+            var best: EngineGarment?
+            var bestScore = 0.0
+            for garment in closet where !garment.isArchived && !used.contains(garment.id) {
+                // Needs the right category and color (0.9); ties go to the more worn favorite.
+                guard let value = score(piece, garment: garment), value >= 0.9 else { continue }
+                let isBetter = value > bestScore || (value == bestScore && garment.wearCount > (best?.wearCount ?? -1))
+                if isBetter {
+                    best = garment
+                    bestScore = value
+                }
+            }
             if let best {
-                result[index] = best.0
-                used.insert(best.0.id)
+                result[index] = best
+                used.insert(best.id)
             }
         }
         return result
