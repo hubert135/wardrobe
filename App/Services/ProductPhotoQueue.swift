@@ -11,16 +11,17 @@ enum ProductPhotoSettings {
     }
 }
 
-/// Creates online-store style photos for garments in the background, one at a time.
+/// Creates online-store style photos for garments in the background, two at a time.
 /// Garments are saved first; their store photo appears when ready, so the user never waits.
 @MainActor
 @Observable
 final class ProductPhotoQueue {
     nonisolated static let filePrefix = "product-"
 
-    /// Garments waiting for or currently getting a store photo.
+    /// Garments waiting for a store photo.
     private(set) var pending: [UUID] = []
-    private(set) var current: UUID?
+    /// Garments getting one right now.
+    private(set) var active: Set<UUID> = []
     /// Last error per garment, shown on the garment's detail page.
     private(set) var failures: [UUID: String] = [:]
 
@@ -28,7 +29,8 @@ final class ProductPhotoQueue {
     private let repository: WardrobeRepository
     private let imageStore: ImageStore
     private let canUseAI: @MainActor () -> Bool
-    private var worker: Task<Void, Never>?
+    /// Renders take about half a minute each; two in parallel halves the wait for a sample closet.
+    private let maxConcurrent = 2
 
     init(api: WardrobeAPI, repository: WardrobeRepository, imageStore: ImageStore, canUseAI: @escaping @MainActor () -> Bool) {
         self.api = api
@@ -37,7 +39,7 @@ final class ProductPhotoQueue {
         self.canUseAI = canUseAI
     }
 
-    func isWorking(on id: UUID) -> Bool { current == id || pending.contains(id) }
+    func isWorking(on id: UUID) -> Bool { active.contains(id) || pending.contains(id) }
 
     /// Called after new photo garments are saved. Respects the user setting and sign-in.
     func enqueueNew(_ ids: [UUID]) {
@@ -55,15 +57,14 @@ final class ProductPhotoQueue {
     }
 
     private func startIfNeeded() {
-        guard worker == nil, !pending.isEmpty else { return }
-        worker = Task { [weak self] in
-            while let self, !self.pending.isEmpty {
-                let id = self.pending.removeFirst()
-                self.current = id
-                await self.process(id)
-                self.current = nil
+        while active.count < maxConcurrent, !pending.isEmpty {
+            let id = pending.removeFirst()
+            active.insert(id)
+            Task {
+                await process(id)
+                active.remove(id)
+                startIfNeeded()
             }
-            self?.worker = nil
         }
     }
 
@@ -92,22 +93,15 @@ final class ProductPhotoQueue {
         // unrecognized photos carry default values that could make the model recolor the garment.
         let hintsAreReliable = garment.category != .other
             && (payload == nil || garment.status == .confirmed || (garment.confidence ?? 0) >= 0.5)
-        let hints: RenderGarmentHintsDTO? = !hintsAreReliable ? nil : RenderGarmentHintsDTO(
-            name: garment.name.isEmpty ? nil : garment.name,
-            category: garment.category.rawValue,
-            subcategory: garment.subcategory.isEmpty ? nil : garment.subcategory,
-            primaryColor: garment.primaryColor,
-            secondaryColor: garment.secondaryColor,
-            pattern: garment.pattern.rawValue,
-            material: garment.material.isEmpty ? nil : garment.material
-        )
+        let hints: RenderGarmentHintsDTO? = hintsAreReliable ? garment.renderHints : nil
         guard payload != nil || hints != nil else {
             failures[id] = "Choose a category for this garment first."
             return
         }
 
         do {
-            let result = try await api.renderProductPhoto(image: payload, garment: hints)
+            // A garment that already has a store photo is being regenerated: ask for a new picture.
+            let result = try await api.renderProductPhoto(image: payload, garment: hints, fresh: garment.productImageFile != nil)
             guard let data = Data(base64Encoded: result.data), UIImage(data: data) != nil else {
                 failures[id] = "The product photo could not be read. Try again."
                 return

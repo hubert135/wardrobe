@@ -28,11 +28,11 @@ protocol WardrobeAPI: AnyObject {
     func rankOutfits(_ request: RankOutfitsRequest) async throws -> RankOutfitsResponse
     /// Turns a garment photo into an online-store style product photo (slow: up to ~2 minutes).
     /// Without a photo, the garment description alone is used.
-    func renderProductPhoto(image: ImagePayload?, garment: RenderGarmentHintsDTO?) async throws -> ImagePayload
-    /// The private style guide (recipes and shop links) imported on the user's server.
+    func renderProductPhoto(image: ImagePayload?, garment: RenderGarmentHintsDTO?, fresh: Bool) async throws -> ImagePayload
+    /// A photo of the outfit worn by the house model.
+    func renderOutfit(items: [RenderOutfitItemDTO], fresh: Bool) async throws -> ImagePayload
+    /// Outfit formulas learned from the user's private style guide, served by their own server.
     func stylebook() async throws -> StylebookDTO
-    /// A product photo from the style guide (JPEG bytes).
-    func stylebookImage(named name: String) async throws -> Data
 }
 
 /// Supplies the bearer token for authenticated requests.
@@ -96,19 +96,22 @@ final class HTTPWardrobeAPI: WardrobeAPI {
         try await post("v1/outfits/rank", body: request)
     }
 
-    func renderProductPhoto(image: ImagePayload?, garment: RenderGarmentHintsDTO?) async throws -> ImagePayload {
+    func renderProductPhoto(image: ImagePayload?, garment: RenderGarmentHintsDTO?, fresh: Bool) async throws -> ImagePayload {
         let response: RenderProductPhotoResponse = try await post(
-            "v1/garments/render", body: RenderProductPhotoRequest(image: image, garment: garment), timeout: 180
+            "v1/garments/render", body: RenderProductPhotoRequest(image: image, garment: garment, fresh: fresh ? true : nil), timeout: 180
+        )
+        return response.image
+    }
+
+    func renderOutfit(items: [RenderOutfitItemDTO], fresh: Bool) async throws -> ImagePayload {
+        let response: RenderProductPhotoResponse = try await post(
+            "v1/outfits/render", body: RenderOutfitRequest(items: items, fresh: fresh ? true : nil), timeout: 200
         )
         return response.image
     }
 
     func stylebook() async throws -> StylebookDTO {
         try await send("v1/stylebook", body: Optional<NoBody>.none, authenticated: true, timeout: 60)
-    }
-
-    func stylebookImage(named name: String) async throws -> Data {
-        try await send("v1/stylebook/images/\(name)", body: Optional<NoBody>.none, authenticated: true, timeout: 30)
     }
 
     private struct NoBody: Encodable {}
@@ -237,7 +240,7 @@ final class OfflineWardrobeAPI: WardrobeAPI {
     func analyzeGarment(image: ImagePayload) async throws -> [AnalyzedGarmentDTO] { throw APIError.offline }
     func parseOrder(text: String?, image: ImagePayload?) async throws -> [ParsedOrderItemDTO] { throw APIError.offline }
     func rankOutfits(_ request: RankOutfitsRequest) async throws -> RankOutfitsResponse { throw APIError.offline }
-    func renderProductPhoto(image: ImagePayload?, garment: RenderGarmentHintsDTO?) async throws -> ImagePayload { throw APIError.offline }
+    func renderProductPhoto(image: ImagePayload?, garment: RenderGarmentHintsDTO?, fresh: Bool) async throws -> ImagePayload { throw APIError.offline }
+    func renderOutfit(items: [RenderOutfitItemDTO], fresh: Bool) async throws -> ImagePayload { throw APIError.offline }
     func stylebook() async throws -> StylebookDTO { throw APIError.offline }
-    func stylebookImage(named name: String) async throws -> Data { throw APIError.offline }
 }

@@ -134,12 +134,10 @@ struct OnboardingView: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            if services.stylebook.hasStylebook {
-                Button("Load sample closet from your style guide") {
-                    Task { _ = await StylebookSampleCloset.load(into: services) }
-                }
-                .font(.footnote)
+            Button("Load a sample closet of \(SampleCloset.itemCount) basics") {
+                SampleCloset.load(into: services)
             }
+            .font(.footnote)
             #if DEBUG
             Button("Load drawn sample closet") {
                 SeedData.seed(SeedData.sampleCloset, into: services.repository, imageStore: services.imageStore)

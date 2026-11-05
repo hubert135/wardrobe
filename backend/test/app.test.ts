@@ -210,16 +210,33 @@ describe("GET /v1/stylebook", () => {
   const get = (app: ReturnType<typeof makeApp>, token: string) =>
     app.request("/v1/stylebook", { headers: { authorization: `Bearer ${token}` } });
 
-  it("serves the private style guide to signed-in devices", async () => {
-    const app = createApp({
-      config: loadConfig(testEnv),
-      ai: new FakeAI(),
-      loadStylebook: async () => JSON.stringify({ version: "v1", recipes: [] }),
-    });
+  it("serves only the outfit formulas, never products, shops or prices", async () => {
+    const book = {
+      version: "v1",
+      recipes: [
+        {
+          id: "01", title: "T", summary: "S", description: "long text", occasions: ["work"], styles: ["smart_casual"], seasons: [],
+          pieces: [{ slot: "top", categories: ["sweater"], colors: ["navy"], materials: ["wool"], labels: ["SWETER"] }],
+          budgets: { standard: { total: 900, items: [{ label: "SWETER", price: 199, shop: "Shop", url: "https://example.com", image: "r01.jpg" }] } },
+        },
+      ],
+      alternatives: [{ title: "x", options: [] }],
+    };
+    const app = createApp({ config: loadConfig(testEnv), ai: new FakeAI(), loadStylebook: async () => JSON.stringify(book) });
     const token = await devSession(app as never);
     const response = await get(app as never, token);
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ version: "v1", recipes: [] });
+    const text = await response.text();
+    expect(JSON.parse(text)).toEqual({
+      version: "formulas-v1",
+      recipes: [
+        {
+          id: "01", title: "T", summary: "S", occasions: ["work"], styles: ["smart_casual"], seasons: [],
+          pieces: [{ slot: "top", categories: ["sweater"], colors: ["navy"], patterns: [], materials: ["wool"], optional: false }],
+        },
+      ],
+    });
+    for (const secret of ["Shop", "example.com", "199", "r01.jpg", "long text"]) expect(text).not.toContain(secret);
   });
 
   it("returns 404 when no style guide was imported", async () => {
@@ -231,32 +248,5 @@ describe("GET /v1/stylebook", () => {
   it("requires a session", async () => {
     const app = makeApp(new FakeAI());
     expect((await app.request("/v1/stylebook")).status).toBe(401);
-  });
-});
-
-describe("GET /v1/stylebook/images/:name", () => {
-  const make = () =>
-    createApp({
-      config: loadConfig(testEnv),
-      ai: new FakeAI(),
-      loadStylebookImage: async (name) => (name === "r05-standard-1.jpg" ? new Uint8Array([0xff, 0xd8, 0xff]) : null),
-    });
-
-  it("serves product photos as JPEG", async () => {
-    const app = make();
-    const token = await devSession(app as never);
-    const response = await app.request("/v1/stylebook/images/r05-standard-1.jpg", { headers: { authorization: `Bearer ${token}` } });
-    expect(response.status).toBe(200);
-    expect(response.headers.get("content-type")).toBe("image/jpeg");
-  });
-
-  it("rejects anything that is not a plain file name", async () => {
-    const app = make();
-    const token = await devSession(app as never);
-    for (const name of ["..%2F.env", "x.png", "UPPER.jpg"]) {
-      const response = await app.request(`/v1/stylebook/images/${name}`, { headers: { authorization: `Bearer ${token}` } });
-      expect([400, 404]).toContain(response.status);
-    }
-    expect((await app.request("/v1/stylebook/images/r05-standard-1.jpg")).status).toBe(401);
   });
 });

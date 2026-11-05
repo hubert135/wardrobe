@@ -33,24 +33,22 @@ private struct ShopContent: View {
 
     var body: some View {
         List {
-            if model.hasStylebook {
-                let progress = model.recipeProgress()
-                Section {
-                    ForEach(progress.prefix(showAllRecipes ? progress.count : 5)) { item in
-                        NavigationLink {
-                            RecipeDetailView(model: model, progress: item) { safariURL = $0 }
-                        } label: {
-                            RecipeRow(progress: item)
-                        }
+            let progress = model.recipeProgress()
+            Section {
+                ForEach(progress.prefix(showAllRecipes ? progress.count : 5)) { item in
+                    NavigationLink {
+                        RecipeDetailView(model: model, progress: item)
+                    } label: {
+                        RecipeRow(progress: item)
                     }
-                    if progress.count > 5 {
-                        Button(showAllRecipes ? "Show fewer" : "Show all \(progress.count) recipes") { showAllRecipes.toggle() }
-                    }
-                } header: {
-                    Text("From your style guide")
-                } footer: {
-                    Text("Recipes from your e-book, closest to complete first. Open one to see products for the pieces you are missing.")
                 }
+                if progress.count > 5 {
+                    Button(showAllRecipes ? "Show fewer" : "Show all \(progress.count) recipes") { showAllRecipes.toggle() }
+                }
+            } header: {
+                Text("Outfit recipes")
+            } footer: {
+                Text("Classic combinations\(model.hasStylebook ? " and formulas from your style guide" : ""), closest to complete first. Missing pieces are described in plain words, so you can buy them anywhere.")
             }
 
             Section {
@@ -154,13 +152,13 @@ private struct RecipeRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .firstTextBaseline) {
-                Text("Recipe \(progress.recipe.id)").font(.caption.bold()).foregroundStyle(Theme.accent)
+                Text(progress.isFromStyleGuide ? "Style guide" : "Recipe").font(.caption.bold()).foregroundStyle(Theme.accent)
                 Spacer()
                 Text(progress.missingIndices.isEmpty ? "You have it all" : "You own \(progress.ownedCount) of \(progress.requiredIndices.count)")
                     .font(.caption)
                     .foregroundStyle(progress.missingIndices.isEmpty ? Color.green : Color.secondary)
             }
-            Text(progress.recipe.title.capitalized).font(.subheadline.weight(.semibold)).lineLimit(2)
+            Text(progress.title).font(.subheadline.weight(.semibold)).lineLimit(2)
             if !progress.missingIndices.isEmpty {
                 Text("Missing: " + progress.missingIndices.map { progress.recipe.pieces[$0].displayName.lowercased() }.joined(separator: ", "))
                     .font(.caption).foregroundStyle(.secondary).lineLimit(2)
@@ -170,27 +168,23 @@ private struct RecipeRow: View {
     }
 }
 
-/// One recipe: what you own, what is missing, and the e-book products in three budgets.
+/// One recipe: the idea, what you own and what is missing (described generically, no shops or brands).
 struct RecipeDetailView: View {
     @Bindable var model: ShopViewModel
     var progress: ShopViewModel.RecipeProgress
-    var open: (URL) -> Void
-    @State private var budget: StylebookBudget = .standard
-    @State private var showsDescription = false
 
-    private var recipe: StylebookRecipeDTO { progress.recipe }
-    private var products: [StylebookProductDTO] { recipe.budgets[budget.rawValue]?.items ?? [] }
+    private var recipe: StyleRecipe { progress.recipe }
 
     var body: some View {
         List {
             Section {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("RECIPE \(recipe.id)").font(.caption.bold()).foregroundStyle(Theme.accent)
-                    Text(recipe.title.capitalized).font(.title3.bold())
-                    Text(recipe.summary).font(.subheadline).foregroundStyle(.secondary)
-                }
-                DisclosureGroup("From the e-book", isExpanded: $showsDescription) {
-                    Text(recipe.description).font(.footnote)
+                    Text(progress.isFromStyleGuide ? "FROM YOUR STYLE GUIDE" : "STYLE RECIPE").font(.caption.bold()).foregroundStyle(Theme.accent)
+                    Text(progress.title).font(.title3.bold())
+                    if !recipe.summary.isEmpty {
+                        Text(recipe.summary).font(.subheadline).foregroundStyle(.secondary)
+                    }
+                    Text(details).font(.caption).foregroundStyle(.secondary)
                 }
             }
 
@@ -206,28 +200,19 @@ struct RecipeDetailView: View {
                     }
                 }
             }
-
-            Section {
-                Picker("Budget", selection: $budget) {
-                    ForEach(StylebookBudget.allCases) { Text($0.displayName).tag($0) }
-                }
-                .pickerStyle(.segmented)
-                ForEach(Array(products.enumerated()), id: \.offset) { _, product in
-                    ProductRow(product: product, isMissing: product.pieceIndex.map { progress.missingIndices.contains($0) } ?? false, open: open)
-                }
-            } header: {
-                Text("Products from the e-book")
-            } footer: {
-                if let total = recipe.budgets[budget.rawValue]?.total {
-                    Text("Whole outfit in this budget: \(total) zł. Prices are from the e-book; check the shop for the current price.")
-                }
-            }
         }
-        .navigationTitle("Recipe \(recipe.id)")
+        .navigationTitle(progress.isFromStyleGuide ? "Style guide" : "Recipe")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Shop", isPresented: Binding(get: { model.message != nil }, set: { if !$0 { model.message = nil } })) {
             Button("OK", role: .cancel) {}
         } message: { Text(model.message ?? "") }
+    }
+
+    private var details: String {
+        let styles = recipe.styles.map(\.displayName).joined(separator: ", ")
+        let seasons = recipe.seasons.isEmpty ? "All year" : Season.allCases.filter(recipe.seasons.contains).map(\.displayName).joined(separator: ", ")
+        let occasions = recipe.occasions.prefix(3).map(\.displayName).joined(separator: ", ")
+        return [styles, seasons, occasions].filter { !$0.isEmpty }.joined(separator: " · ")
     }
 
     @ViewBuilder
@@ -255,46 +240,6 @@ struct RecipeDetailView: View {
                 Spacer()
             }
         }
-    }
-}
-
-private struct ProductRow: View {
-    var product: StylebookProductDTO
-    var isMissing: Bool
-    var open: (URL) -> Void
-
-    var body: some View {
-        Button {
-            if let url = product.url.flatMap(URL.init(string:)) { open(url) }
-        } label: {
-            HStack(spacing: 12) {
-                StylebookProductImage(name: product.image, maxPixels: 200)
-                    .frame(width: 48, height: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 6) {
-                        Text(product.label.capitalized).font(.subheadline.weight(.semibold))
-                        if isMissing {
-                            Text("YOU NEED THIS")
-                                .font(.caption2.bold())
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Theme.accent.opacity(0.15), in: Capsule())
-                                .foregroundStyle(Theme.accent)
-                        }
-                    }
-                    Text(product.shop ?? "Shop unknown").font(.caption).foregroundStyle(.secondary)
-                }
-                Spacer()
-                Text("\(product.price) zł").font(.subheadline.monospacedDigit())
-                if product.url != nil {
-                    Image(systemName: "arrow.up.right.square").foregroundStyle(Theme.accent)
-                }
-            }
-        }
-        .buttonStyle(.plain)
-        .disabled(product.url == nil)
-        .accessibilityLabel("\(product.label), \(product.shop ?? ""), \(product.price) złoty\(isMissing ? ", you need this" : "")")
     }
 }
 

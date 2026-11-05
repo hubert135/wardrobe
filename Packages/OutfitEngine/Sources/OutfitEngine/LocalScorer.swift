@@ -23,8 +23,12 @@ public struct LocalScorer: Sendable {
         let average = Double(core.map(\.formality).reduce(0, +)) / Double(max(core.count, 1))
         score -= abs(average - context.targetFormality)
 
-        // Classic menswear pairings.
+        // Classic menswear pairings and the style knowledge base (color pairs, textures).
         score += pairingBonus(candidate)
+        let knowledge = StyleKnowledge.shared
+        score += 0.5 * knowledge.colorHarmony(garments)
+        if knowledge.hasTextureClash(candidate) { score -= 1.0 }
+        if knowledge.hasTextureContrast(garments) { score += 0.2 }
 
         // Personal preferences.
         let colors = Set(garments.flatMap { [$0.primaryColor] + ($0.secondaryColor.map { [$0] } ?? []) })

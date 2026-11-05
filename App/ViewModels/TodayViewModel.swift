@@ -85,6 +85,12 @@ final class TodayViewModel {
         OutfitPresenter.tiles(for: suggestion.outfit, garments: garmentsByID)
     }
 
+    /// "From your style guide" for the e-book formulas, "Style recipe" for the built-in library.
+    func recipeLabel(for recipe: StyleRecipe?) -> String? {
+        guard let recipe else { return nil }
+        return services.stylebook.isFromStyleGuide(recipe) ? "From your style guide" : "Style recipe"
+    }
+
     func wear(_ suggestion: OutfitSuggestion) {
         guard let index = suggestions.firstIndex(where: { $0.id == suggestion.id }) else { return }
         services.repository.saveOutfit(suggestion, wornOn: Date(), favorite: false)

@@ -66,7 +66,7 @@ export function loadConfig(env: Env): Config {
     imageModel: env.IMAGE_MODEL ?? "gpt-image-2",
     imageQuality,
     renderRateLimit: {
-      requests: Number(env.RENDER_RATE_LIMIT_REQUESTS ?? 30),
+      requests: Number(env.RENDER_RATE_LIMIT_REQUESTS ?? 150),
       windowMs: Number(env.RENDER_RATE_LIMIT_WINDOW_SECONDS ?? 3600) * 1000,
     },
     corsOrigins: (env.CORS_ORIGINS ?? "").split(",").map((s) => s.trim()).filter(Boolean),

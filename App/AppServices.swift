@@ -71,6 +71,7 @@ final class AppServices {
     let imageDownloader = ProductImageDownloader()
     let outfits: OutfitService
     let productPhotos: ProductPhotoQueue
+    let outfitModels: OutfitModelStore
     let stylebook: StylebookStore
     let shop: ShopService
     let notifications = NotificationService()
@@ -114,6 +115,7 @@ final class AppServices {
             api: api, repository: repository, imageStore: imageStore,
             canUseAI: { aiAvailable }
         )
+        outfitModels = OutfitModelStore(api: api, imageStore: imageStore, canUseAI: { aiAvailable })
 
         prepareData()
     }

@@ -1,6 +1,7 @@
 import { AIOutputError, type AIClient, type StructuredRequest } from "../src/ai/client.js";
+import type { OutfitPhotoRenderer } from "../src/ai/outfitPhoto.js";
 import type { ProductPhotoRenderer } from "../src/ai/productPhoto.js";
-import { createApp } from "../src/app.js";
+import { createApp, type AppDependencies } from "../src/app.js";
 import { loadConfig, type Env } from "../src/config.js";
 import type { AIGarmentSchema } from "../src/schemas/garments.js";
 import type { z } from "zod";
@@ -40,8 +41,18 @@ export function makeApp(
   overrides: Env = {},
   verifyAppleToken?: (token: string) => Promise<string>,
   renderer: ProductPhotoRenderer | null = null,
+  extra: Partial<AppDependencies> = {},
 ) {
-  return createApp({ config: loadConfig({ ...testEnv, ...overrides }), ai, verifyAppleToken, renderer });
+  return createApp({ config: loadConfig({ ...testEnv, ...overrides }), ai, verifyAppleToken, renderer, ...extra });
+}
+
+/** Records outfit renders and returns a fixed JPEG payload. */
+export class FakeOutfitRenderer implements OutfitPhotoRenderer {
+  readonly calls: Array<Parameters<OutfitPhotoRenderer["render"]>[0]> = [];
+  async render(input: Parameters<OutfitPhotoRenderer["render"]>[0]) {
+    this.calls.push(input);
+    return { mediaType: "image/jpeg" as const, data: "C".repeat(200) };
+  }
 }
 
 /** Records render calls and returns a fixed JPEG payload. */

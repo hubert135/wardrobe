@@ -1,0 +1,4381 @@
+[
+ {
+  "id": "L01",
+  "title": "Navy suit, white shirt, black dress shoes",
+  "summary": "The most useful business outfit: a navy suit, a crisp white shirt and black oxfords. Add a navy or burgundy tie, a black belt and navy socks.",
+  "occasions": [
+   "business_meeting",
+   "event",
+   "work"
+  ],
+  "styles": [
+   "formal"
+  ],
+  "seasons": [],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "suit"
+    ],
+    "requires": [
+     "suit"
+    ],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "suit"
+    ],
+    "requires": [
+     "suit"
+    ],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [
+     "dress shirt",
+     "poplin"
+    ],
+    "requires": [],
+    "avoid": [
+     "flannel",
+     "linen",
+     "denim",
+     "chambray",
+     "overshirt",
+     "short sleeve"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "black"
+    ],
+    "materials": [
+     "oxford",
+     "derby"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail",
+     "suede",
+     "chukka",
+     "desert"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "accessory",
+    "categories": [
+     "accessory"
+    ],
+    "colors": [
+     "navy",
+     "burgundy"
+    ],
+    "materials": [
+     "tie"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L02",
+  "title": "Charcoal suit, light blue shirt, black dress shoes",
+  "summary": "Charcoal is the most formal everyday suit colour; a light blue shirt softens it and a burgundy tie is the single accent. Black shoes and belt.",
+  "occasions": [
+   "business_meeting",
+   "event"
+  ],
+  "styles": [
+   "formal"
+  ],
+  "seasons": [],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "charcoal",
+     "grey"
+    ],
+    "materials": [
+     "suit"
+    ],
+    "requires": [
+     "suit"
+    ],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "charcoal",
+     "grey"
+    ],
+    "materials": [
+     "suit"
+    ],
+    "requires": [
+     "suit"
+    ],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "light blue"
+    ],
+    "materials": [
+     "dress shirt",
+     "poplin"
+    ],
+    "requires": [],
+    "avoid": [
+     "flannel",
+     "linen",
+     "denim",
+     "chambray",
+     "overshirt",
+     "short sleeve"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "black"
+    ],
+    "materials": [
+     "oxford",
+     "derby"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail",
+     "suede",
+     "chukka",
+     "desert"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "accessory",
+    "categories": [
+     "accessory"
+    ],
+    "colors": [
+     "burgundy",
+     "navy"
+    ],
+    "materials": [
+     "tie"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L03",
+  "title": "Suit without a tie, brown shoes",
+  "summary": "A suit worn with an open collar reads modern rather than stiff. Brown derbies or loafers warm it up; keep the belt brown to match.",
+  "occasions": [
+   "work",
+   "dinner",
+   "business_meeting"
+  ],
+  "styles": [
+   "formal",
+   "smart_casual"
+  ],
+  "seasons": [],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "grey",
+     "navy",
+     "charcoal"
+    ],
+    "materials": [
+     "suit"
+    ],
+    "requires": [
+     "suit"
+    ],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "grey",
+     "navy",
+     "charcoal"
+    ],
+    "materials": [
+     "suit"
+    ],
+    "requires": [
+     "suit"
+    ],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white",
+     "light blue"
+    ],
+    "materials": [
+     "oxford",
+     "poplin"
+    ],
+    "requires": [],
+    "avoid": [
+     "flannel",
+     "denim",
+     "chambray"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "derby",
+     "loafer"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "accessory",
+    "categories": [
+     "accessory"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "belt"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L04",
+  "title": "Navy blazer, grey trousers, shirt",
+  "summary": "Odd jacket and trousers should contrast on purpose: navy over mid-grey is the classic pairing. Add a tie for meetings, drop it for dinner.",
+  "occasions": [
+   "business_meeting",
+   "work",
+   "event",
+   "dinner"
+  ],
+  "styles": [
+   "formal",
+   "smart_casual"
+  ],
+  "seasons": [],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "blazer",
+     "wool"
+    ],
+    "requires": [],
+    "avoid": [
+     "suit"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "grey",
+     "charcoal"
+    ],
+    "materials": [
+     "wool",
+     "flannel"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white",
+     "light blue"
+    ],
+    "materials": [
+     "oxford",
+     "poplin"
+    ],
+    "requires": [],
+    "avoid": [
+     "flannel",
+     "denim",
+     "chambray"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "black",
+     "brown"
+    ],
+    "materials": [
+     "derby",
+     "oxford",
+     "loafer"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "accessory",
+    "categories": [
+     "accessory"
+    ],
+    "colors": [
+     "burgundy",
+     "navy"
+    ],
+    "materials": [
+     "tie"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L05",
+  "title": "Tweed jacket, flannel trousers, oxford shirt",
+  "summary": "Textured tweed needs equally wintry partners: flannel trousers and an oxford shirt. Brown brogues or derbies and a knitted tie finish it.",
+  "occasions": [
+   "work",
+   "dinner",
+   "event"
+  ],
+  "styles": [
+   "smart_casual",
+   "formal"
+  ],
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "brown",
+     "grey",
+     "olive"
+    ],
+    "materials": [
+     "tweed"
+    ],
+    "requires": [
+     "tweed",
+     "herringbone"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "grey",
+     "charcoal"
+    ],
+    "materials": [
+     "flannel",
+     "wool"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "light blue",
+     "white"
+    ],
+    "materials": [
+     "oxford"
+    ],
+    "requires": [],
+    "avoid": [
+     "denim",
+     "chambray"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "brogue",
+     "derby"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "accessory",
+    "categories": [
+     "accessory"
+    ],
+    "colors": [
+     "burgundy",
+     "green"
+    ],
+    "materials": [
+     "tie"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L06",
+  "title": "Dark suit for the evening",
+  "summary": "For evening events go dark and simple: a navy or charcoal suit, a white shirt and polished black shoes. Lose the tie at a relaxed party.",
+  "occasions": [
+   "event",
+   "dinner"
+  ],
+  "styles": [
+   "formal"
+  ],
+  "seasons": [],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "navy",
+     "charcoal",
+     "black"
+    ],
+    "materials": [
+     "suit",
+     "velvet"
+    ],
+    "requires": [
+     "suit",
+     "velvet",
+     "tuxedo"
+    ],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "navy",
+     "charcoal",
+     "black"
+    ],
+    "materials": [
+     "suit",
+     "wool"
+    ],
+    "requires": [
+     "suit",
+     "wool",
+     "tuxedo"
+    ],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [
+     "dress shirt",
+     "poplin"
+    ],
+    "requires": [],
+    "avoid": [
+     "flannel",
+     "linen",
+     "denim",
+     "chambray",
+     "overshirt",
+     "short sleeve"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "black"
+    ],
+    "materials": [
+     "oxford",
+     "derby",
+     "loafer"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail",
+     "suede",
+     "chukka",
+     "desert"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L07",
+  "title": "Light summer jacket, open collar",
+  "summary": "In warm weather a stone or light grey suit in linen or cotton looks fresh. A light blue shirt and brown suede loafers; ties optional.",
+  "occasions": [
+   "event",
+   "dinner",
+   "business_meeting"
+  ],
+  "styles": [
+   "formal",
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "beige",
+     "grey",
+     "cream"
+    ],
+    "materials": [
+     "linen",
+     "cotton"
+    ],
+    "requires": [],
+    "avoid": [
+     "tweed",
+     "flannel",
+     "corduroy",
+     "velvet"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers",
+     "chinos"
+    ],
+    "colors": [
+     "beige",
+     "grey",
+     "cream"
+    ],
+    "materials": [
+     "linen",
+     "cotton"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "light blue",
+     "white"
+    ],
+    "materials": [
+     "linen",
+     "poplin",
+     "oxford"
+    ],
+    "requires": [],
+    "avoid": [
+     "flannel",
+     "denim"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "loafer",
+     "suede"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L08",
+  "title": "Blazer with a fine turtleneck",
+  "summary": "A fine merino turtleneck under a blazer is the polished alternative to shirt and tie. Keep the trousers dark and the shoes sleek.",
+  "occasions": [
+   "dinner",
+   "event"
+  ],
+  "styles": [
+   "smart_casual",
+   "formal"
+  ],
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "navy",
+     "charcoal",
+     "brown"
+    ],
+    "materials": [
+     "blazer",
+     "wool",
+     "tweed"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "black",
+     "navy",
+     "cream"
+    ],
+    "materials": [
+     "merino"
+    ],
+    "requires": [
+     "turtleneck",
+     "roll neck",
+     "rollneck"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "grey",
+     "charcoal",
+     "black"
+    ],
+    "materials": [
+     "wool",
+     "flannel"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "black",
+     "brown"
+    ],
+    "materials": [
+     "chelsea",
+     "loafer",
+     "derby"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L10",
+  "title": "Navy blazer, white oxford, beige chinos",
+  "summary": "The everyday smart-casual uniform: navy jacket, white oxford, beige chinos. Brown suede loafers keep it relaxed; a brown belt ties it together.",
+  "occasions": [
+   "work",
+   "dinner",
+   "event"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "unstructured",
+     "blazer"
+    ],
+    "requires": [],
+    "avoid": [
+     "suit"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [
+     "oxford"
+    ],
+    "requires": [],
+    "avoid": [
+     "flannel"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "chinos"
+    ],
+    "colors": [
+     "beige",
+     "khaki",
+     "tan"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "loafer",
+     "suede",
+     "derby"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "accessory",
+    "categories": [
+     "accessory"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "belt"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L11",
+  "title": "Blazer with dark jeans",
+  "summary": "Dark, clean jeans dress up easily: add an oxford shirt and a soft-shouldered blazer. Loafers or Chelsea boots finish it better than trainers.",
+  "occasions": [
+   "dinner",
+   "work",
+   "casual_outing"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "navy",
+     "grey",
+     "brown"
+    ],
+    "materials": [
+     "unstructured",
+     "tweed",
+     "blazer"
+    ],
+    "requires": [],
+    "avoid": [
+     "suit"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "light blue",
+     "white"
+    ],
+    "materials": [
+     "oxford"
+    ],
+    "requires": [],
+    "avoid": [
+     "flannel"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [
+     "dark"
+    ],
+    "requires": [],
+    "avoid": [
+     "light wash",
+     "distressed",
+     "ripped"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "loafer",
+     "chelsea",
+     "derby"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L12",
+  "title": "Crewneck over a shirt, dark jeans, brown boots",
+  "summary": "A crewneck over a button-down is warm and neat; let the collar sit outside the knit. Dark jeans and brown Chelsea boots keep it grown-up.",
+  "occasions": [
+   "work",
+   "dinner",
+   "casual_outing"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "grey",
+     "navy"
+    ],
+    "materials": [
+     "merino",
+     "crewneck"
+    ],
+    "requires": [],
+    "avoid": [
+     "cable",
+     "zip"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [
+     "dark"
+    ],
+    "requires": [],
+    "avoid": [
+     "light wash",
+     "distressed"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "chelsea"
+    ],
+    "requires": [
+     "boot"
+    ],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white",
+     "light blue"
+    ],
+    "materials": [
+     "oxford"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L13",
+  "title": "Navy knit, grey trousers, brown shoes",
+  "summary": "Navy and grey is the safest smart combination there is. A fine crewneck over wool trousers works in most offices; add a collar for meetings.",
+  "occasions": [
+   "work",
+   "business_meeting",
+   "dinner"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "merino",
+     "crewneck"
+    ],
+    "requires": [],
+    "avoid": [
+     "cable",
+     "hoodie"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "grey",
+     "charcoal"
+    ],
+    "materials": [
+     "wool",
+     "flannel"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "derby",
+     "loafer"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white",
+     "light blue"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L14",
+  "title": "Camel coat, dark turtleneck, grey trousers",
+  "summary": "A camel coat lifts dark winter outfits instantly. Keep everything underneath dark and smooth so the coat stays the focus.",
+  "occasions": [
+   "dinner",
+   "work",
+   "event"
+  ],
+  "styles": [
+   "smart_casual",
+   "formal"
+  ],
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "coat"
+    ],
+    "colors": [
+     "tan",
+     "beige"
+    ],
+    "materials": [
+     "overcoat",
+     "wool"
+    ],
+    "requires": [
+     "overcoat",
+     "wool",
+     "camel"
+    ],
+    "avoid": [
+     "trench",
+     "mac",
+     "puffer",
+     "down"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "navy",
+     "black",
+     "charcoal"
+    ],
+    "materials": [
+     "merino"
+    ],
+    "requires": [
+     "turtleneck",
+     "roll neck",
+     "rollneck"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "charcoal",
+     "grey"
+    ],
+    "materials": [
+     "wool",
+     "flannel"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "black",
+     "brown"
+    ],
+    "materials": [
+     "chelsea",
+     "derby",
+     "loafer"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L15",
+  "title": "Trench coat, navy knit, grey trousers",
+  "summary": "A trench is the transitional-season essential. A navy knit and grey trousers underneath still work once the coat comes off.",
+  "occasions": [
+   "work",
+   "dinner"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "coat"
+    ],
+    "colors": [
+     "beige",
+     "tan",
+     "khaki"
+    ],
+    "materials": [
+     "trench",
+     "mac"
+    ],
+    "requires": [
+     "trench",
+     "mac",
+     "gabardine"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "merino",
+     "crewneck"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "grey",
+     "charcoal"
+    ],
+    "materials": [
+     "wool"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "loafer",
+     "derby"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L16",
+  "title": "Knit polo, chinos, suede shoes",
+  "summary": "A knitted polo sits between a T-shirt and a shirt: smart enough for the office, relaxed enough for dinner. Tuck it in and show a slim belt.",
+  "occasions": [
+   "work",
+   "dinner",
+   "casual_outing"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "polo"
+    ],
+    "colors": [
+     "navy",
+     "brown",
+     "cream",
+     "white"
+    ],
+    "materials": [
+     "knit"
+    ],
+    "requires": [
+     "knit"
+    ],
+    "avoid": [
+     "pique"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "chinos"
+    ],
+    "colors": [
+     "beige",
+     "navy",
+     "olive"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "loafer",
+     "suede"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "accessory",
+    "categories": [
+     "accessory"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "belt"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L17",
+  "title": "White linen shirt, light trousers, loafers",
+  "summary": "Linen is meant to look a little relaxed; keep the colours light and the fit easy. Suede loafers without socks suit a summer evening.",
+  "occasions": [
+   "dinner",
+   "casual_outing",
+   "event",
+   "travel"
+  ],
+  "styles": [
+   "smart_casual",
+   "casual"
+  ],
+  "seasons": [
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white",
+     "light blue"
+    ],
+    "materials": [
+     "linen"
+    ],
+    "requires": [
+     "linen"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers",
+     "chinos"
+    ],
+    "colors": [
+     "beige",
+     "cream",
+     "navy"
+    ],
+    "materials": [
+     "linen",
+     "cotton"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "loafer",
+     "suede",
+     "espadrille"
+    ],
+    "requires": [],
+    "avoid": [
+     "running",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L18",
+  "title": "Soft blazer over a white T-shirt",
+  "summary": "A soft blazer over a plain white T-shirt is the modern smart-casual shortcut. Clean white leather sneakers or loafers both work.",
+  "occasions": [
+   "dinner",
+   "casual_outing",
+   "work"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "blazer"
+    ],
+    "colors": [
+     "navy",
+     "grey",
+     "beige"
+    ],
+    "materials": [
+     "unstructured",
+     "linen",
+     "cotton"
+    ],
+    "requires": [],
+    "avoid": [
+     "suit"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white",
+     "grey",
+     "navy"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [
+     "graphic",
+     "breton"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers",
+     "chinos"
+    ],
+    "colors": [
+     "grey",
+     "beige",
+     "navy"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white",
+     "brown"
+    ],
+    "materials": [
+     "leather sneaker",
+     "loafer"
+    ],
+    "requires": [],
+    "avoid": [
+     "running",
+     "trail",
+     "canvas"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L19",
+  "title": "Chambray shirt, chinos, suede chukkas",
+  "summary": "A chambray shirt has denim's texture with a shirt's polish. Earthy chinos and suede chukkas keep the palette warm.",
+  "occasions": [
+   "work",
+   "casual_outing",
+   "weekend"
+  ],
+  "styles": [
+   "smart_casual",
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "denim",
+     "light blue"
+    ],
+    "materials": [
+     "chambray",
+     "denim"
+    ],
+    "requires": [
+     "chambray",
+     "denim"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "chinos"
+    ],
+    "colors": [
+     "beige",
+     "khaki",
+     "olive"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "chukka",
+     "desert",
+     "suede"
+    ],
+    "requires": [],
+    "avoid": [
+     "running",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L20",
+  "title": "Corduroys, oxford shirt, navy crewneck",
+  "summary": "Corduroy brings texture, so keep the rest plain: a navy crewneck over a light blue oxford and brown suede shoes.",
+  "occasions": [
+   "work",
+   "weekend",
+   "dinner"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers",
+     "chinos"
+    ],
+    "colors": [
+     "brown",
+     "olive",
+     "beige",
+     "cream"
+    ],
+    "materials": [
+     "corduroy"
+    ],
+    "requires": [
+     "corduroy",
+     "cord "
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "merino",
+     "crewneck"
+    ],
+    "requires": [],
+    "avoid": [
+     "cable"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "loafer",
+     "suede",
+     "chukka"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "light blue",
+     "white"
+    ],
+    "materials": [
+     "oxford"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L21",
+  "title": "Burgundy knit with grey and navy",
+  "summary": "Burgundy is the easiest accent colour: it sits naturally with grey, navy and brown. Let it be the only colour in the outfit.",
+  "occasions": [
+   "work",
+   "dinner",
+   "casual_outing"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "burgundy",
+     "red"
+    ],
+    "materials": [
+     "lambswool",
+     "merino"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers",
+     "chinos",
+     "jeans"
+    ],
+    "colors": [
+     "grey",
+     "charcoal",
+     "denim"
+    ],
+    "materials": [
+     "wool",
+     "flannel"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "black"
+    ],
+    "materials": [
+     "chelsea",
+     "derby",
+     "boot"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "outerwear",
+    "categories": [
+     "coat"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "peacoat",
+     "overcoat"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L22",
+  "title": "Cream cable knit, dark jeans, peacoat",
+  "summary": "A chunky cream knit with dark denim is winter weekend comfort that still looks put together. Wear the knit untucked, a navy peacoat over the top.",
+  "occasions": [
+   "weekend",
+   "casual_outing",
+   "dinner"
+  ],
+  "styles": [
+   "smart_casual",
+   "casual"
+  ],
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "cream",
+     "white"
+    ],
+    "materials": [
+     "cable",
+     "wool"
+    ],
+    "requires": [
+     "cable",
+     "chunky",
+     "fisherman",
+     "aran"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [
+     "dark"
+    ],
+    "requires": [],
+    "avoid": [
+     "ripped"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "outerwear",
+    "categories": [
+     "coat",
+     "jacket"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "peacoat",
+     "wool"
+    ],
+    "requires": [
+     "peacoat",
+     "wool"
+    ],
+    "avoid": [
+     "puffer",
+     "down",
+     "nylon"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "boot",
+     "chukka",
+     "chelsea"
+    ],
+    "requires": [],
+    "avoid": [
+     "running",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L23",
+  "title": "Quarter-zip, chinos, clean sneakers",
+  "summary": "A quarter-zip with a white T-shirt just visible at the neck is comfortable and tidy: great for travel days and relaxed offices.",
+  "occasions": [
+   "work",
+   "travel",
+   "casual_outing"
+  ],
+  "styles": [
+   "smart_casual",
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "grey",
+     "navy"
+    ],
+    "materials": [
+     "quarter-zip"
+    ],
+    "requires": [
+     "zip"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "chinos",
+     "trousers"
+    ],
+    "colors": [
+     "navy",
+     "beige",
+     "grey"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "cargo"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white",
+     "brown"
+    ],
+    "materials": [
+     "leather sneaker"
+    ],
+    "requires": [],
+    "avoid": [
+     "running",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L24",
+  "title": "Suede jacket, fine turtleneck, dark jeans",
+  "summary": "Suede and soft knitwear make a warm, tactile pairing. Keep the jeans dark and the boots brown for a relaxed date-night look.",
+  "occasions": [
+   "dinner",
+   "casual_outing"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "suede"
+    ],
+    "requires": [
+     "suede"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "cream",
+     "white",
+     "grey",
+     "black",
+     "navy"
+    ],
+    "materials": [
+     "merino"
+    ],
+    "requires": [
+     "turtleneck",
+     "roll neck",
+     "rollneck"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [
+     "dark"
+    ],
+    "requires": [],
+    "avoid": [
+     "ripped"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "chelsea",
+     "boot",
+     "loafer"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L25",
+  "title": "Black leather jacket, grey knit, black jeans",
+  "summary": "A dark base with one matte grey layer keeps a leather jacket sharp rather than rock'n'roll. Black boots, no other shine.",
+  "occasions": [
+   "dinner",
+   "casual_outing",
+   "event"
+  ],
+  "styles": [
+   "smart_casual",
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket"
+    ],
+    "colors": [
+     "black"
+    ],
+    "materials": [
+     "leather"
+    ],
+    "requires": [
+     "leather"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "sweater",
+     "t-shirt"
+    ],
+    "colors": [
+     "grey",
+     "charcoal",
+     "white"
+    ],
+    "materials": [
+     "merino",
+     "crewneck"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "black",
+     "charcoal"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "black"
+    ],
+    "materials": [
+     "chelsea",
+     "boot",
+     "derby"
+    ],
+    "requires": [],
+    "avoid": [
+     "running",
+     "trail",
+     "canvas"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L26",
+  "title": "Tonal dark evening layers",
+  "summary": "Tonal charcoal and black look effortlessly elegant at night. Vary the textures (fine knit, flannel, wool coat) so it does not fall flat.",
+  "occasions": [
+   "dinner",
+   "event"
+  ],
+  "styles": [
+   "smart_casual",
+   "formal"
+  ],
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "black",
+     "charcoal"
+    ],
+    "materials": [
+     "turtleneck",
+     "merino"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "charcoal",
+     "grey",
+     "black"
+    ],
+    "materials": [
+     "wool",
+     "flannel"
+    ],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "outerwear",
+    "categories": [
+     "coat"
+    ],
+    "colors": [
+     "charcoal",
+     "black",
+     "navy"
+    ],
+    "materials": [
+     "overcoat",
+     "wool"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "black"
+    ],
+    "materials": [
+     "chelsea",
+     "derby",
+     "boot"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L27",
+  "title": "Grey knit, olive chinos, brown shoes",
+  "summary": "Olive and grey are a quiet, grown-up pairing; brown shoes bridge the two.",
+  "occasions": [
+   "work",
+   "casual_outing",
+   "weekend"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "grey"
+    ],
+    "materials": [
+     "merino",
+     "crewneck"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "chinos"
+    ],
+    "colors": [
+     "olive"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "derby",
+     "loafer",
+     "suede",
+     "chukka"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "white",
+     "light blue"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L28",
+  "title": "Pink oxford, navy chinos, brown shoes",
+  "summary": "A pale pink oxford is a confident spring alternative to blue; navy chinos and brown loafers keep it grounded.",
+  "occasions": [
+   "work",
+   "dinner"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [
+     "pink"
+    ],
+    "materials": [
+     "oxford"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "chinos",
+     "trousers"
+    ],
+    "colors": [
+     "navy",
+     "grey"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "loafer",
+     "suede"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L29",
+  "title": "White polo, navy trousers, brown shoes",
+  "summary": "A white knitted polo with navy trousers is crisp summer evening wear. Tuck it in and add suede loafers.",
+  "occasions": [
+   "dinner",
+   "event",
+   "work"
+  ],
+  "styles": [
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "polo"
+    ],
+    "colors": [
+     "white",
+     "cream"
+    ],
+    "materials": [
+     "knit",
+     "pique"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers",
+     "chinos"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "loafer",
+     "suede"
+    ],
+    "requires": [],
+    "avoid": [
+     "sneaker",
+     "trainer",
+     "running",
+     "canvas",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L30",
+  "title": "Navy cardigan, white T-shirt, grey trousers",
+  "summary": "A cardigan is a softer blazer. Over a white T-shirt with grey trousers it works for a creative office or a weekend lunch.",
+  "occasions": [
+   "work",
+   "casual_outing",
+   "weekend"
+  ],
+  "styles": [
+   "smart_casual",
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "navy",
+     "brown",
+     "grey"
+    ],
+    "materials": [
+     "cardigan"
+    ],
+    "requires": [
+     "cardigan"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers",
+     "chinos"
+    ],
+    "colors": [
+     "grey",
+     "charcoal",
+     "beige"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [
+     "jogger",
+     "sweat",
+     "cargo",
+     "track",
+     "corduroy"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "white"
+    ],
+    "materials": [
+     "loafer",
+     "derby",
+     "leather sneaker"
+    ],
+    "requires": [],
+    "avoid": [
+     "running",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L40",
+  "title": "Field jacket, white T-shirt, dark jeans",
+  "summary": "Military olive, white and indigo is a casual classic. Keep the jeans unripped and the sneakers clean.",
+  "occasions": [
+   "weekend",
+   "casual_outing",
+   "travel"
+  ],
+  "styles": [
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket"
+    ],
+    "colors": [
+     "olive",
+     "khaki"
+    ],
+    "materials": [
+     "field",
+     "cotton"
+    ],
+    "requires": [
+     "field",
+     "utility",
+     "m65",
+     "m-65",
+     "chore",
+     "overshirt"
+    ],
+    "avoid": [
+     "puffer",
+     "down",
+     "leather",
+     "suede"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white",
+     "grey",
+     "cream"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [
+     "graphic"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [
+     "sneaker"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L41",
+  "title": "Breton stripes, navy bottoms, white sneakers",
+  "summary": "Navy-and-white stripes need nothing else patterned. Pair with navy or denim and white sneakers for an easy seaside feel.",
+  "occasions": [
+   "weekend",
+   "casual_outing",
+   "travel"
+  ],
+  "styles": [
+   "casual",
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white",
+     "cream",
+     "navy"
+    ],
+    "materials": [
+     "breton"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [
+     "striped"
+    ],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "chinos",
+     "jeans"
+    ],
+    "colors": [
+     "navy",
+     "denim",
+     "beige"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [
+     "sneaker"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket",
+     "blazer"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L42",
+  "title": "White T-shirt, chino shorts, sneakers",
+  "summary": "Summer basics done right: a good white T-shirt, chino shorts ending above the knee and clean white sneakers.",
+  "occasions": [
+   "weekend",
+   "casual_outing"
+  ],
+  "styles": [
+   "casual"
+  ],
+  "seasons": [
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white",
+     "grey",
+     "navy"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [
+     "graphic"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "shorts"
+    ],
+    "colors": [
+     "beige",
+     "navy",
+     "olive"
+    ],
+    "materials": [
+     "chino"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [
+     "sneaker",
+     "canvas"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L43",
+  "title": "Flannel shirt over a T-shirt, jeans, boots",
+  "summary": "Wear a flannel shirt open over a T-shirt as a light layer. Dark jeans and brown boots keep it rugged but neat.",
+  "occasions": [
+   "weekend",
+   "casual_outing"
+  ],
+  "styles": [
+   "casual"
+  ],
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "shirt"
+    ],
+    "colors": [],
+    "materials": [
+     "flannel"
+    ],
+    "requires": [
+     "flannel",
+     "check",
+     "plaid",
+     "tartan"
+    ],
+    "avoid": [],
+    "patterns": [
+     "checked"
+    ],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "boot",
+     "chukka",
+     "chelsea"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white",
+     "grey"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L44",
+  "title": "Denim jacket, grey sweatshirt, black jeans",
+  "summary": "Avoid double denim in the same wash: a denim jacket over grey with black jeans keeps the blues separate.",
+  "occasions": [
+   "weekend",
+   "casual_outing"
+  ],
+  "styles": [
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [
+     "denim",
+     "trucker"
+    ],
+    "requires": [
+     "denim",
+     "trucker",
+     "jean"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "hoodie",
+     "sweater",
+     "t-shirt"
+    ],
+    "colors": [
+     "grey",
+     "white"
+    ],
+    "materials": [
+     "sweatshirt",
+     "crew"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "black",
+     "charcoal"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [
+     "sneaker"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L45",
+  "title": "Down jacket, chunky knit, jeans, boots",
+  "summary": "On the coldest days a down jacket over a chunky knit keeps you warm; brown boots and dark jeans stop it looking like ski gear.",
+  "occasions": [
+   "weekend",
+   "travel",
+   "casual_outing"
+  ],
+  "styles": [
+   "casual"
+  ],
+  "seasons": [
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket",
+     "coat"
+    ],
+    "colors": [
+     "navy",
+     "black",
+     "olive"
+    ],
+    "materials": [
+     "puffer",
+     "down"
+    ],
+    "requires": [
+     "puffer",
+     "down",
+     "quilted",
+     "padded"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "cream",
+     "grey",
+     "navy"
+    ],
+    "materials": [
+     "cable",
+     "chunky",
+     "wool"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown"
+    ],
+    "materials": [
+     "boot",
+     "chelsea"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L46",
+  "title": "Workwear jacket, grey T-shirt, dark jeans",
+  "summary": "Workwear jackets look best with simple basics: a grey T-shirt, dark jeans and sturdy brown shoes.",
+  "occasions": [
+   "weekend",
+   "casual_outing",
+   "work"
+  ],
+  "styles": [
+   "casual",
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket"
+    ],
+    "colors": [
+     "olive",
+     "navy",
+     "brown",
+     "khaki"
+    ],
+    "materials": [
+     "chore",
+     "workwear"
+    ],
+    "requires": [
+     "chore",
+     "workwear",
+     "work jacket",
+     "overshirt",
+     "canvas"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "grey",
+     "white"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [
+     "graphic"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "denim"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "boot",
+     "derby",
+     "chukka"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L47",
+  "title": "Olive chinos, white T-shirt, navy cardigan",
+  "summary": "Olive, navy and white is relaxed and easy to wear. Leave the cardigan open over the T-shirt.",
+  "occasions": [
+   "weekend",
+   "casual_outing"
+  ],
+  "styles": [
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "bottom",
+    "categories": [
+     "chinos"
+    ],
+    "colors": [
+     "olive"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "navy"
+    ],
+    "materials": [
+     "cardigan"
+    ],
+    "requires": [
+     "cardigan"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white",
+     "brown"
+    ],
+    "materials": [
+     "sneaker",
+     "suede"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L48",
+  "title": "Light jeans, knit polo, suede shoes",
+  "summary": "Lighter denim is perfect for warm days; a navy knitted polo and suede loafers make it smart enough for dinner.",
+  "occasions": [
+   "weekend",
+   "dinner",
+   "casual_outing"
+  ],
+  "styles": [
+   "casual",
+   "smart_casual"
+  ],
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "bottom",
+    "categories": [
+     "jeans"
+    ],
+    "colors": [
+     "light blue",
+     "denim"
+    ],
+    "materials": [
+     "light"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "polo"
+    ],
+    "colors": [
+     "navy",
+     "cream",
+     "white"
+    ],
+    "materials": [
+     "knit"
+    ],
+    "requires": [
+     "knit"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "brown",
+     "tan"
+    ],
+    "materials": [
+     "loafer",
+     "suede"
+    ],
+    "requires": [],
+    "avoid": [
+     "running",
+     "trail"
+    ],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L60",
+  "title": "Sweatshirt, joggers, sneakers, bomber",
+  "summary": "Elevated athleisure: a plain grey sweatshirt, tapered joggers without logos and clean sneakers. A bomber makes it city-ready.",
+  "occasions": [
+   "weekend",
+   "travel",
+   "casual_outing"
+  ],
+  "styles": [
+   "sporty",
+   "casual"
+  ],
+  "seasons": [],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "hoodie",
+     "sweater"
+    ],
+    "colors": [
+     "grey",
+     "navy"
+    ],
+    "materials": [
+     "sweatshirt"
+    ],
+    "requires": [
+     "sweatshirt",
+     "cotton sweat",
+     "hoodie",
+     "fleece"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "navy",
+     "black",
+     "grey"
+    ],
+    "materials": [
+     "jogger"
+    ],
+    "requires": [
+     "jogger",
+     "sweat",
+     "track"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white",
+     "grey"
+    ],
+    "materials": [
+     "sneaker"
+    ],
+    "requires": [
+     "sneaker",
+     "trainer",
+     "running"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket"
+    ],
+    "colors": [
+     "olive",
+     "navy",
+     "black"
+    ],
+    "materials": [
+     "bomber"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": true
+   }
+  ]
+ },
+ {
+  "id": "L61",
+  "title": "Hoodie, joggers, down jacket",
+  "summary": "Comfort for cold days: hoodie and joggers in one or two quiet colours, a down jacket on top.",
+  "occasions": [
+   "weekend",
+   "travel"
+  ],
+  "styles": [
+   "sporty"
+  ],
+  "seasons": [
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "hoodie"
+    ],
+    "colors": [
+     "grey",
+     "navy",
+     "black"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "navy",
+     "black",
+     "grey"
+    ],
+    "materials": [
+     "jogger"
+    ],
+    "requires": [
+     "jogger",
+     "sweat",
+     "track"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white",
+     "grey",
+     "black"
+    ],
+    "materials": [
+     "sneaker",
+     "running"
+    ],
+    "requires": [
+     "sneaker",
+     "trainer",
+     "running"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket",
+     "coat"
+    ],
+    "colors": [
+     "navy",
+     "black",
+     "olive"
+    ],
+    "materials": [
+     "puffer",
+     "down"
+    ],
+    "requires": [
+     "puffer",
+     "down",
+     "quilted",
+     "padded"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L62",
+  "title": "Tech T-shirt, shorts, running shoes",
+  "summary": "For an active weekend: a technical T-shirt, shorts and proper running shoes. Keep it to two colours.",
+  "occasions": [
+   "weekend"
+  ],
+  "styles": [
+   "sporty"
+  ],
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white",
+     "grey",
+     "navy",
+     "black"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "shorts"
+    ],
+    "colors": [
+     "navy",
+     "black",
+     "grey"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "grey",
+     "white",
+     "black"
+    ],
+    "materials": [
+     "running"
+    ],
+    "requires": [
+     "running",
+     "trainer",
+     "sport"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L63",
+  "title": "Quarter-zip and joggers for travel",
+  "summary": "Travel comfort that still looks tidy: a quarter-zip, soft trousers and white sneakers.",
+  "occasions": [
+   "travel",
+   "weekend"
+  ],
+  "styles": [
+   "sporty",
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "sweater"
+    ],
+    "colors": [
+     "grey",
+     "navy"
+    ],
+    "materials": [
+     "quarter-zip"
+    ],
+    "requires": [
+     "zip"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers",
+     "chinos"
+    ],
+    "colors": [
+     "navy",
+     "grey",
+     "black"
+    ],
+    "materials": [
+     "jogger",
+     "chino"
+    ],
+    "requires": [],
+    "avoid": [
+     "wool",
+     "flannel",
+     "suit"
+    ],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white",
+     "grey"
+    ],
+    "materials": [
+     "sneaker"
+    ],
+    "requires": [
+     "sneaker",
+     "trainer"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L64",
+  "title": "Windbreaker, T-shirt, cargo trousers, trail shoes",
+  "summary": "For city walks or light hikes: a packable windbreaker, cargo trousers and trail shoes in earthy tones.",
+  "occasions": [
+   "travel",
+   "weekend"
+  ],
+  "styles": [
+   "sporty",
+   "casual"
+  ],
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "pieces": [
+   {
+    "slot": "outerwear",
+    "categories": [
+     "jacket"
+    ],
+    "colors": [
+     "olive",
+     "navy",
+     "black",
+     "khaki"
+    ],
+    "materials": [
+     "windbreaker",
+     "technical",
+     "nylon"
+    ],
+    "requires": [
+     "windbreaker",
+     "technical",
+     "shell",
+     "anorak",
+     "rain"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "top",
+    "categories": [
+     "t-shirt"
+    ],
+    "colors": [
+     "white",
+     "grey",
+     "olive"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "trousers"
+    ],
+    "colors": [
+     "olive",
+     "khaki",
+     "black"
+    ],
+    "materials": [
+     "cargo"
+    ],
+    "requires": [
+     "cargo",
+     "utility"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "grey",
+     "brown",
+     "black"
+    ],
+    "materials": [
+     "trail",
+     "hiking"
+    ],
+    "requires": [
+     "trail",
+     "hiking",
+     "running",
+     "sneaker"
+    ],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ },
+ {
+  "id": "L65",
+  "title": "Piqué polo, chino shorts, white sneakers",
+  "summary": "Sporty summer smart: a piqué polo, tailored chino shorts and white sneakers.",
+  "occasions": [
+   "weekend",
+   "casual_outing"
+  ],
+  "styles": [
+   "sporty",
+   "casual"
+  ],
+  "seasons": [
+   "summer"
+  ],
+  "pieces": [
+   {
+    "slot": "top",
+    "categories": [
+     "polo"
+    ],
+    "colors": [
+     "white",
+     "navy"
+    ],
+    "materials": [
+     "pique"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "bottom",
+    "categories": [
+     "shorts"
+    ],
+    "colors": [
+     "beige",
+     "navy"
+    ],
+    "materials": [],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   },
+   {
+    "slot": "shoes",
+    "categories": [
+     "shoes"
+    ],
+    "colors": [
+     "white"
+    ],
+    "materials": [
+     "sneaker"
+    ],
+    "requires": [],
+    "avoid": [],
+    "patterns": [],
+    "optional": false
+   }
+  ]
+ }
+]

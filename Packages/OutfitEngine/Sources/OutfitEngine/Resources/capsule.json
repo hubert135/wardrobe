@@ -1,0 +1,993 @@
+[
+ {
+  "id": "C01",
+  "name": "White oxford shirt",
+  "category": "shirt",
+  "subcategory": "oxford shirt",
+  "color": "white",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton oxford",
+  "formality": 3,
+  "seasons": [],
+  "description": "white cotton oxford cloth button-down shirt, long sleeves"
+ },
+ {
+  "id": "C02",
+  "name": "Light blue oxford shirt",
+  "category": "shirt",
+  "subcategory": "oxford shirt",
+  "color": "light blue",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton oxford",
+  "formality": 3,
+  "seasons": [],
+  "description": "light blue cotton oxford cloth button-down shirt, long sleeves"
+ },
+ {
+  "id": "C03",
+  "name": "White dress shirt",
+  "category": "shirt",
+  "subcategory": "dress shirt",
+  "color": "white",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton poplin",
+  "formality": 5,
+  "seasons": [],
+  "description": "crisp white cotton poplin dress shirt with a semi-spread collar and buttoned cuffs"
+ },
+ {
+  "id": "C04",
+  "name": "Light blue dress shirt",
+  "category": "shirt",
+  "subcategory": "dress shirt",
+  "color": "light blue",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton poplin",
+  "formality": 4,
+  "seasons": [],
+  "description": "light blue cotton poplin dress shirt with a semi-spread collar"
+ },
+ {
+  "id": "C05",
+  "name": "Chambray shirt",
+  "category": "shirt",
+  "subcategory": "chambray shirt",
+  "color": "denim",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton chambray",
+  "formality": 2,
+  "seasons": [],
+  "description": "mid-blue cotton chambray shirt with two chest pockets"
+ },
+ {
+  "id": "C06",
+  "name": "Check flannel shirt",
+  "category": "shirt",
+  "subcategory": "flannel shirt",
+  "color": "navy",
+  "secondaryColor": "green",
+  "pattern": "checked",
+  "material": "cotton flannel",
+  "formality": 2,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "navy and green checked brushed cotton flannel shirt"
+ },
+ {
+  "id": "C07",
+  "name": "White linen shirt",
+  "category": "shirt",
+  "subcategory": "linen shirt",
+  "color": "white",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "linen",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "description": "white linen shirt, relaxed fit, long sleeves"
+ },
+ {
+  "id": "C08",
+  "name": "Pink oxford shirt",
+  "category": "shirt",
+  "subcategory": "oxford shirt",
+  "color": "pink",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton oxford",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn"
+  ],
+  "description": "pale pink cotton oxford cloth button-down shirt"
+ },
+ {
+  "id": "C09",
+  "name": "White T-shirt",
+  "category": "t-shirt",
+  "subcategory": "crew neck t-shirt",
+  "color": "white",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton jersey",
+  "formality": 2,
+  "seasons": [],
+  "description": "plain white heavyweight cotton crew-neck T-shirt"
+ },
+ {
+  "id": "C10",
+  "name": "Grey T-shirt",
+  "category": "t-shirt",
+  "subcategory": "crew neck t-shirt",
+  "color": "grey",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton jersey",
+  "formality": 2,
+  "seasons": [],
+  "description": "plain heather grey cotton crew-neck T-shirt"
+ },
+ {
+  "id": "C11",
+  "name": "Breton striped top",
+  "category": "t-shirt",
+  "subcategory": "breton long-sleeve top",
+  "color": "white",
+  "secondaryColor": "navy",
+  "pattern": "striped",
+  "material": "cotton",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn"
+  ],
+  "description": "white and navy Breton striped long-sleeve cotton top"
+ },
+ {
+  "id": "C12",
+  "name": "Navy knit polo",
+  "category": "polo",
+  "subcategory": "knit polo",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "knitted cotton",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn"
+  ],
+  "description": "navy short-sleeve knitted cotton polo shirt"
+ },
+ {
+  "id": "C13",
+  "name": "White piqué polo",
+  "category": "polo",
+  "subcategory": "pique polo",
+  "color": "white",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton pique",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "description": "white short-sleeve cotton piqué polo shirt"
+ },
+ {
+  "id": "C14",
+  "name": "Navy merino crewneck",
+  "category": "sweater",
+  "subcategory": "merino crewneck",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "merino wool",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "navy fine-gauge merino wool crew-neck sweater"
+ },
+ {
+  "id": "C15",
+  "name": "Grey merino crewneck",
+  "category": "sweater",
+  "subcategory": "merino crewneck",
+  "color": "grey",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "merino wool",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "mid-grey fine-gauge merino wool crew-neck sweater"
+ },
+ {
+  "id": "C16",
+  "name": "Cream cable-knit sweater",
+  "category": "sweater",
+  "subcategory": "cable knit sweater",
+  "color": "cream",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool cable knit",
+  "formality": 3,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "cream chunky wool cable-knit crew-neck sweater"
+ },
+ {
+  "id": "C17",
+  "name": "Burgundy lambswool crewneck",
+  "category": "sweater",
+  "subcategory": "lambswool crewneck",
+  "color": "burgundy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "lambswool",
+  "formality": 3,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "burgundy lambswool crew-neck sweater"
+ },
+ {
+  "id": "C18",
+  "name": "Black merino turtleneck",
+  "category": "sweater",
+  "subcategory": "merino turtleneck",
+  "color": "black",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "merino wool",
+  "formality": 4,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "black fine merino wool turtleneck sweater"
+ },
+ {
+  "id": "C19",
+  "name": "Navy cardigan",
+  "category": "sweater",
+  "subcategory": "cardigan",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool cardigan",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "navy wool V-neck button cardigan"
+ },
+ {
+  "id": "C20",
+  "name": "Grey quarter-zip",
+  "category": "sweater",
+  "subcategory": "quarter-zip sweater",
+  "color": "grey",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton knit",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "grey cotton knit quarter-zip sweater"
+ },
+ {
+  "id": "C21",
+  "name": "Grey sweatshirt",
+  "category": "hoodie",
+  "subcategory": "crew sweatshirt",
+  "color": "grey",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton sweat",
+  "formality": 1,
+  "seasons": [],
+  "description": "plain heather grey cotton crew-neck sweatshirt"
+ },
+ {
+  "id": "C22",
+  "name": "Navy hoodie",
+  "category": "hoodie",
+  "subcategory": "hoodie",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton fleece",
+  "formality": 1,
+  "seasons": [],
+  "description": "plain navy cotton pullover hoodie"
+ },
+ {
+  "id": "C23",
+  "name": "Dark jeans",
+  "category": "jeans",
+  "subcategory": "dark straight jeans",
+  "color": "denim",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "dark denim",
+  "formality": 3,
+  "seasons": [],
+  "description": "dark indigo straight-leg jeans without distressing"
+ },
+ {
+  "id": "C24",
+  "name": "Black jeans",
+  "category": "jeans",
+  "subcategory": "black slim jeans",
+  "color": "black",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "denim",
+  "formality": 2,
+  "seasons": [],
+  "description": "black slim straight jeans"
+ },
+ {
+  "id": "C25",
+  "name": "Light wash jeans",
+  "category": "jeans",
+  "subcategory": "light wash jeans",
+  "color": "light blue",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "light denim",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "description": "light wash straight-leg jeans"
+ },
+ {
+  "id": "C26",
+  "name": "Beige chinos",
+  "category": "chinos",
+  "subcategory": "slim chinos",
+  "color": "beige",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton twill",
+  "formality": 3,
+  "seasons": [],
+  "description": "beige cotton twill slim chinos"
+ },
+ {
+  "id": "C27",
+  "name": "Navy chinos",
+  "category": "chinos",
+  "subcategory": "slim chinos",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton twill",
+  "formality": 3,
+  "seasons": [],
+  "description": "navy cotton twill slim chinos"
+ },
+ {
+  "id": "C28",
+  "name": "Olive chinos",
+  "category": "chinos",
+  "subcategory": "slim chinos",
+  "color": "olive",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton twill",
+  "formality": 3,
+  "seasons": [],
+  "description": "olive cotton twill slim chinos"
+ },
+ {
+  "id": "C29",
+  "name": "Grey wool trousers",
+  "category": "trousers",
+  "subcategory": "wool trousers",
+  "color": "grey",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool",
+  "formality": 4,
+  "seasons": [],
+  "description": "mid-grey wool trousers with a front crease"
+ },
+ {
+  "id": "C30",
+  "name": "Charcoal flannel trousers",
+  "category": "trousers",
+  "subcategory": "flannel trousers",
+  "color": "charcoal",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool flannel",
+  "formality": 4,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "charcoal wool flannel trousers with a front crease"
+ },
+ {
+  "id": "C31",
+  "name": "Brown corduroy trousers",
+  "category": "trousers",
+  "subcategory": "corduroy trousers",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "corduroy",
+  "formality": 3,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "brown medium-wale corduroy trousers"
+ },
+ {
+  "id": "C32",
+  "name": "Navy suit trousers",
+  "category": "trousers",
+  "subcategory": "suit trousers",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool suit",
+  "formality": 5,
+  "seasons": [],
+  "description": "navy wool suit trousers with a sharp crease"
+ },
+ {
+  "id": "C33",
+  "name": "Charcoal suit trousers",
+  "category": "trousers",
+  "subcategory": "suit trousers",
+  "color": "charcoal",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool suit",
+  "formality": 5,
+  "seasons": [],
+  "description": "charcoal wool suit trousers with a sharp crease"
+ },
+ {
+  "id": "C34",
+  "name": "Beige linen trousers",
+  "category": "trousers",
+  "subcategory": "linen trousers",
+  "color": "beige",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "linen",
+  "formality": 3,
+  "seasons": [
+   "summer"
+  ],
+  "description": "beige linen drawstring-free trousers, relaxed straight leg"
+ },
+ {
+  "id": "C35",
+  "name": "Beige chino shorts",
+  "category": "shorts",
+  "subcategory": "chino shorts",
+  "color": "beige",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton",
+  "formality": 2,
+  "seasons": [
+   "summer"
+  ],
+  "description": "beige cotton chino shorts ending above the knee"
+ },
+ {
+  "id": "C36",
+  "name": "Navy joggers",
+  "category": "trousers",
+  "subcategory": "joggers",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton jersey jogger",
+  "formality": 1,
+  "seasons": [],
+  "description": "navy cotton jersey tapered joggers"
+ },
+ {
+  "id": "C37",
+  "name": "White leather sneakers",
+  "category": "shoes",
+  "subcategory": "leather sneakers",
+  "color": "white",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "leather sneaker",
+  "formality": 3,
+  "seasons": [],
+  "description": "minimal white leather low-top sneakers, a pair"
+ },
+ {
+  "id": "C38",
+  "name": "Brown suede loafers",
+  "category": "shoes",
+  "subcategory": "suede loafers",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "suede loafer",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn"
+  ],
+  "description": "brown suede penny loafers, a pair"
+ },
+ {
+  "id": "C39",
+  "name": "Brown leather derbies",
+  "category": "shoes",
+  "subcategory": "derby shoes",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "leather derby",
+  "formality": 4,
+  "seasons": [],
+  "description": "brown polished leather derby shoes, a pair"
+ },
+ {
+  "id": "C40",
+  "name": "Black oxford shoes",
+  "category": "shoes",
+  "subcategory": "oxford shoes",
+  "color": "black",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "leather oxford",
+  "formality": 5,
+  "seasons": [],
+  "description": "black polished leather cap-toe oxford shoes, a pair"
+ },
+ {
+  "id": "C41",
+  "name": "Brown Chelsea boots",
+  "category": "shoes",
+  "subcategory": "chelsea boots",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "leather chelsea boot",
+  "formality": 4,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "dark brown leather Chelsea boots, a pair"
+ },
+ {
+  "id": "C42",
+  "name": "Black Chelsea boots",
+  "category": "shoes",
+  "subcategory": "chelsea boots",
+  "color": "black",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "leather chelsea boot",
+  "formality": 4,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "black leather Chelsea boots, a pair"
+ },
+ {
+  "id": "C43",
+  "name": "Tan suede chukka boots",
+  "category": "shoes",
+  "subcategory": "chukka boots",
+  "color": "tan",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "suede chukka",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "tan suede chukka boots, a pair"
+ },
+ {
+  "id": "C44",
+  "name": "Grey running sneakers",
+  "category": "shoes",
+  "subcategory": "running sneakers",
+  "color": "grey",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "mesh running",
+  "formality": 1,
+  "seasons": [],
+  "description": "grey mesh running sneakers, a pair"
+ },
+ {
+  "id": "C45",
+  "name": "Navy unstructured blazer",
+  "category": "blazer",
+  "subcategory": "unstructured blazer",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool blazer",
+  "formality": 4,
+  "seasons": [],
+  "description": "navy unstructured soft-shouldered wool blazer"
+ },
+ {
+  "id": "C46",
+  "name": "Navy suit jacket",
+  "category": "blazer",
+  "subcategory": "suit jacket",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool suit",
+  "formality": 5,
+  "seasons": [],
+  "description": "navy wool single-breasted suit jacket"
+ },
+ {
+  "id": "C47",
+  "name": "Charcoal suit jacket",
+  "category": "blazer",
+  "subcategory": "suit jacket",
+  "color": "charcoal",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool suit",
+  "formality": 5,
+  "seasons": [],
+  "description": "charcoal wool single-breasted suit jacket"
+ },
+ {
+  "id": "C48",
+  "name": "Brown tweed jacket",
+  "category": "blazer",
+  "subcategory": "tweed jacket",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool tweed",
+  "formality": 4,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "brown wool tweed sport jacket"
+ },
+ {
+  "id": "C49",
+  "name": "Charcoal overcoat",
+  "category": "coat",
+  "subcategory": "wool overcoat",
+  "color": "charcoal",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool overcoat",
+  "formality": 5,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "charcoal wool single-breasted overcoat, knee length"
+ },
+ {
+  "id": "C50",
+  "name": "Camel overcoat",
+  "category": "coat",
+  "subcategory": "wool overcoat",
+  "color": "tan",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool overcoat",
+  "formality": 4,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "camel wool single-breasted overcoat, knee length"
+ },
+ {
+  "id": "C51",
+  "name": "Beige trench coat",
+  "category": "coat",
+  "subcategory": "trench coat",
+  "color": "beige",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton gabardine trench",
+  "formality": 4,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "beige cotton gabardine trench coat"
+ },
+ {
+  "id": "C52",
+  "name": "Navy peacoat",
+  "category": "coat",
+  "subcategory": "peacoat",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool peacoat",
+  "formality": 4,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "navy wool double-breasted peacoat"
+ },
+ {
+  "id": "C53",
+  "name": "Olive field jacket",
+  "category": "jacket",
+  "subcategory": "field jacket",
+  "color": "olive",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton field jacket",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "olive cotton field jacket with four pockets"
+ },
+ {
+  "id": "C54",
+  "name": "Brown suede jacket",
+  "category": "jacket",
+  "subcategory": "suede jacket",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "suede",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "brown suede short zip jacket"
+ },
+ {
+  "id": "C55",
+  "name": "Denim jacket",
+  "category": "jacket",
+  "subcategory": "denim jacket",
+  "color": "denim",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "denim",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn"
+  ],
+  "description": "mid-blue denim trucker jacket"
+ },
+ {
+  "id": "C56",
+  "name": "Black leather jacket",
+  "category": "jacket",
+  "subcategory": "leather jacket",
+  "color": "black",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "leather",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "black leather jacket with a simple collar and zip"
+ },
+ {
+  "id": "C57",
+  "name": "Navy down jacket",
+  "category": "jacket",
+  "subcategory": "down puffer jacket",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "down puffer",
+  "formality": 2,
+  "seasons": [
+   "winter"
+  ],
+  "description": "navy quilted down puffer jacket"
+ },
+ {
+  "id": "C58",
+  "name": "Olive bomber jacket",
+  "category": "jacket",
+  "subcategory": "bomber jacket",
+  "color": "olive",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "nylon bomber",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "olive nylon bomber jacket"
+ },
+ {
+  "id": "C59",
+  "name": "Olive chore jacket",
+  "category": "jacket",
+  "subcategory": "chore jacket",
+  "color": "olive",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton workwear chore",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "olive cotton canvas chore jacket with patch pockets"
+ },
+ {
+  "id": "C60",
+  "name": "Navy windbreaker",
+  "category": "jacket",
+  "subcategory": "windbreaker",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "nylon windbreaker technical",
+  "formality": 1,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "navy lightweight hooded nylon windbreaker"
+ },
+ {
+  "id": "C61",
+  "name": "Olive cargo trousers",
+  "category": "trousers",
+  "subcategory": "cargo trousers",
+  "color": "olive",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton cargo",
+  "formality": 2,
+  "seasons": [],
+  "description": "olive cotton cargo trousers, straight leg"
+ },
+ {
+  "id": "C62",
+  "name": "Brown leather belt",
+  "category": "accessory",
+  "subcategory": "belt",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "leather belt",
+  "formality": 3,
+  "seasons": [],
+  "description": "brown leather belt with a simple silver buckle"
+ },
+ {
+  "id": "C63",
+  "name": "Black leather belt",
+  "category": "accessory",
+  "subcategory": "belt",
+  "color": "black",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "leather belt",
+  "formality": 4,
+  "seasons": [],
+  "description": "black leather belt with a simple silver buckle"
+ },
+ {
+  "id": "C64",
+  "name": "Navy silk tie",
+  "category": "accessory",
+  "subcategory": "tie",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "silk tie",
+  "formality": 5,
+  "seasons": [],
+  "description": "navy silk tie"
+ },
+ {
+  "id": "C65",
+  "name": "Burgundy knit tie",
+  "category": "accessory",
+  "subcategory": "tie",
+  "color": "burgundy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "knit silk tie",
+  "formality": 4,
+  "seasons": [],
+  "description": "burgundy knitted silk tie"
+ },
+ {
+  "id": "C66",
+  "name": "Beige linen blazer",
+  "category": "blazer",
+  "subcategory": "unstructured linen blazer",
+  "color": "beige",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "linen",
+  "formality": 4,
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "description": "beige unstructured linen blazer, soft shoulders"
+ },
+ {
+  "id": "C67",
+  "name": "Navy sport shorts",
+  "category": "shorts",
+  "subcategory": "sport shorts",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "technical jersey",
+  "formality": 1,
+  "seasons": [
+   "spring",
+   "summer"
+  ],
+  "description": "navy lightweight technical running shorts"
+ }
+]

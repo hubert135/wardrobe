@@ -208,7 +208,8 @@ private struct BuilderContent: View {
                         tiles: model.tiles(for: suggestion),
                         isFavorite: suggestion.isFavorite,
                         isWorn: suggestion.isWornToday,
-                        subtitle: suggestion.outfit.recipe.map { "Style guide · recipe \($0.id)" },
+                        subtitle: model.recipeLabel(for: suggestion.outfit.recipe),
+                        modelMode: .auto,
                         onWear: { model.wear(suggestion) },
                         onFavorite: { model.toggleFavorite(suggestion) },
                         onAddMissing: { model.addToShoppingList($0) }

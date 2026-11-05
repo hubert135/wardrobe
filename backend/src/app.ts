@@ -3,7 +3,9 @@ import { bodyLimit } from "hono/body-limit";
 import { cors } from "hono/cors";
 import { z } from "zod";
 import { AIOutputError, AIUnavailableError, generateWithRetry, type AIClient } from "./ai/client.js";
+import { HOUSE_MODEL_VERSION, type OutfitPhotoRenderer } from "./ai/outfitPhoto.js";
 import type { ProductPhotoRenderer } from "./ai/productPhoto.js";
+import { renderKey, type RenderCache } from "./ai/renderCache.js";
 import { ANALYZE_GARMENT_SYSTEM, PARSE_ORDER_SYSTEM, RANK_OUTFITS_SYSTEM } from "./ai/prompts.js";
 import { appleTokenVerifier, issueSession, verifySession, type AppleTokenVerifier } from "./auth/tokens.js";
 import type { Config } from "./config.js";
@@ -12,7 +14,8 @@ import { RateLimiter, rateLimit } from "./middleware/rateLimit.js";
 import { AIAnalyzeOutputSchema, AnalyzeGarmentRequestSchema, normalizeAnalysis } from "./schemas/garments.js";
 import { AIOrderOutputSchema, normalizeOrder, ParseOrderRequestSchema } from "./schemas/orders.js";
 import { AIRankOutputSchema, normalizeRanking, RankOutfitsRequestSchema } from "./schemas/outfits.js";
-import { RenderProductPhotoRequestSchema } from "./schemas/render.js";
+import type { ImagePayload } from "./schemas/common.js";
+import { RenderOutfitRequestSchema, RenderProductPhotoRequestSchema } from "./schemas/render.js";
 
 export interface AppDependencies {
   config: Config;
@@ -20,10 +23,12 @@ export interface AppDependencies {
   ai: AIClient | null;
   /** Image editing for store-style photos; null when OPENAI_API_KEY is not set. */
   renderer?: ProductPhotoRenderer | null;
+  /** Outfits shown on a model; null when OPENAI_API_KEY is not set. */
+  outfitRenderer?: OutfitPhotoRenderer | null;
+  /** Finished renders, so repeated requests cost nothing. */
+  renderCache?: RenderCache | null;
   /** Returns the private style-guide JSON (built from the user's e-book), or null if there is none. */
   loadStylebook?: () => Promise<string | null>;
-  /** Returns a product photo from the style guide by file name, or null. */
-  loadStylebookImage?: (name: string) => Promise<Uint8Array | null>;
   /** Injected in tests; defaults to verification against Apple's public keys. */
   verifyAppleToken?: AppleTokenVerifier;
   now?: () => number;
@@ -37,6 +42,35 @@ const DeviceSessionRequestSchema = z.object({ deviceId: z.uuid() });
 /** ISO-8601 without milliseconds (what Swift's `.iso8601` decoder expects). */
 const isoSeconds = (date: Date) => date.toISOString().replace(/\.\d{3}Z$/, "Z");
 
+/**
+ * Only the outfit formulas of the private style guide reach the app: what to combine, in which colors and
+ * fabrics. Products, shops, prices and photos stay on the server.
+ */
+export function recipeFormulas(json: string): string {
+  type Piece = { slot: unknown; categories: unknown; colors: unknown; patterns?: unknown; materials?: unknown; optional?: unknown };
+  type Recipe = { id: unknown; title: unknown; summary: unknown; occasions: unknown; styles: unknown; seasons: unknown; pieces?: Piece[] };
+  const book = JSON.parse(json) as { version?: string; recipes?: Recipe[] };
+  return JSON.stringify({
+    version: `formulas-${book.version ?? "1"}`,
+    recipes: (book.recipes ?? []).map((recipe) => ({
+      id: recipe.id,
+      title: recipe.title,
+      summary: recipe.summary,
+      occasions: recipe.occasions,
+      styles: recipe.styles,
+      seasons: recipe.seasons,
+      pieces: (recipe.pieces ?? []).map((piece) => ({
+        slot: piece.slot,
+        categories: piece.categories,
+        colors: piece.colors,
+        patterns: piece.patterns ?? [],
+        materials: piece.materials ?? [],
+        optional: piece.optional ?? false,
+      })),
+    })),
+  });
+}
+
 function clientIP(c: Context): string {
   return c.req.header("cf-connecting-ip") ?? c.req.header("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 }
@@ -44,6 +78,20 @@ function clientIP(c: Context): string {
 export function createApp(deps: AppDependencies) {
   const { config } = deps;
   const renderer = deps.renderer ?? null;
+  const outfitRenderer = deps.outfitRenderer ?? null;
+  const renderCache = deps.renderCache ?? null;
+  /** Serves a cached render when the same request was made before (unless `fresh`). */
+  const cachedRender = async (kind: string, keyInput: object, fresh: boolean, render: () => Promise<ImagePayload>) => {
+    if (!renderCache) return render();
+    const key = await renderKey(kind, { ...keyInput, imageModel: config.imageModel, quality: config.imageQuality });
+    if (!fresh) {
+      const hit = await renderCache.get(key).catch(() => null);
+      if (hit) return hit;
+    }
+    const image = await render();
+    await renderCache.put(key, image).catch(() => undefined);
+    return image;
+  };
   const notConfigured = (what: string) =>
     new ApiError(503, "ai_not_configured", `${what} is not set up on this server yet.`);
   /** Claude client or a clean 503 when the server has no Anthropic key. */
@@ -113,21 +161,12 @@ export function createApp(deps: AppDependencies) {
   };
 
   const aiLimiter = new RateLimiter(config.rateLimit.requests, config.rateLimit.windowMs, now);
-  // Style guide: private recipes and shop links from the user's own e-book (never part of the repo).
+  // Style guide: outfit formulas learned from the user's own e-book (never part of the repo).
   app.get("/v1/stylebook", requireSession, async (c) => {
     const json = deps.loadStylebook ? await deps.loadStylebook() : null;
     if (!json) throw new ApiError(404, "stylebook_not_found", "No style guide has been imported on this server.");
     c.header("Cache-Control", "no-store");
-    return c.body(json, 200, { "Content-Type": "application/json; charset=utf-8" });
-  });
-
-  app.get("/v1/stylebook/images/:name", requireSession, async (c) => {
-    const name = c.req.param("name") ?? "";
-    // Only plain generated file names: never a path.
-    if (!/^[a-z0-9-]{1,80}\.jpg$/.test(name)) throw new ApiError(400, "invalid_request", "Invalid image name.");
-    const bytes = deps.loadStylebookImage ? await deps.loadStylebookImage(name) : null;
-    if (!bytes) throw new ApiError(404, "not_found", "Image not found.");
-    return c.body(bytes as Uint8Array<ArrayBuffer>, 200, { "Content-Type": "image/jpeg", "Cache-Control": "private, max-age=604800" });
+    return c.body(recipeFormulas(json), 200, { "Content-Type": "application/json; charset=utf-8" });
   });
 
   for (const path of ["/v1/garments/*", "/v1/orders/*", "/v1/outfits/*"]) {
@@ -164,7 +203,21 @@ export function createApp(deps: AppDependencies) {
     async (c) => {
       if (!renderer) throw notConfigured("Store-style photos");
       const body = await parseBody(c, RenderProductPhotoRequestSchema);
-      const image = await renderer.render({ image: body.image ?? null, garment: body.garment ?? null });
+      const input = { image: body.image ?? null, garment: body.garment ?? null };
+      const image = await cachedRender("product", input, body.fresh === true, () => renderer.render(input));
+      return c.json({ image });
+    },
+  );
+
+  app.post(
+    "/v1/outfits/render",
+    rateLimit(renderLimiter, (c) => `render:${(c as Context<Env>).get("userId")}`),
+    async (c) => {
+      if (!outfitRenderer) throw notConfigured("Outfits on a model");
+      const body = await parseBody(c, RenderOutfitRequestSchema);
+      const items = body.items.map((item) => ({ slot: item.slot, garment: item.garment, image: item.image ?? null }));
+      const keyInput = { items, model: body.model, version: HOUSE_MODEL_VERSION };
+      const image = await cachedRender("outfit", keyInput, body.fresh === true, () => outfitRenderer.render({ items, model: body.model }));
       return c.json({ image });
     },
   );

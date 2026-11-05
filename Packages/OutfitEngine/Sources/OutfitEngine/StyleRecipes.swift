@@ -9,19 +9,47 @@ public struct RecipePiece: Sendable, Hashable, Codable {
     public var colors: [String]
     /// Required patterns; empty means any pattern.
     public var patterns: [Pattern]
-    /// Keywords looked up in the garment's material and type (e.g. "suede", "corduroy").
+    /// Preferred keywords looked up in the garment's material and type (e.g. "suede", "oxford"): a small bonus.
     public var materials: [String]
+    /// Keywords that define the piece: at least one must appear ("turtleneck", "suit"). Empty: no requirement.
+    public var requires: [String]
+    /// The garment may not contain any of these (e.g. "sneaker" for a dress shoe).
+    public var avoid: [String]
     /// Optional pieces (extra layers, accessories, coats for colder days) never block a match.
     public var optional: Bool
 
-    public init(slot: Slot, categories: [GarmentCategory], colors: [String] = [], patterns: [Pattern] = [], materials: [String] = [], optional: Bool = false) {
+    public init(
+        slot: Slot, categories: [GarmentCategory], colors: [String] = [], patterns: [Pattern] = [],
+        materials: [String] = [], requires: [String] = [], avoid: [String] = [], optional: Bool = false
+    ) {
         self.slot = slot
         self.categories = categories
         self.colors = colors.compactMap { ColorPalette.normalize($0) }
         self.patterns = patterns
         self.materials = materials.map { $0.lowercased() }
+        self.requires = requires.map { $0.lowercased() }
+        self.avoid = avoid.map { $0.lowercased() }
         self.optional = optional
     }
+
+    private enum CodingKeys: String, CodingKey { case slot, categories, colors, patterns, materials, requires, avoid, optional }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            slot: try c.decode(Slot.self, forKey: .slot),
+            categories: try c.decode([GarmentCategory].self, forKey: .categories),
+            colors: try c.decodeIfPresent([String].self, forKey: .colors) ?? [],
+            patterns: try c.decodeIfPresent([Pattern].self, forKey: .patterns) ?? [],
+            materials: try c.decodeIfPresent([String].self, forKey: .materials) ?? [],
+            requires: try c.decodeIfPresent([String].self, forKey: .requires) ?? [],
+            avoid: try c.decodeIfPresent([String].self, forKey: .avoid) ?? [],
+            optional: try c.decodeIfPresent(Bool.self, forKey: .optional) ?? false
+        )
+    }
+
+    /// Whether the piece asks for a suit jacket or suit trousers.
+    var isSuitPiece: Bool { (requires + materials).contains { $0.contains("suit") } }
 }
 
 /// A proven outfit formula, e.g. from a style guide: which pieces, in which colors and materials.
@@ -61,11 +89,15 @@ public struct RecipeMatcher: Sendable {
 
     public init() {}
 
-    /// nil when the garment cannot play this piece at all (wrong category or pattern);
-    /// otherwise 0.6 for the right category, up to 0.3 for color and 0.1 for material.
+    /// nil when the garment cannot play this piece at all (wrong category, pattern or type, or a suit piece
+    /// worn as a separate); otherwise 0.6 for the right category, up to 0.3 for color and 0.1 for material.
     public func score(_ piece: RecipePiece, garment: EngineGarment) -> Double? {
         guard piece.categories.contains(garment.category) else { return nil }
         if !piece.patterns.isEmpty, !piece.patterns.contains(garment.pattern) { return nil }
+        let text = garment.searchText
+        if piece.avoid.contains(where: { text.contains($0) }) { return nil }
+        if !piece.requires.isEmpty, !piece.requires.contains(where: { text.contains($0) }) { return nil }
+        if StyleKnowledge.shared.isSuitPiece(garment), !piece.isSuitPiece { return nil }
         var score = 0.6
         if piece.colors.isEmpty {
             score += 0.3
@@ -74,7 +106,6 @@ public struct RecipeMatcher: Sendable {
         } else if let secondary = garment.secondaryColor, piece.colors.contains(secondary) {
             score += 0.15
         }
-        let text = (garment.material + " " + garment.subcategory).lowercased()
         if piece.materials.isEmpty || piece.materials.contains(where: { text.contains($0) }) {
             score += 0.1
         }

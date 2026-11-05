@@ -9,6 +9,8 @@ struct CollageTile: Identifiable, Hashable {
     var color: String
     var label: String
     var missing: HypotheticalItem?
+    /// Description for dressing the model.
+    var hints: RenderGarmentHintsDTO
 
     var id: Slot { slot }
 }
@@ -19,12 +21,16 @@ enum OutfitPresenter {
         outfit.pieces.keys.sorted().compactMap { slot in
             guard let piece = outfit.pieces[slot] else { return nil }
             if let missing = outfit.missing[slot] {
-                return CollageTile(slot: slot, imageFile: nil, category: missing.category, color: missing.color, label: missing.title, missing: missing)
+                return CollageTile(
+                    slot: slot, imageFile: nil, category: missing.category, color: missing.color, label: missing.title,
+                    missing: missing, hints: missing.renderHints
+                )
             }
             let garment = garments[piece.id]
             return CollageTile(
                 slot: slot, imageFile: garment?.displayImageFile, category: piece.category,
-                color: piece.primaryColor, label: garment?.displayName ?? piece.shortLabel, missing: nil
+                color: piece.primaryColor, label: garment?.displayName ?? piece.shortLabel, missing: nil,
+                hints: garment?.renderHints ?? piece.renderHints
             )
         }
     }
@@ -32,12 +38,15 @@ enum OutfitPresenter {
     static func tiles(for outfit: Outfit) -> [CollageTile] {
         outfit.orderedSlots.compactMap { slot in
             if let missing = slot.missingItem {
-                return CollageTile(slot: slot.slot, imageFile: nil, category: missing.category, color: missing.color, label: missing.title, missing: missing)
+                return CollageTile(
+                    slot: slot.slot, imageFile: nil, category: missing.category, color: missing.color, label: missing.title,
+                    missing: missing, hints: missing.renderHints
+                )
             }
             guard let garment = slot.garment else { return nil }
             return CollageTile(
                 slot: slot.slot, imageFile: garment.displayImageFile, category: garment.category,
-                color: garment.primaryColor, label: garment.displayName, missing: nil
+                color: garment.primaryColor, label: garment.displayName, missing: nil, hints: garment.renderHints
             )
         }
     }
@@ -104,6 +113,8 @@ struct OutfitCard: View {
     var isFavorite: Bool
     var isWorn: Bool = false
     var subtitle: String?
+    /// Fresh suggestions dress the model automatically; saved outfits show a model photo only if there is one.
+    var modelMode: OutfitModelMode = .cachedOnly
     var onWear: (() -> Void)?
     var onFavorite: (() -> Void)?
     var onSwap: ((Slot) -> Void)?
@@ -114,7 +125,7 @@ struct OutfitCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            OutfitCollageView(tiles: tiles)
+            OutfitVisual(tiles: tiles, mode: modelMode)
 
             VStack(alignment: .leading, spacing: 4) {
                 if let subtitle {

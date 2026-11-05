@@ -54,8 +54,11 @@ public struct RecipeOutfitBuilder: Sendable {
         eligibilityContext.occasion = nil
         eligibilityContext.style = nil
         let window = formalityWindow(for: recipe)
+        let knowledge = StyleKnowledge.shared
         let eligible = closet.filter {
-            rules.isEligible($0, in: eligibilityContext) && ($0.slot == .accessory || window.contains($0.formality))
+            rules.isEligible($0, in: eligibilityContext)
+                && ($0.slot == .accessory || window.contains(knowledge.effectiveFormality(for: $0)))
+                && !knowledge.isExcluded($0, fromAll: recipe.styles)
         }
         let anchors = eligible.filter { context.anchorGarmentIDs.contains($0.id) }
 
@@ -107,9 +110,20 @@ public struct RecipeOutfitBuilder: Sendable {
             }
         }
         combine(0, [:], 0)
+        // Closest to the recipe first; among similar fills, the better color story wins.
         return fills
             .filter { $0.quality >= minimumQuality }
-            .sorted { $0.quality == $1.quality ? $0.candidate.id < $1.candidate.id : $0.quality > $1.quality }
+            .map { ($0, rank($0, knowledge: knowledge)) }
+            .sorted { $0.1 == $1.1 ? $0.0.candidate.id < $1.0.candidate.id : $0.1 > $1.1 }
+            .map(\.0)
+    }
+
+    private func rank(_ fill: RecipeFill, knowledge: StyleKnowledge) -> Double {
+        let garments = fill.candidate.garments
+        var value = fill.quality + 0.05 * knowledge.colorHarmony(garments)
+        if knowledge.hasColorClash(garments) { value -= 0.1 }
+        if knowledge.hasTextureContrast(garments) { value += 0.02 }
+        return value
     }
 
     /// Adds weather outerwear when needed and checks pattern and color rules.
@@ -124,15 +138,17 @@ public struct RecipeOutfitBuilder: Sendable {
             pieces[.outerwear] = layer
         }
         let candidate = OutfitCandidate(pieces: pieces)
-        guard rules.hasCompatiblePatterns(candidate.coreGarments), rules.hasHarmoniousColors(candidate.garments) else { return nil }
+        guard rules.hasCompatiblePatterns(candidate.coreGarments), rules.hasHarmoniousColors(candidate.garments),
+              rules.hasConsistentSuit(candidate), !StyleKnowledge.shared.hasTextureClash(candidate)
+        else { return nil }
         return candidate
     }
 
     private func hypothetical(for piece: RecipePiece) -> HypotheticalItem? {
         guard let category = piece.categories.first else { return nil }
         return HypotheticalItem(
-            category: category, color: piece.colors.first ?? "navy", material: piece.materials.first ?? "",
-            pattern: piece.patterns.first ?? .solid
+            category: category, color: piece.colors.first ?? "navy", cut: piece.requires.first ?? "",
+            material: piece.materials.first ?? "", pattern: piece.patterns.first ?? .solid
         )
     }
 

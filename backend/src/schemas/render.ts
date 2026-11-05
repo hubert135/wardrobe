@@ -20,6 +20,8 @@ export const RenderProductPhotoRequestSchema = z
   .object({
     image: ImagePayloadSchema.nullish(),
     garment: RenderGarmentHintsSchema.nullish(),
+    /** Skip the server cache ("Regenerate"). */
+    fresh: z.boolean().nullish(),
   })
   .refine((value) => value.image != null || value.garment != null, {
     message: "Send a photo or a garment description",
@@ -27,4 +29,27 @@ export const RenderProductPhotoRequestSchema = z
 
 export const RenderProductPhotoResponseSchema = z.object({
   image: ImagePayloadSchema,
+});
+
+export const OUTFIT_SLOTS = ["outerwear", "top", "bottom", "shoes", "accessory"] as const;
+export type OutfitSlot = (typeof OUTFIT_SLOTS)[number];
+
+/** A whole outfit to be shown on a model: each piece's description and, ideally, its product photo. */
+export const RenderOutfitRequestSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        slot: z.enum(OUTFIT_SLOTS),
+        garment: RenderGarmentHintsSchema,
+        image: ImagePayloadSchema.nullish(),
+      }),
+    )
+    .min(2)
+    .max(6)
+    .refine((items) => new Set(items.map((item) => item.slot)).size === items.length, {
+      message: "One garment per slot",
+    }),
+  /** Who wears the outfit. Only the house model for now; a personal avatar later. */
+  model: z.enum(["house"]).default("house"),
+  fresh: z.boolean().nullish(),
 });

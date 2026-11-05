@@ -1,0 +1,955 @@
+{
+ "colorPairs": [
+  {
+   "a": "navy",
+   "b": "grey",
+   "score": 2
+  },
+  {
+   "a": "navy",
+   "b": "white",
+   "score": 2
+  },
+  {
+   "a": "navy",
+   "b": "light blue",
+   "score": 2
+  },
+  {
+   "a": "navy",
+   "b": "beige",
+   "score": 2
+  },
+  {
+   "a": "navy",
+   "b": "cream",
+   "score": 2
+  },
+  {
+   "a": "navy",
+   "b": "tan",
+   "score": 2
+  },
+  {
+   "a": "navy",
+   "b": "brown",
+   "score": 2
+  },
+  {
+   "a": "navy",
+   "b": "burgundy",
+   "score": 2
+  },
+  {
+   "a": "navy",
+   "b": "khaki",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "olive",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "charcoal",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "denim",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "pink",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "red",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "yellow",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "green",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "orange",
+   "score": 1
+  },
+  {
+   "a": "navy",
+   "b": "black",
+   "score": -1
+  },
+  {
+   "a": "grey",
+   "b": "white",
+   "score": 2
+  },
+  {
+   "a": "grey",
+   "b": "light blue",
+   "score": 2
+  },
+  {
+   "a": "grey",
+   "b": "burgundy",
+   "score": 2
+  },
+  {
+   "a": "grey",
+   "b": "black",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "charcoal",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "cream",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "brown",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "tan",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "denim",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "pink",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "green",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "purple",
+   "score": 1
+  },
+  {
+   "a": "grey",
+   "b": "red",
+   "score": 1
+  },
+  {
+   "a": "charcoal",
+   "b": "white",
+   "score": 2
+  },
+  {
+   "a": "charcoal",
+   "b": "light blue",
+   "score": 2
+  },
+  {
+   "a": "charcoal",
+   "b": "burgundy",
+   "score": 2
+  },
+  {
+   "a": "charcoal",
+   "b": "black",
+   "score": 1
+  },
+  {
+   "a": "charcoal",
+   "b": "cream",
+   "score": 1
+  },
+  {
+   "a": "charcoal",
+   "b": "pink",
+   "score": 1
+  },
+  {
+   "a": "charcoal",
+   "b": "tan",
+   "score": 1
+  },
+  {
+   "a": "charcoal",
+   "b": "purple",
+   "score": 1
+  },
+  {
+   "a": "black",
+   "b": "white",
+   "score": 2
+  },
+  {
+   "a": "black",
+   "b": "cream",
+   "score": 1
+  },
+  {
+   "a": "black",
+   "b": "tan",
+   "score": 1
+  },
+  {
+   "a": "black",
+   "b": "red",
+   "score": 1
+  },
+  {
+   "a": "black",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "black",
+   "b": "denim",
+   "score": 1
+  },
+  {
+   "a": "black",
+   "b": "brown",
+   "score": -1
+  },
+  {
+   "a": "black",
+   "b": "yellow",
+   "score": -1
+  },
+  {
+   "a": "white",
+   "b": "light blue",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "denim",
+   "score": 2
+  },
+  {
+   "a": "white",
+   "b": "beige",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "tan",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "brown",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "khaki",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "olive",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "green",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "blue",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "red",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "pink",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "yellow",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "orange",
+   "score": 1
+  },
+  {
+   "a": "white",
+   "b": "purple",
+   "score": 1
+  },
+  {
+   "a": "light blue",
+   "b": "beige",
+   "score": 2
+  },
+  {
+   "a": "light blue",
+   "b": "brown",
+   "score": 2
+  },
+  {
+   "a": "light blue",
+   "b": "tan",
+   "score": 1
+  },
+  {
+   "a": "light blue",
+   "b": "khaki",
+   "score": 1
+  },
+  {
+   "a": "light blue",
+   "b": "cream",
+   "score": 1
+  },
+  {
+   "a": "light blue",
+   "b": "denim",
+   "score": 1
+  },
+  {
+   "a": "light blue",
+   "b": "olive",
+   "score": 1
+  },
+  {
+   "a": "light blue",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "light blue",
+   "b": "yellow",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "cream",
+   "score": 2
+  },
+  {
+   "a": "denim",
+   "b": "olive",
+   "score": 2
+  },
+  {
+   "a": "denim",
+   "b": "brown",
+   "score": 2
+  },
+  {
+   "a": "denim",
+   "b": "tan",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "beige",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "red",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "green",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "khaki",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "pink",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "yellow",
+   "score": 1
+  },
+  {
+   "a": "denim",
+   "b": "orange",
+   "score": 1
+  },
+  {
+   "a": "beige",
+   "b": "brown",
+   "score": 1
+  },
+  {
+   "a": "beige",
+   "b": "olive",
+   "score": 1
+  },
+  {
+   "a": "beige",
+   "b": "cream",
+   "score": 1
+  },
+  {
+   "a": "beige",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "beige",
+   "b": "green",
+   "score": 1
+  },
+  {
+   "a": "cream",
+   "b": "brown",
+   "score": 2
+  },
+  {
+   "a": "cream",
+   "b": "olive",
+   "score": 2
+  },
+  {
+   "a": "cream",
+   "b": "tan",
+   "score": 1
+  },
+  {
+   "a": "cream",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "cream",
+   "b": "green",
+   "score": 1
+  },
+  {
+   "a": "tan",
+   "b": "brown",
+   "score": 1
+  },
+  {
+   "a": "tan",
+   "b": "olive",
+   "score": 1
+  },
+  {
+   "a": "tan",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "brown",
+   "b": "olive",
+   "score": 1
+  },
+  {
+   "a": "brown",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "brown",
+   "b": "green",
+   "score": 1
+  },
+  {
+   "a": "brown",
+   "b": "khaki",
+   "score": 1
+  },
+  {
+   "a": "brown",
+   "b": "orange",
+   "score": 1
+  },
+  {
+   "a": "olive",
+   "b": "burgundy",
+   "score": 1
+  },
+  {
+   "a": "olive",
+   "b": "khaki",
+   "score": 0
+  },
+  {
+   "a": "burgundy",
+   "b": "red",
+   "score": -1
+  },
+  {
+   "a": "burgundy",
+   "b": "pink",
+   "score": -1
+  },
+  {
+   "a": "red",
+   "b": "pink",
+   "score": -1
+  },
+  {
+   "a": "red",
+   "b": "orange",
+   "score": -1
+  }
+ ],
+ "textures": {
+  "textured": [
+   "corduroy",
+   "cord ",
+   "tweed",
+   "flannel",
+   "cable",
+   "chunky",
+   "waffle",
+   "boucle",
+   "bouclé",
+   "suede",
+   "nubuck",
+   "oxford",
+   "chambray",
+   "denim",
+   "linen",
+   "herringbone",
+   "shetland",
+   "lambswool",
+   "fleece",
+   "quilted",
+   "waxed",
+   "shearling",
+   "seersucker",
+   "knit"
+  ],
+  "sheen": [
+   "leather",
+   "satin",
+   "silk",
+   "patent",
+   "velvet",
+   "nylon"
+  ]
+ },
+ "heavyTextures": [
+  "corduroy",
+  "tweed",
+  "cable",
+  "chunky",
+  "shearling",
+  "fleece"
+ ],
+ "seasonalMaterials": [
+  {
+   "seasons": [
+    "spring",
+    "summer"
+   ],
+   "keywords": [
+    "linen",
+    "seersucker",
+    "espadrille",
+    "sandal",
+    "short sleeve",
+    "short-sleeve"
+   ]
+  },
+  {
+   "seasons": [
+    "autumn",
+    "winter"
+   ],
+   "keywords": [
+    "flannel",
+    "tweed",
+    "corduroy",
+    "cashmere",
+    "shearling",
+    "puffer",
+    "down jacket",
+    "cable",
+    "lambswool",
+    "peacoat",
+    "overcoat",
+    "fleece-lined",
+    "chunky"
+   ]
+  }
+ ],
+ "formalityKeywords": [
+  {
+   "keyword": "tuxedo",
+   "formality": 5
+  },
+  {
+   "keyword": "dress shirt",
+   "formality": 5
+  },
+  {
+   "keyword": " suit",
+   "formality": 5
+  },
+  {
+   "keyword": "oxford shoe",
+   "formality": 5
+  },
+  {
+   "keyword": "patent",
+   "formality": 5
+  },
+  {
+   "keyword": "overcoat",
+   "formality": 5
+  },
+  {
+   "keyword": "monk",
+   "formality": 4
+  },
+  {
+   "keyword": "derby",
+   "formality": 4
+  },
+  {
+   "keyword": "brogue",
+   "formality": 4
+  },
+  {
+   "keyword": "chelsea",
+   "formality": 4
+  },
+  {
+   "keyword": "peacoat",
+   "formality": 4
+  },
+  {
+   "keyword": "trench",
+   "formality": 4
+  },
+  {
+   "keyword": "blazer",
+   "formality": 4
+  },
+  {
+   "keyword": "turtleneck",
+   "formality": 4
+  },
+  {
+   "keyword": "flannel trousers",
+   "formality": 4
+  },
+  {
+   "keyword": "wool trousers",
+   "formality": 4
+  },
+  {
+   "keyword": "tweed",
+   "formality": 4
+  },
+  {
+   "keyword": "loafer",
+   "formality": 3
+  },
+  {
+   "keyword": "chukka",
+   "formality": 3
+  },
+  {
+   "keyword": "desert",
+   "formality": 3
+  },
+  {
+   "keyword": "oxford shirt",
+   "formality": 3
+  },
+  {
+   "keyword": "oxford",
+   "formality": 3
+  },
+  {
+   "keyword": "knit polo",
+   "formality": 3
+  },
+  {
+   "keyword": "cardigan",
+   "formality": 3
+  },
+  {
+   "keyword": "merino",
+   "formality": 3
+  },
+  {
+   "keyword": "chino",
+   "formality": 3
+  },
+  {
+   "keyword": "corduroy",
+   "formality": 3
+  },
+  {
+   "keyword": "leather sneaker",
+   "formality": 3
+  },
+  {
+   "keyword": "suede jacket",
+   "formality": 3
+  },
+  {
+   "keyword": "leather jacket",
+   "formality": 3
+  },
+  {
+   "keyword": "linen",
+   "formality": 3
+  },
+  {
+   "keyword": "quarter-zip",
+   "formality": 3
+  },
+  {
+   "keyword": "flannel shirt",
+   "formality": 2
+  },
+  {
+   "keyword": "chambray",
+   "formality": 2
+  },
+  {
+   "keyword": "denim jacket",
+   "formality": 2
+  },
+  {
+   "keyword": "field jacket",
+   "formality": 2
+  },
+  {
+   "keyword": "chore",
+   "formality": 2
+  },
+  {
+   "keyword": "bomber",
+   "formality": 2
+  },
+  {
+   "keyword": "puffer",
+   "formality": 2
+  },
+  {
+   "keyword": "pique",
+   "formality": 2
+  },
+  {
+   "keyword": "t-shirt",
+   "formality": 2
+  },
+  {
+   "keyword": "tee",
+   "formality": 2
+  },
+  {
+   "keyword": "sneaker",
+   "formality": 2
+  },
+  {
+   "keyword": "canvas",
+   "formality": 2
+  },
+  {
+   "keyword": "shorts",
+   "formality": 2
+  },
+  {
+   "keyword": "cargo",
+   "formality": 2
+  },
+  {
+   "keyword": "boot",
+   "formality": 2
+  },
+  {
+   "keyword": "hoodie",
+   "formality": 1
+  },
+  {
+   "keyword": "sweatshirt",
+   "formality": 1
+  },
+  {
+   "keyword": "jogger",
+   "formality": 1
+  },
+  {
+   "keyword": "track",
+   "formality": 1
+  },
+  {
+   "keyword": "running",
+   "formality": 1
+  },
+  {
+   "keyword": "trail",
+   "formality": 1
+  },
+  {
+   "keyword": "windbreaker",
+   "formality": 1
+  },
+  {
+   "keyword": "fleece",
+   "formality": 1
+  },
+  {
+   "keyword": "sandal",
+   "formality": 1
+  },
+  {
+   "keyword": "flip-flop",
+   "formality": 1
+  }
+ ],
+ "styleExclusions": [
+  {
+   "style": "formal",
+   "categories": [
+    "hoodie",
+    "t-shirt",
+    "shorts",
+    "jeans"
+   ],
+   "keywords": [
+    "sneaker",
+    "trainer",
+    "running",
+    "canvas",
+    "jogger",
+    "sweatshirt",
+    "sweatpant",
+    "cotton sweat",
+    "fleece",
+    "cargo",
+    "track",
+    "puffer",
+    "down jacket",
+    "windbreaker",
+    "bomber",
+    "sandal",
+    "espadrille",
+    "flip-flop",
+    "graphic",
+    "field jacket",
+    "denim jacket",
+    "chore"
+   ]
+  },
+  {
+   "style": "smart_casual",
+   "categories": [
+    "hoodie"
+   ],
+   "keywords": [
+    "jogger",
+    "sweatshirt",
+    "sweatpant",
+    "cotton sweat",
+    "fleece",
+    "track",
+    "running",
+    "trail",
+    "cargo",
+    "sandal",
+    "flip-flop",
+    "graphic",
+    "windbreaker",
+    "gym"
+   ]
+  },
+  {
+   "style": "casual",
+   "categories": [],
+   "keywords": [
+    "tuxedo",
+    "patent",
+    " suit",
+    "dress shirt"
+   ]
+  },
+  {
+   "style": "sporty",
+   "categories": [
+    "blazer"
+   ],
+   "keywords": [
+    "tuxedo",
+    "patent",
+    " suit",
+    "dress shirt",
+    "oxford shoe",
+    "velvet",
+    "tweed",
+    "overcoat",
+    "loafer",
+    "derby",
+    "brogue",
+    "monk",
+    "trench",
+    "peacoat",
+    "flannel trousers",
+    "wool trousers"
+   ]
+  }
+ ],
+ "principles": [
+  "Fit beats price: no pulling at buttons, sleeves ending at the wrist, trousers without a concertina above the shoe.",
+  "Balance volume: a chunky top wants straight or wider trousers; very slim trousers exaggerate a big knit.",
+  "Layer from thin to thick, and make sure the outfit still works when the coat comes off.",
+  "Mix one strong texture with calm, smooth pieces: a cable knit with plain trousers, corduroy with a plain top.",
+  "Build around two or three base colours (navy, grey, brown, beige, olive, black) and add at most one accent.",
+  "Burgundy is the easiest accent: it sits with navy, grey, brown and black.",
+  "Pure white contrasts crisply with navy, black and grey; ecru and cream are softer next to brown, olive, beige and denim.",
+  "Shoes set the level of the outfit; match their shape and weight to the trouser width.",
+  "In smart outfits keep belt and shoes in the same colour family: black with black, brown with brown.",
+  "A coordinated jacket and trousers should contrast on purpose (navy with grey, brown with cream, olive with beige).",
+  "Avoid denim on denim in the same wash, and leave logos and statement details for experienced hands.",
+  "Linen and seersucker are for warm months; flannel, tweed, corduroy and cashmere for cold ones."
+ ]
+}

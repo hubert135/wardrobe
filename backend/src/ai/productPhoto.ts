@@ -15,7 +15,8 @@ export interface ProductPhotoRenderer {
 /** Thrown when no image provider is configured (no OPENAI_API_KEY). */
 export class RendererNotConfiguredError extends Error {}
 
-function describe(garment: RenderGarmentHints | null): string | null {
+/** "navy with white striped cotton oxford shirt" */
+export function describe(garment: RenderGarmentHints | null): string | null {
   if (!garment) return null;
   return [
     garment.primaryColor,
@@ -68,24 +69,50 @@ export interface OpenAIRendererOptions {
   timeoutMs?: number;
 }
 
+/** Portrait JPEG output shared by all renders. */
+export function imageParams(options: OpenAIRendererOptions) {
+  return {
+    model: options.model,
+    size: "1024x1536",
+    quality: options.quality,
+    background: "opaque",
+    output_format: "jpeg",
+    output_compression: 90,
+    n: 1,
+  } as const;
+}
+
+export function openAIClient(options: OpenAIRendererOptions): OpenAI {
+  // Image edits can take up to a minute or two; keep the SDK's own retries low to stay under client timeouts.
+  return new OpenAI({ apiKey: options.apiKey, timeout: options.timeoutMs ?? 150_000, maxRetries: 1 });
+}
+
+/** The first image of a response, or an error the app can show. */
+export function firstImage(response: OpenAI.ImagesResponse): ImagePayload {
+  const data = response.data?.[0]?.b64_json;
+  if (!data) throw new AIUnavailableError("The image model returned no image", true);
+  return { mediaType: "image/jpeg", data };
+}
+
+/** Maps provider failures to errors the API turns into clean 503s. */
+export function mapImageError(error: unknown): never {
+  if (error instanceof AIUnavailableError) throw error;
+  if (error instanceof OpenAI.RateLimitError) throw new AIUnavailableError("Image provider rate limit reached", true);
+  if (error instanceof OpenAI.AuthenticationError) throw new AIUnavailableError("Image provider credentials are invalid", false);
+  if (error instanceof OpenAI.BadRequestError) throw new AIUnavailableError(`Image provider rejected the request: ${error.message}`, false);
+  if (error instanceof OpenAI.APIError) throw new AIUnavailableError(`Image provider error (${error.status ?? "unknown"})`, true);
+  throw new AIUnavailableError("Image provider unreachable", true);
+}
+
 export class OpenAIProductPhotoRenderer implements ProductPhotoRenderer {
   private readonly client: OpenAI;
 
   constructor(private readonly options: OpenAIRendererOptions) {
-    // Image edits can take up to a minute or two; keep the SDK's own retries low to stay under client timeouts.
-    this.client = new OpenAI({ apiKey: options.apiKey, timeout: options.timeoutMs ?? 150_000, maxRetries: 1 });
+    this.client = openAIClient(options);
   }
 
   async render(input: { image: ImagePayload | null; garment: RenderGarmentHints | null }): Promise<ImagePayload> {
-    const common = {
-      model: this.options.model,
-      size: "1024x1536",
-      quality: this.options.quality,
-      background: "opaque",
-      output_format: "jpeg",
-      output_compression: 90,
-      n: 1,
-    } as const;
+    const common = imageParams(this.options);
     try {
       let response: OpenAI.ImagesResponse;
       if (input.image) {
@@ -97,16 +124,9 @@ export class OpenAIProductPhotoRenderer implements ProductPhotoRenderer {
       } else {
         throw new AIUnavailableError("Nothing to render: no photo and no description", false);
       }
-      const data = response.data?.[0]?.b64_json;
-      if (!data) throw new AIUnavailableError("The image model returned no image", true);
-      return { mediaType: "image/jpeg", data };
+      return firstImage(response);
     } catch (error) {
-      if (error instanceof AIUnavailableError) throw error;
-      if (error instanceof OpenAI.RateLimitError) throw new AIUnavailableError("Image provider rate limit reached", true);
-      if (error instanceof OpenAI.AuthenticationError) throw new AIUnavailableError("Image provider credentials are invalid", false);
-      if (error instanceof OpenAI.BadRequestError) throw new AIUnavailableError(`Image provider rejected the request: ${error.message}`, false);
-      if (error instanceof OpenAI.APIError) throw new AIUnavailableError(`Image provider error (${error.status ?? "unknown"})`, true);
-      throw new AIUnavailableError("Image provider unreachable", true);
+      mapImageError(error);
     }
   }
 }

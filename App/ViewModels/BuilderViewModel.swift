@@ -57,6 +57,12 @@ final class BuilderViewModel {
         OutfitPresenter.tiles(for: suggestion.outfit, garments: garmentsByID)
     }
 
+    /// "From your style guide" for the e-book formulas, "Style recipe" for the built-in library.
+    func recipeLabel(for recipe: StyleRecipe?) -> String? {
+        guard let recipe else { return nil }
+        return services.stylebook.isFromStyleGuide(recipe) ? "From your style guide" : "Style recipe"
+    }
+
     func toggleFavorite(_ suggestion: OutfitSuggestion) {
         guard let index = results.firstIndex(where: { $0.id == suggestion.id }) else { return }
         let repository = services.repository

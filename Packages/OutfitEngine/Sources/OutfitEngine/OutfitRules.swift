@@ -30,12 +30,19 @@ public struct OutfitRules: Sendable {
         if garment.isArchived { return .archived }
         guard let slot = garment.slot else { return .noSlot }
 
-        if let season = context.season, !garment.seasons.isEmpty, !garment.seasons.contains(season) {
-            return .season
+        let knowledge = StyleKnowledge.shared
+        if let season = context.season {
+            // Without explicit seasons, the fabric decides (no linen in winter, no flannel in summer).
+            let seasons = garment.seasons.isEmpty ? (knowledge.inferredSeasons(for: garment) ?? []) : garment.seasons
+            if !seasons.isEmpty, !seasons.contains(season) { return .season }
         }
 
         // Accessories are flexible and are matched to the outfit later.
         if slot != .accessory, !context.formalityRange.contains(garment.formality) {
+            return .formality
+        }
+        // Some pieces never belong in a style, whatever their formality says (sneakers with formal wear).
+        if slot != .accessory, let style = context.style, knowledge.isExcluded(garment, from: style) {
             return .formality
         }
 
@@ -95,8 +102,20 @@ public struct OutfitRules: Sendable {
         }
         // A hoodie under a blazer is a fashion statement, not a default.
         if pieces[.top]?.category == .hoodie, pieces[.outerwear]?.category == .blazer { return false }
+        if !hasConsistentSuit(candidate) { return false }
 
         return true
+    }
+
+    /// A suit jacket is only worn with its own trousers (same color), and suit trousers never go under
+    /// another blazer. Suit trousers with a knit or a coat are fine.
+    public func hasConsistentSuit(_ candidate: OutfitCandidate) -> Bool {
+        let knowledge = StyleKnowledge.shared
+        guard let outer = candidate.pieces[.outerwear], outer.category == .blazer else { return true }
+        let jacketIsSuit = knowledge.isSuitPiece(outer)
+        let trousersAreSuit = candidate.pieces[.bottom].map(knowledge.isSuitPiece) ?? false
+        guard jacketIsSuit || trousersAreSuit else { return true }
+        return jacketIsSuit && trousersAreSuit && outer.primaryColor == candidate.pieces[.bottom]?.primaryColor
     }
 
     public func hasAcceptableFormalitySpread(_ garments: [EngineGarment]) -> Bool {

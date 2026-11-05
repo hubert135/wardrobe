@@ -30,10 +30,10 @@ private struct ProfileForm: View {
     @State private var notificationError: String?
     @AppStorage(ServerSettings.overrideKey) private var serverAddress = ""
     @State private var connectionResult: String?
-    @State private var isLoadingSample = false
     @State private var sampleResult: String?
     @State private var isTestingConnection = false
     @AppStorage(ProductPhotoSettings.enabledKey) private var storePhotosEnabled = true
+    @AppStorage(OutfitModelSettings.enabledKey) private var outfitsOnModel = true
 
     var body: some View {
         Form {
@@ -142,10 +142,11 @@ private struct ProfileForm: View {
 
             Section {
                 Toggle("Create store photos", isOn: $storePhotosEnabled)
+                Toggle("Show outfits on a model", isOn: $outfitsOnModel)
             } header: {
                 Text("Photos")
             } footer: {
-                Text("New photos are turned into online-store style pictures on a white background by AI (OpenAI). Costs about $0.05 per photo on your server's OpenAI account.")
+                Text("Store photos: your pictures become online-store style photos on a white background, about $0.05 each. Outfits on a model: each new suggestion is photographed on the same model, about $0.07 per outfit. Both use AI (OpenAI) on your server's account; results are kept, so nothing is paid twice.")
             }
 
             Section("Appearance") {
@@ -171,32 +172,23 @@ private struct ProfileForm: View {
                 Text("Photos stay on this iPhone. Only photos you add for recognition, order text and anonymous outfit attributes are sent to the Wardrobe server, and nothing is stored there.")
             }
 
-            if let stylebook = services.stylebook.stylebook {
-                Section {
-                    LabeledContent("Recipes", value: "\(stylebook.recipes.count)")
-                    Button {
-                        isLoadingSample = true
-                        Task {
-                            let removed = StylebookSampleCloset.removePreviousSamples(from: services)
-                            let added = await StylebookSampleCloset.load(into: services)
-                            sampleResult = "Added \(added) products with real photos" + (removed > 0 ? ", replaced \(removed) earlier sample garments." : ".")
-                            isLoadingSample = false
-                        }
-                    } label: {
-                        HStack {
-                            Text("Load sample closet with real products")
-                            if isLoadingSample { Spacer(); ProgressView() }
-                        }
-                    }
-                    .disabled(isLoadingSample)
-                    if let sampleResult {
-                        Text(sampleResult).font(.footnote).foregroundStyle(.secondary)
-                    }
-                } header: {
-                    Text("Style guide")
-                } footer: {
-                    Text("Recipes and products from your e-book, served by your own server. The sample closet uses the e-book's product photos and replaces earlier sample garments; your own clothes stay.")
+            Section {
+                NavigationLink {
+                    StyleKnowledgeView(stylebook: services.stylebook)
+                } label: {
+                    LabeledContent("Outfit recipes", value: "\(services.stylebook.recipes.count)")
                 }
+                Button("Load sample closet (\(SampleCloset.itemCount) basics)") {
+                    let result = SampleCloset.load(into: services)
+                    sampleResult = "Added \(result.added) basics" + (result.removed > 0 ? ", replaced \(result.removed) earlier sample garments." : ".")
+                }
+                if let sampleResult {
+                    Text(sampleResult).font(.footnote).foregroundStyle(.secondary)
+                }
+            } header: {
+                Text("Style knowledge")
+            } footer: {
+                Text("Classic outfit recipes and styling rules\(services.stylebook.hasStylebook ? ", plus \(services.stylebook.privateRecipes.count) formulas learned from your style guide" : ""). The sample closet is plain, unbranded basics; it replaces earlier sample garments and your own clothes stay. With store photos on, their pictures are created once (about $3 for all).")
             }
 
             #if DEBUG
@@ -302,6 +294,7 @@ private struct ProfileForm: View {
         auth.signOut()
         services.repository.deleteEverything()
         services.stylebook.deleteCache()
+        services.outfitModels.deleteAll()
         // A fresh profile brings back onboarding.
         _ = services.repository.profile()
     }

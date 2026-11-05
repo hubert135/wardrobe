@@ -1,9 +1,10 @@
 import { readFile } from "node:fs/promises";
-import { basename, dirname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { createAppFromEnv, describeFeatures } from "./env.js";
+import { FileReferenceStore, FileRenderCache } from "./fileStores.js";
 
 try {
   process.loadEnvFile?.(".env");
@@ -16,9 +17,11 @@ const app = new Hono();
 app.use("*", logger());
 const stylebookPath = process.env.STYLEBOOK_PATH ?? "data/stylebook.json";
 const loadStylebook = () => readFile(stylebookPath, "utf8").catch(() => null);
-const imagesDir = join(dirname(stylebookPath), "images");
-const loadStylebookImage = (name: string) => readFile(join(imagesDir, basename(name))).catch(() => null);
-app.route("/", createAppFromEnv(process.env, { loadStylebook, loadStylebookImage }));
+// Generated images live next to the style guide in data/ (git-ignored).
+const dataDir = dirname(stylebookPath);
+const renderCache = new FileRenderCache(join(dataDir, "render-cache"));
+const referenceImages = new FileReferenceStore(join(dataDir, "models"));
+app.route("/", createAppFromEnv(process.env, { loadStylebook, renderCache, referenceImages }));
 const port = Number(process.env.PORT ?? 8787);
 
 serve({ fetch: app.fetch, port }, (info) => {

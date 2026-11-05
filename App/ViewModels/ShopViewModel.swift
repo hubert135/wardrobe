@@ -85,35 +85,48 @@ final class ShopViewModel {
         services.repository.delete(item)
     }
 
-    // MARK: Style guide
+    // MARK: Outfit recipes
 
     struct RecipeProgress: Identifiable {
-        var recipe: StylebookRecipeDTO
+        var recipe: StyleRecipe
         /// Owned garment per required piece index.
         var owned: [Int: Garment]
         var requiredIndices: [Int]
+        var isFromStyleGuide: Bool
 
         var id: String { recipe.id }
         var missingIndices: [Int] { requiredIndices.filter { owned[$0] == nil } }
         var ownedCount: Int { requiredIndices.count - missingIndices.count }
+
+        /// Sentence case, also for style-guide titles written in capitals.
+        var title: String {
+            guard recipe.title == recipe.title.uppercased() else { return recipe.title }
+            let lower = recipe.title.lowercased()
+            return lower.prefix(1).uppercased() + lower.dropFirst()
+        }
     }
 
     var hasStylebook: Bool { services.stylebook.hasStylebook }
 
-    /// Recipes sorted by how close the closet is to completing them.
+    /// All recipes, closest to complete first; the user's preferred styles before the others.
     func recipeProgress() -> [RecipeProgress] {
-        guard let stylebook = services.stylebook.stylebook else { return [] }
         let garments = services.repository.garments(includeArchived: false)
         let byID = Dictionary(uniqueKeysWithValues: garments.map { ($0.id, $0) })
         let closet = garments.map(\.engineGarment)
+        let preferred = Set(services.repository.profile().stylePreferences.preferredStyles)
         let matcher = RecipeMatcher()
-        return stylebook.recipes.map { dto in
-            let recipe = dto.engineRecipe
+        let stylebook = services.stylebook
+        return stylebook.recipes.map { recipe in
             let owned = matcher.ownedPieces(of: recipe, in: closet).compactMapValues { byID[$0.id] }
             let required = recipe.pieces.indices.filter { !recipe.pieces[$0].optional }
-            return RecipeProgress(recipe: dto, owned: owned, requiredIndices: required)
+            return RecipeProgress(recipe: recipe, owned: owned, requiredIndices: required, isFromStyleGuide: stylebook.isFromStyleGuide(recipe))
         }
-        .sorted { $0.missingIndices.count == $1.missingIndices.count ? $0.recipe.id < $1.recipe.id : $0.missingIndices.count < $1.missingIndices.count }
+        .sorted { a, b in
+            if a.missingIndices.count != b.missingIndices.count { return a.missingIndices.count < b.missingIndices.count }
+            let aPreferred = !preferred.isDisjoint(with: a.recipe.styles), bPreferred = !preferred.isDisjoint(with: b.recipe.styles)
+            if aPreferred != bPreferred { return aPreferred }
+            return a.recipe.id < b.recipe.id
+        }
     }
 
     /// Adds the missing pieces of a recipe to the shopping list.
@@ -122,12 +135,7 @@ final class ShopViewModel {
         let preferences = services.repository.profile().stylePreferences
         var added: [String] = []
         for index in progress.missingIndices {
-            let piece = progress.recipe.pieces[index].enginePiece
-            guard let category = piece.categories.first else { continue }
-            let item = HypotheticalItem(
-                category: category, color: piece.colors.first ?? "", material: piece.materials.first ?? "",
-                pattern: piece.patterns.first ?? .solid
-            )
+            guard let item = progress.recipe.pieces[index].hypotheticalItem else { continue }
             let alreadyListed = services.repository.wishlist().contains { $0.status == .open && $0.searchQuery == item.searchQuery }
             guard !alreadyListed else { continue }
             let count = services.shop.unlockedCount(for: item, closet: closet, preferences: preferences)

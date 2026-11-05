@@ -51,7 +51,7 @@ struct AnalyzeGarmentResponse: Codable {
 
 // MARK: Store-style product photos
 
-struct RenderGarmentHintsDTO: Codable, Equatable {
+struct RenderGarmentHintsDTO: Codable, Hashable {
     var name: String?
     var category: String
     var subcategory: String?
@@ -65,6 +65,25 @@ struct RenderProductPhotoRequest: Codable {
     /// nil: create the photo from the garment description alone.
     var image: ImagePayload?
     var garment: RenderGarmentHintsDTO?
+    /// Skip the server's cache ("Regenerate").
+    var fresh: Bool?
+}
+
+// MARK: Outfits on a model
+
+struct RenderOutfitItemDTO: Codable, Equatable {
+    /// "outerwear", "top", "bottom", "shoes" or "accessory".
+    var slot: String
+    var garment: RenderGarmentHintsDTO
+    /// Small product photo of the piece, if there is one.
+    var image: ImagePayload?
+}
+
+struct RenderOutfitRequest: Codable {
+    var items: [RenderOutfitItemDTO]
+    /// Who wears it: the house model for now, a personal avatar later.
+    var model = "house"
+    var fresh: Bool?
 }
 
 struct RenderProductPhotoResponse: Codable {
