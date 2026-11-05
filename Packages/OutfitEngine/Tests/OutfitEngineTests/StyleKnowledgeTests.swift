@@ -24,6 +24,8 @@ final class StyleKnowledgeTests: XCTestCase {
         XCTAssertGreaterThan(knowledge.colorHarmony(classic), knowledge.colorHarmony(clash))
         XCTAssertTrue(knowledge.hasColorClash(clash))
         XCTAssertFalse(knowledge.hasColorClash(classic))
+        let navySuitBlackShoes = [Fixtures.garment(.blazer, "navy"), Fixtures.garment(.trousers, "navy"), Fixtures.garment(.shoes, "black")]
+        XCTAssertFalse(knowledge.hasColorClash(navySuitBlackShoes), "Black shoes with navy are classic")
     }
 
     func testSuitDetectionIgnoresTracksuits() {

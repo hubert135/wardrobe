@@ -51,9 +51,14 @@ public struct StyleKnowledge: Sendable {
         return pairScores[Self.key(a, b)] ?? 0
     }
 
-    /// Average pair score of the outfit's main colors (-1 ... 2); 0 for fewer than two pieces.
+    /// Colors of the clothes themselves; shoes and accessories follow their own rules (black shoes with navy is classic).
+    private func clothingColors(_ garments: [EngineGarment]) -> [String] {
+        garments.filter { $0.slot != .accessory && $0.slot != .shoes }.map(\.primaryColor)
+    }
+
+    /// Average pair score of the outfit's clothing colors (-1 ... 2); 0 for fewer than two pieces.
     public func colorHarmony(_ garments: [EngineGarment]) -> Double {
-        let colors = garments.filter { $0.slot != .accessory }.map(\.primaryColor)
+        let colors = clothingColors(garments)
         guard colors.count > 1 else { return 0 }
         var total = 0, pairs = 0
         for i in colors.indices {
@@ -65,9 +70,9 @@ public struct StyleKnowledge: Sendable {
         return Double(total) / Double(pairs)
     }
 
-    /// True if two of the outfit's pieces are in colors that should not be worn together.
+    /// True if two of the outfit's clothes are in colors that should not be worn together.
     public func hasColorClash(_ garments: [EngineGarment]) -> Bool {
-        let colors = garments.filter { $0.slot != .accessory }.map(\.primaryColor)
+        let colors = clothingColors(garments)
         for i in colors.indices {
             for j in colors.indices where j > i && colorScore(colors[i], colors[j]) < 0 { return true }
         }
