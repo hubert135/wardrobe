@@ -111,11 +111,16 @@ public struct RecipeOutfitBuilder: Sendable {
         }
         combine(0, [:], 0)
         // Closest to the recipe first; among similar fills, the better color story wins.
-        return fills
-            .filter { $0.quality >= minimumQuality }
-            .map { ($0, rank($0, knowledge: knowledge)) }
-            .sorted { $0.1 == $1.1 ? $0.0.candidate.id < $1.0.candidate.id : $0.1 > $1.1 }
-            .map(\.0)
+        struct Ranked { var fill: RecipeFill; var value: Double; var id: String }
+        var ranked: [Ranked] = []
+        for fill in fills where fill.quality >= minimumQuality {
+            ranked.append(Ranked(fill: fill, value: rank(fill, knowledge: knowledge), id: fill.candidate.id))
+        }
+        ranked.sort { (a: Ranked, b: Ranked) -> Bool in
+            if a.value != b.value { return a.value > b.value }
+            return a.id < b.id
+        }
+        return ranked.map { $0.fill }
     }
 
     private func rank(_ fill: RecipeFill, knowledge: StyleKnowledge) -> Double {

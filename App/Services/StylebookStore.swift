@@ -65,7 +65,7 @@ extension RecipePiece {
         let color = colors.prefix(2).joined(separator: " or ")
         let base = color.isEmpty ? kind : "\(color) \(kind)"
         let detail = requires.first.map { " (\($0.trimmingCharacters(in: .whitespaces)))" } ?? ""
-        return base.prefix(1).uppercased() + base.dropFirst() + detail
+        return base.prefix(1).uppercased() + String(base.dropFirst()) + detail
     }
 
     /// What to buy when the closet has nothing for this piece.

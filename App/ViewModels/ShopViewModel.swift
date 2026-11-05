@@ -102,7 +102,7 @@ final class ShopViewModel {
         var title: String {
             guard recipe.title == recipe.title.uppercased() else { return recipe.title }
             let lower = recipe.title.lowercased()
-            return lower.prefix(1).uppercased() + lower.dropFirst()
+            return lower.prefix(1).uppercased() + String(lower.dropFirst())
         }
     }
 
