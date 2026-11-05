@@ -66,4 +66,9 @@ jobs:
       - name: App unit and UI tests
         run: |
           set -o pipefail
-          make test-app | xcbeautify --renderer github-actions
+          make test-app 2>&1 | tee test-app.log | xcbeautify --renderer github-actions
+
+      - name: Show app test failures
+        if: failure()
+        run: |
+          grep -E "error:|: failed|Fatal error|crashed|Assertion|XCTAssert" test-app.log | grep -v "^warning" | head -40 | sed 's/^/::error::/' || true
