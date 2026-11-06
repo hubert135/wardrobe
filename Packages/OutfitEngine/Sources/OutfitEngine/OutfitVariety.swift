@@ -80,7 +80,9 @@ public struct OutfitSignature: Sendable, Hashable {
         bottom = identity(candidate.pieces[.bottom])
         top = identity(candidate.pieces[.top])
         let outer = candidate.pieces[.outerwear]
-        let layerIsPartOfLook = recipe.map { recipe in recipe.requiredPieces.contains { $0.slot == .outerwear } } ?? (outer?.category == .blazer)
+        // A recipe says whether its jacket is part of the look (otherwise it was added for the cold);
+        // in a generic combination the jacket was chosen with the rest, so it always counts.
+        let layerIsPartOfLook = recipe.map { recipe in recipe.requiredPieces.contains { $0.slot == .outerwear } } ?? true
         layer = layerIsPartOfLook ? identity(outer) : nil
         silhouette = knowledge.silhouette(of: candidate)
         look = recipe?.effectiveLook

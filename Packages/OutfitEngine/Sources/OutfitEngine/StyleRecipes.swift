@@ -135,6 +135,8 @@ public struct RecipeMatcher: Sendable {
         if piece.materials.isEmpty || piece.materials.contains(where: { text.contains($0) }) {
             score += 0.1
         }
+        // A plain piece is meant unless the recipe asks for a pattern.
+        if piece.patterns.isEmpty, garment.pattern != .solid { score -= 0.05 }
         return score
     }
 

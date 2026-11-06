@@ -208,7 +208,8 @@ public struct RecipeOutfitBuilder: Sendable {
             let fills = self.fills(for: recipe, closet: closet, context: context, allowMissing: allowMissing)
             guard let best = fills.first else { continue }
             var score = best.quality
-            if fitsOccasion(recipe, context) { score += 0.25 }
+            // The occasion comes first: a new idea never beats an outfit made for the day.
+            if fitsOccasion(recipe, context) { score += 0.6 }
             if !best.missing.isEmpty { score -= 0.3 }
             if let index = recentlyShown.lastIndex(of: recipe.id) {
                 // Shown a moment ago: push far down; shown earlier: push down less.
@@ -244,8 +245,8 @@ public struct RecipeOutfitBuilder: Sendable {
                 guard let variantChoice = chosen, let firstQuality = option.variants.first?.fill.quality else { continue }
                 let variant = variantChoice.variant
                 var value = option.score - firstQuality + variantChoice.value
-                // A new idea beats one more version of an idea already in the set.
-                if !usedLooks.contains(option.recipe.effectiveLook) { value += 0.5 }
+                // Among outfits for the occasion, a new idea beats one more version of an idea already in the set.
+                if !usedLooks.contains(option.recipe.effectiveLook) { value += 0.3 }
                 if let current = best, value < current.value || (value == current.value && option.recipe.id > current.id) { continue }
                 best = (index, variant, value, option.recipe.id)
             }
