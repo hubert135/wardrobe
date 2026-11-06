@@ -70,7 +70,7 @@ jobs:
         run: |
           for f in "$RUNNER_TEMP"/variety/*.txt; do
             [ -f "$f" ] || continue
-            title=$(head -1 "$f")
+            title=$(head -1 "$f" | sed 's/%/%25/g; s/,/%2C/g; s/:/%3A/g')
             body=$(tail -n +2 "$f" | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
             echo "::notice title=${title}::${body}"
           done
