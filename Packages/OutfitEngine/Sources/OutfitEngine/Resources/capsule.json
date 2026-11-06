@@ -989,5 +989,336 @@
    "summer"
   ],
   "description": "navy lightweight technical running shorts"
+ },
+ {
+  "id": "C68",
+  "name": "Grey high-waisted pleated trousers",
+  "category": "trousers",
+  "subcategory": "high-rise pleated wide-leg trousers",
+  "color": "grey",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool",
+  "formality": 4,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "mid-grey wool high-waisted trousers with two front pleats and a wide straight leg"
+ },
+ {
+  "id": "C69",
+  "name": "Beige pleated trousers",
+  "category": "trousers",
+  "subcategory": "pleated wide-leg trousers",
+  "color": "beige",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton twill",
+  "formality": 3,
+  "seasons": [],
+  "description": "beige cotton twill pleated trousers with a relaxed wide leg"
+ },
+ {
+  "id": "C70",
+  "name": "Ecru jeans",
+  "category": "jeans",
+  "subcategory": "straight ecru jeans",
+  "color": "cream",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "denim",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "summer",
+   "autumn"
+  ],
+  "description": "ecru (off-white) straight-leg jeans"
+ },
+ {
+  "id": "C71",
+  "name": "Brown shawl-collar cardigan",
+  "category": "sweater",
+  "subcategory": "shawl collar cardigan",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool",
+  "formality": 3,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "brown chunky wool cardigan with a shawl collar and buttons"
+ },
+ {
+  "id": "C72",
+  "name": "Brown knit vest",
+  "category": "sweater",
+  "subcategory": "knitted sweater vest",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "lambswool knit",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "brown V-neck lambswool sleeveless sweater vest"
+ },
+ {
+  "id": "C73",
+  "name": "Navy rib knit sweater",
+  "category": "sweater",
+  "subcategory": "rib crew sweater",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool rib knit",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "navy ribbed wool crew-neck sweater"
+ },
+ {
+  "id": "C74",
+  "name": "Breton striped sweater",
+  "category": "sweater",
+  "subcategory": "breton stripe sweater",
+  "color": "cream",
+  "secondaryColor": "navy",
+  "pattern": "striped",
+  "material": "wool",
+  "formality": 3,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "cream and navy Breton striped wool sweater"
+ },
+ {
+  "id": "C75",
+  "name": "Cream knit polo",
+  "category": "polo",
+  "subcategory": "long-sleeve knit polo",
+  "color": "cream",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "knitted wool",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "cream long-sleeve knitted wool polo shirt"
+ },
+ {
+  "id": "C76",
+  "name": "Rugby shirt",
+  "category": "polo",
+  "subcategory": "rugby shirt",
+  "color": "navy",
+  "secondaryColor": "green",
+  "pattern": "striped",
+  "material": "heavy cotton",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "navy and green hooped long-sleeve rugby shirt with a white collar"
+ },
+ {
+  "id": "C77",
+  "name": "Navy quilted vest",
+  "category": "jacket",
+  "subcategory": "quilted gilet vest",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "quilted nylon",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "navy diamond-quilted sleeveless gilet"
+ },
+ {
+  "id": "C78",
+  "name": "Beige Harrington jacket",
+  "category": "jacket",
+  "subcategory": "harrington jacket",
+  "color": "beige",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton",
+  "formality": 3,
+  "seasons": [
+   "spring",
+   "autumn"
+  ],
+  "description": "beige cotton Harrington jacket with a stand collar"
+ },
+ {
+  "id": "C79",
+  "name": "Olive waxed jacket",
+  "category": "jacket",
+  "subcategory": "waxed cotton jacket",
+  "color": "olive",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "waxed cotton",
+  "formality": 2,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "olive waxed cotton country jacket with a corduroy collar"
+ },
+ {
+  "id": "C80",
+  "name": "Olive parka",
+  "category": "coat",
+  "subcategory": "hooded parka",
+  "color": "olive",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton parka",
+  "formality": 2,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "olive hooded parka, thigh length"
+ },
+ {
+  "id": "C81",
+  "name": "Olive fatigue trousers",
+  "category": "trousers",
+  "subcategory": "fatigue trousers",
+  "color": "olive",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "cotton sateen",
+  "formality": 2,
+  "seasons": [],
+  "description": "olive cotton fatigue trousers with a relaxed straight leg"
+ },
+ {
+  "id": "C82",
+  "name": "Navy velvet jacket",
+  "category": "blazer",
+  "subcategory": "velvet dinner jacket",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "velvet",
+  "formality": 5,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "navy cotton velvet single-breasted dinner jacket"
+ },
+ {
+  "id": "C83",
+  "name": "Navy double-breasted blazer",
+  "category": "blazer",
+  "subcategory": "double-breasted blazer",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool",
+  "formality": 4,
+  "seasons": [],
+  "description": "navy wool double-breasted blazer with six buttons"
+ },
+ {
+  "id": "C84",
+  "name": "Black wool trousers",
+  "category": "trousers",
+  "subcategory": "wool trousers",
+  "color": "black",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool",
+  "formality": 4,
+  "seasons": [],
+  "description": "black wool trousers with a front crease"
+ },
+ {
+  "id": "C85",
+  "name": "Nordic pattern sweater",
+  "category": "sweater",
+  "subcategory": "nordic pattern sweater",
+  "color": "cream",
+  "secondaryColor": "navy",
+  "pattern": "patterned",
+  "material": "wool",
+  "formality": 2,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "cream and navy Nordic pattern wool sweater"
+ },
+ {
+  "id": "C86",
+  "name": "Brown wool overshirt",
+  "category": "jacket",
+  "subcategory": "wool overshirt",
+  "color": "brown",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "wool",
+  "formality": 3,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "brown wool overshirt with two chest pockets"
+ },
+ {
+  "id": "C87",
+  "name": "Grey fleece jacket",
+  "category": "jacket",
+  "subcategory": "fleece zip jacket",
+  "color": "grey",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "fleece",
+  "formality": 1,
+  "seasons": [
+   "autumn",
+   "winter"
+  ],
+  "description": "grey zip-up fleece jacket"
+ },
+ {
+  "id": "C88",
+  "name": "Navy track jacket",
+  "category": "jacket",
+  "subcategory": "track jacket",
+  "color": "navy",
+  "secondaryColor": null,
+  "pattern": "solid",
+  "material": "polyester tricot",
+  "formality": 1,
+  "seasons": [
+   "spring",
+   "autumn",
+   "winter"
+  ],
+  "description": "navy retro zip track jacket with plain white piping"
  }
 ]

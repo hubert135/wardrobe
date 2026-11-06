@@ -36,26 +36,33 @@ final class OutfitService {
     }
 
     func suggestions(closet: [EngineGarment], context: OutfitContext, count: Int, recentRecipeIDs: [String] = []) async -> ([EngineOutfit], OutfitSuggestion.Origin) {
+        let (outfits, origin, _) = await suggestionSet(closet: closet, context: context, count: count, recentRecipeIDs: recentRecipeIDs)
+        return (outfits, origin)
+    }
+
+    /// Outfits plus, when the closet cannot make `count` genuinely different ones, pieces that would unlock more.
+    func suggestionSet(closet: [EngineGarment], context: OutfitContext, count: Int, recentRecipeIDs: [String] = []) async -> ([EngineOutfit], OutfitSuggestion.Origin, [UnlockSuggestion]) {
         // Heavy combinatorics run off the main thread so the screen stays responsive.
         let engine = self.engine
-        // With a style guide, its recipes drive the suggestions.
+        // Recipes (built-in templates and the style guide) drive the suggestions.
         if !context.recipes.isEmpty {
-            let outfits = await Task.detached(priority: .userInitiated) {
-                engine.suggestWithRecipes(closet: closet, context: context, count: count, recentlyShown: recentRecipeIDs)
+            let set = await Task.detached(priority: .userInitiated) {
+                engine.suggestionSet(closet: closet, context: context, count: count, recentlyShown: recentRecipeIDs)
             }.value
-            return (outfits, .local)
+            return (set.outfits, .local, set.unlocks)
         }
         let shortlist = await Task.detached(priority: .userInitiated) {
             engine.shortlist(closet: closet, context: context, limit: 30)
         }.value
-        guard !shortlist.isEmpty else { return ([], .local) }
+        guard !shortlist.isEmpty else { return ([], .local, []) }
+        let variety = OutfitVariety.suggestions
         let local = { () -> [EngineOutfit] in
-            self.engine.scorer.selectDiverse(shortlist, count: count).map {
+            variety.distinct(self.engine.scorer.selectDiverse(shortlist, count: shortlist.count).map {
                 self.engine.finalize($0.candidate, score: $0.score, closet: closet, context: context)
-            }
+            }, limit: count)
         }
         // With very few options there is nothing for the AI to choose; save the call.
-        guard isAIEnabled(), shortlist.count > count else { return (local(), .local) }
+        guard isAIEnabled(), shortlist.count > count else { return (local(), .local, []) }
 
         let request = RankRequestBuilder.request(shortlist: shortlist.map(\.candidate), context: context, count: count)
         let key = RankingCache.key(for: request)
@@ -66,24 +73,24 @@ final class OutfitService {
             do {
                 ranked = try await api.rankOutfits(request).outfits
             } catch {
-                return (local(), .local)
+                return (local(), .local, [])
             }
         }
 
         let validated = RankResponseValidator.validate(
             ranked, shortlist: shortlist.map(\.candidate), closetIDs: Set(closet.map(\.id)), count: count
         )
-        guard !validated.isEmpty else { return (local(), .local) }
+        guard !validated.isEmpty else { return (local(), .local, []) }
         cache.store(validated.map(\.dto), for: key)
 
-        var outfits = validated.map {
+        // The AI's picks must pass the same variety rule; near-duplicates are dropped and topped up locally.
+        var outfits = variety.distinct(validated.map {
             engine.finalize($0.candidate, closet: closet, context: context, title: $0.dto.title, reasoning: $0.dto.reasoning)
-        }
-        // Top up from the local ranking if the AI returned fewer than requested.
-        for extra in local() where outfits.count < count && !outfits.contains(where: { $0.id == extra.id }) {
+        })
+        for extra in local() where outfits.count < count && outfits.allSatisfy({ variety.areDistinct($0, extra) }) {
             outfits.append(extra)
         }
-        return (outfits, .ai)
+        return (outfits, .ai, [])
     }
 
     /// Builder: anchors in `context`, optional missing pieces. Ranked locally (missing pieces

@@ -13,6 +13,9 @@ public struct StyleKnowledge: Sendable {
     let exclusions: [Style: (categories: Set<GarmentCategory>, keywords: [String])]
     /// Short styling rules, in plain words, for the app to show.
     public let principles: [String]
+    let fits: [(fit: String, keywords: [String])]
+    let categoryFits: [String: String]
+    let volumeKeywords: [String]
 
     public static let shared: StyleKnowledge = {
         guard let url = Bundle.module.url(forResource: "knowledge", withExtension: "json"),
@@ -39,6 +42,9 @@ public struct StyleKnowledge: Sendable {
         }
         exclusions = styleExclusions
         principles = file.principles
+        fits = file.fits.map { (fit: $0.fit, keywords: $0.keywords) }
+        categoryFits = file.categoryFits
+        volumeKeywords = file.volumeKeywords
     }
 
     private static func key(_ a: String, _ b: String) -> String { a < b ? "\(a)|\(b)" : "\(b)|\(a)" }
@@ -111,6 +117,28 @@ public struct StyleKnowledge: Sendable {
         return textured >= 1 && textured < core.count
     }
 
+    // MARK: Silhouette
+
+    /// The shape of a bottom: "wide" (high-waisted, pleated), "relaxed", "slim", "tailored" or "straight".
+    public func fit(of garment: EngineGarment) -> String {
+        let text = " " + garment.searchText
+        return fits.first { entry in entry.keywords.contains { text.contains($0) } }?.fit
+            ?? categoryFits[garment.category.rawValue] ?? "straight"
+    }
+
+    /// Chunky knits, hoodies and the like change the upper-body shape.
+    public func hasVolume(_ garment: EngineGarment) -> Bool {
+        let text = garment.searchText
+        return garment.category == .hoodie || volumeKeywords.contains { text.contains($0) }
+    }
+
+    /// The outfit's shape, e.g. "wide", "slim+volume".
+    public func silhouette(of candidate: OutfitCandidate) -> String {
+        let legs = candidate.pieces[.bottom].map(fit(of:)) ?? "none"
+        let volume = candidate.pieces[.top].map(hasVolume) ?? false
+        return volume ? legs + "+volume" : legs
+    }
+
     // MARK: Seasons, formality, styles
 
     /// Seasons a fabric belongs to (linen: spring and summer), or nil when the fabric says nothing.
@@ -158,6 +186,7 @@ struct KnowledgeFile: Decodable {
     struct SeasonalMaterial: Decodable { var seasons: [String]; var keywords: [String] }
     struct FormalityKeyword: Decodable { var keyword: String; var formality: Int }
     struct StyleExclusion: Decodable { var style: String; var categories: [String]; var keywords: [String] }
+    struct Fit: Decodable { var fit: String; var keywords: [String] }
 
     var colorPairs: [ColorPair] = []
     var textures: [String: [String]] = [:]
@@ -166,4 +195,7 @@ struct KnowledgeFile: Decodable {
     var formalityKeywords: [FormalityKeyword] = []
     var styleExclusions: [StyleExclusion] = []
     var principles: [String] = []
+    var fits: [Fit] = []
+    var categoryFits: [String: String] = [:]
+    var volumeKeywords: [String] = []
 }

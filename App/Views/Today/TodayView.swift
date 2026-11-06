@@ -146,6 +146,7 @@ private struct TodayContent: View {
                 title: "Nothing fits today",
                 message: "No combination in your closet matches this occasion and weather. Try another style, or check Shop for what's missing."
             )
+            UnlockLooksView(model: model)
         case .loaded:
             ForEach(model.suggestions) { suggestion in
                 OutfitCard(
@@ -162,6 +163,46 @@ private struct TodayContent: View {
                 )
                 .transition(.opacity)
             }
+            UnlockLooksView(model: model)
+        }
+    }
+}
+
+/// Shown when the closet can't make three genuinely different outfits: one piece per extra look.
+private struct UnlockLooksView: View {
+    var model: TodayViewModel
+
+    var body: some View {
+        if !model.unlocks.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(model.suggestions.isEmpty ? "One piece away from an outfit" : "Only \(model.suggestions.count) different outfit\(model.suggestions.count == 1 ? "" : "s") today")
+                        .font(.headline)
+                    Text("Rather than repeat the same look with other shoes, here is what would add a new one.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                ForEach(model.unlocks) { unlock in
+                    HStack(alignment: .top, spacing: 12) {
+                        Image(systemName: "plus.circle.dashed")
+                            .font(.title2)
+                            .foregroundStyle(Theme.accent)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(unlock.piece.displayName).font(.subheadline.bold())
+                            Text("Unlocks: \(unlock.recipe.title) · \(unlock.recipe.effectiveLook.displayName)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Button(model.isOnShoppingList(unlock) ? "On list" : "Add to list") { model.addToShoppingList(unlock) }
+                            .font(.caption.bold())
+                            .buttonStyle(.bordered)
+                            .disabled(model.isOnShoppingList(unlock))
+                    }
+                }
+            }
+            .padding()
+            .card()
         }
     }
 }

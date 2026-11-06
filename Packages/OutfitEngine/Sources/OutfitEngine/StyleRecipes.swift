@@ -50,6 +50,26 @@ public struct RecipePiece: Sendable, Hashable, Codable {
 
     /// Whether the piece asks for a suit jacket or suit trousers.
     var isSuitPiece: Bool { (requires + materials).contains { $0.contains("suit") } }
+
+    /// Short description, e.g. "Black or navy sweater (turtleneck)".
+    public var displayName: String {
+        let names = categories.map { $0.displayName.lowercased() }
+        let kind = names.isEmpty ? "piece" : names.prefix(2).joined(separator: " or ")
+        let color = colors.prefix(2).joined(separator: " or ")
+        let base = color.isEmpty ? kind : color + " " + kind
+        let detail = requires.first.map { " (" + $0.trimmingCharacters(in: .whitespaces) + ")" } ?? ""
+        return base.prefix(1).uppercased() + String(base.dropFirst()) + detail
+    }
+
+    /// What to buy when the closet has nothing for this piece.
+    public var hypotheticalItem: HypotheticalItem? {
+        guard let category = categories.first else { return nil }
+        return HypotheticalItem(
+            category: category, color: colors.first ?? "navy",
+            cut: requires.first?.trimmingCharacters(in: .whitespaces) ?? "",
+            material: materials.first ?? "", pattern: patterns.first ?? .solid
+        )
+    }
 }
 
 /// A proven outfit formula, e.g. from a style guide: which pieces, in which colors and materials.
@@ -62,8 +82,13 @@ public struct StyleRecipe: Sendable, Hashable, Codable, Identifiable {
     /// Empty means all seasons.
     public var seasons: Set<Season>
     public var pieces: [RecipePiece]
+    /// The idea of the look; inferred when nil (see `effectiveLook`).
+    public var look: Look?
 
-    public init(id: String, title: String, summary: String = "", occasions: [Occasion] = [], styles: [Style] = [], seasons: Set<Season> = [], pieces: [RecipePiece]) {
+    public init(
+        id: String, title: String, summary: String = "", occasions: [Occasion] = [], styles: [Style] = [],
+        seasons: Set<Season> = [], pieces: [RecipePiece], look: Look? = nil
+    ) {
         self.id = id
         self.title = title
         self.summary = summary
@@ -71,6 +96,7 @@ public struct StyleRecipe: Sendable, Hashable, Codable, Identifiable {
         self.styles = styles
         self.seasons = seasons
         self.pieces = pieces
+        self.look = look
     }
 
     public var requiredPieces: [RecipePiece] { pieces.filter { !$0.optional } }

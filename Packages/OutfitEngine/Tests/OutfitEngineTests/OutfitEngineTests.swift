@@ -24,18 +24,19 @@ final class OutfitEngineTests: XCTestCase {
         XCTAssertEqual(candidates.count, 36)
     }
 
-    func testSuggestReturnsThreeDiverseOutfitsFromOwnedGarments() {
+    func testSuggestReturnsOnlyGenuinelyDifferentOutfits() {
         let closet = Fixtures.smartCasualCloset()
         let ids = Set(closet.map(\.id))
         let outfits = engine.suggest(closet: closet, context: Fixtures.context(), count: 3)
-        XCTAssertEqual(outfits.count, 3)
+        // Two pairs of trousers: a third outfit would repeat one of them with another top or jacket.
+        XCTAssertEqual(outfits.count, 2)
+        XCTAssertTrue(OutfitVariety.suggestions.isDistinctSet(outfits))
+        XCTAssertNotEqual(outfits[0].pieces[.bottom]?.id, outfits[1].pieces[.bottom]?.id)
         for outfit in outfits {
             XCTAssertTrue(Set(outfit.garmentIDs).isSubset(of: ids))
             XCTAssertFalse(outfit.title.isEmpty)
             XCTAssertTrue(outfit.reasoning.hasSuffix("."))
         }
-        // No two outfits are the same combination.
-        XCTAssertEqual(Set(outfits.map(\.id)).count, 3)
     }
 
     func testSuggestIsDeterministic() {

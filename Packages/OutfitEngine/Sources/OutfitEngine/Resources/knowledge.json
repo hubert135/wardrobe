@@ -950,6 +950,119 @@
   "In smart outfits keep belt and shoes in the same colour family: black with black, brown with brown.",
   "A coordinated jacket and trousers should contrast on purpose (navy with grey, brown with cream, olive with beige).",
   "Avoid denim on denim in the same wash, and leave logos and statement details for experienced hands.",
+  "High-waisted, pleated trousers want the top tucked in so the waist shows; they lengthen the leg.",
+  "A sleeveless knit or a cardigan over a shirt is the easiest smart layer: keep the collar out.",
+  "A patterned knit is the star: pair it with plain trousers and plain outerwear.",
   "Linen and seersucker are for warm months; flannel, tweed, corduroy and cashmere for cold ones."
+ ],
+ "fits": [
+  {
+   "fit": "wide",
+   "keywords": [
+    "pleat",
+    "wide",
+    "high-rise",
+    "high rise",
+    "high-waisted",
+    "high waisted",
+    "baggy",
+    "loose",
+    "palazzo",
+    "barrel"
+   ]
+  },
+  {
+   "fit": "relaxed",
+   "keywords": [
+    "relaxed",
+    "jogger",
+    "sweatpant",
+    "track",
+    "cargo",
+    "carpenter",
+    "fatigue",
+    "utility",
+    "drawstring"
+   ]
+  },
+  {
+   "fit": "slim",
+   "keywords": [
+    "slim",
+    "skinny",
+    "tapered"
+   ]
+  },
+  {
+   "fit": "tailored",
+   "keywords": [
+    " suit",
+    "wool trousers",
+    "flannel trousers",
+    "dress trousers",
+    "crease",
+    "tailored"
+   ]
+  }
+ ],
+ "categoryFits": {
+  "jeans": "straight",
+  "chinos": "slim",
+  "trousers": "straight",
+  "shorts": "shorts"
+ },
+ "volumeKeywords": [
+  "chunky",
+  "cable",
+  "oversized",
+  "boxy",
+  "nordic",
+  "fisherman",
+  "aran",
+  "shawl",
+  "hoodie",
+  "fleece"
+ ],
+ "looks": [
+  {
+   "id": "business",
+   "name": "Business"
+  },
+  {
+   "id": "office",
+   "name": "Office"
+  },
+  {
+   "id": "evening",
+   "name": "Evening"
+  },
+  {
+   "id": "smart_weekend",
+   "name": "Smart weekend"
+  },
+  {
+   "id": "relaxed",
+   "name": "Relaxed weekend"
+  },
+  {
+   "id": "rugged",
+   "name": "Rugged"
+  },
+  {
+   "id": "outdoor",
+   "name": "Outdoor"
+  },
+  {
+   "id": "athleisure",
+   "name": "City sporty"
+  },
+  {
+   "id": "active",
+   "name": "Active"
+  },
+  {
+   "id": "travel",
+   "name": "Travel"
+  }
  ]
 }

@@ -100,6 +100,33 @@ STYLE_EXCLUSIONS = {
                             "loafer", "derby", "brogue", "monk", "trench", "peacoat", "flannel trousers", "wool trousers"]},
 }
 
+# Silhouette of the legs, by keywords in the bottom's type or material, first match wins.
+# High-rise, pleated and wide-leg trousers make a different shape from slim chinos even in the same color.
+FITS = [
+    ("wide", ["pleat", "wide", "high-rise", "high rise", "high-waisted", "high waisted", "baggy", "loose", "palazzo", "barrel"]),
+    ("relaxed", ["relaxed", "jogger", "sweatpant", "track", "cargo", "carpenter", "fatigue", "utility", "drawstring"]),
+    ("slim", ["slim", "skinny", "tapered"]),
+    ("tailored", [" suit", "wool trousers", "flannel trousers", "dress trousers", "crease", "tailored"]),
+]
+# When the keywords say nothing.
+CATEGORY_FITS = {"jeans": "straight", "chinos": "slim", "trousers": "straight", "shorts": "shorts"}
+# Tops that add volume to the upper body (they change the silhouette as much as the trousers do).
+VOLUME_KEYWORDS = ["chunky", "cable", "oversized", "boxy", "nordic", "fisherman", "aran", "shawl", "hoodie", "fleece"]
+
+# The idea of a look. Two suggestions with the same idea and the same pieces are the same outfit.
+LOOKS = [
+    ("business", "Business"),
+    ("office", "Office"),
+    ("evening", "Evening"),
+    ("smart_weekend", "Smart weekend"),
+    ("relaxed", "Relaxed weekend"),
+    ("rugged", "Rugged"),
+    ("outdoor", "Outdoor"),
+    ("athleisure", "City sporty"),
+    ("active", "Active"),
+    ("travel", "Travel"),
+]
+
 # Styling tips shown with outfits (short, our own words).
 PRINCIPLES = [
     "Fit beats price: no pulling at buttons, sleeves ending at the wrist, trousers without a concertina above the shoe.",
@@ -113,6 +140,9 @@ PRINCIPLES = [
     "In smart outfits keep belt and shoes in the same colour family: black with black, brown with brown.",
     "A coordinated jacket and trousers should contrast on purpose (navy with grey, brown with cream, olive with beige).",
     "Avoid denim on denim in the same wash, and leave logos and statement details for experienced hands.",
+    "High-waisted, pleated trousers want the top tucked in so the waist shows; they lengthen the leg.",
+    "A sleeveless knit or a cardigan over a shirt is the easiest smart layer: keep the collar out.",
+    "A patterned knit is the star: pair it with plain trousers and plain outerwear.",
     "Linen and seersucker are for warm months; flannel, tweed, corduroy and cashmere for cold ones.",
 ]
 
@@ -128,9 +158,12 @@ def P(slot, categories, colors=(), materials=(), avoid=(), patterns=(), optional
             "requires": list(requires), "avoid": list(avoid), "patterns": list(patterns), "optional": optional}
 
 
-def R(id, title, summary, occasions, styles, seasons, pieces):
-    return {"id": id, "title": title, "summary": summary, "occasions": occasions, "styles": styles,
-            "seasons": seasons, "pieces": pieces}
+def R(id, title, summary, occasions, styles, seasons, pieces, look=None):
+    recipe = {"id": id, "title": title, "summary": summary, "occasions": occasions, "styles": styles,
+              "seasons": seasons, "pieces": pieces}
+    if look:
+        recipe["look"] = look
+    return recipe
 
 
 ALL = []
@@ -463,6 +496,140 @@ RECIPES = [
 ]
 
 
+LOOK_OF = {
+    "L01": "business", "L02": "business", "L03": "office", "L04": "business", "L05": "office", "L06": "evening",
+    "L07": "evening", "L08": "evening", "L10": "office", "L11": "smart_weekend", "L12": "smart_weekend",
+    "L13": "office", "L14": "evening", "L15": "office", "L16": "smart_weekend", "L17": "smart_weekend",
+    "L18": "smart_weekend", "L19": "smart_weekend", "L20": "office", "L21": "office", "L22": "smart_weekend",
+    "L23": "travel", "L24": "evening", "L25": "evening", "L26": "evening", "L27": "office", "L28": "office",
+    "L29": "evening", "L30": "smart_weekend",
+    "L40": "relaxed", "L41": "relaxed", "L42": "relaxed", "L43": "rugged", "L44": "relaxed", "L45": "rugged",
+    "L46": "rugged", "L47": "relaxed", "L48": "smart_weekend",
+    "L60": "athleisure", "L61": "athleisure", "L62": "active", "L63": "travel", "L64": "outdoor", "L65": "active",
+}
+
+# Templates built on ideas from the user's style guide, generalized and in our own words: silhouettes
+# (high-waisted pleated trousers), key layers (knit vest, shawl cardigan, overshirt) and color stories.
+WIDE = ["pleat", "wide", "high-rise", "high rise", "high-waisted", "high waisted"]
+FINE_KNIT = ["merino", "fine", "knit polo", "rib", "lambswool", "cashmere"]
+
+RECIPES += [
+    R("T01", "Double-breasted jacket, high-waisted trousers, white shirt",
+      "A double-breasted jacket over high-waisted trousers lengthens the leg and looks deliberate. Keep the shirt plain and the shoes polished; button the jacket when standing.",
+      ["business_meeting", "event", "work"], ["formal"], [],
+      [P("outerwear", ["blazer"], ["navy", "charcoal", "grey"], ["wool"], ["suit"], requires=["double-breasted", "double breasted"]),
+       P("bottom", ["trousers"], ["grey", "charcoal", "navy"], ["wool"], TAILORED_AVOID, requires=WIDE),
+       P("top", ["shirt"], ["white", "light blue"], ["poplin", "dress shirt"], DRESS_SHIRT_AVOID),
+       P("shoes", ["shoes"], ["black", "brown"], ["derby", "oxford", "loafer"], SMART_SHOES_AVOID)], look="business"),
+    R("T02", "Velvet jacket, dark turtleneck, black trousers",
+      "For evenings a velvet jacket replaces the suit. A fine dark turtleneck and plain wool trousers keep the attention on its texture.",
+      ["event", "dinner"], ["formal", "smart_casual"], AUTUMN_WINTER,
+      [P("outerwear", ["blazer"], ["navy", "black", "burgundy", "green"], ["velvet"], requires=["velvet"]),
+       P("top", ["sweater"], ["black", "charcoal", "navy"], ["merino"], requires=["turtleneck", "roll neck", "rollneck"]),
+       P("bottom", ["trousers"], ["black", "charcoal"], ["wool"], TAILORED_AVOID),
+       P("shoes", ["shoes"], ["black"], ["loafer", "derby", "chelsea"], SMART_SHOES_AVOID)], look="evening"),
+
+    R("T10", "High-waisted pleated trousers, tucked fine knit, loafers",
+      "High-waisted pleated trousers give a longer, easy line. Tuck a fine knit in so the waist shows and finish with loafers.",
+      ["work", "dinner"], ["smart_casual"], NOT_SUMMER,
+      [P("bottom", ["trousers", "chinos"], ["grey", "navy", "charcoal", "beige", "brown"], ["wool"], TAILORED_AVOID, requires=WIDE),
+       P("top", ["sweater", "polo"], ["navy", "cream", "black", "grey", "brown"], ["merino"], ["cable", "chunky", "hoodie", "cardigan", "vest"], requires=FINE_KNIT),
+       P("shoes", ["shoes"], ["brown", "black"], ["loafer"], SMART_SHOES_AVOID),
+       belt(["brown", "black"])], look="office"),
+    R("T11", "Pleated trousers, open cardigan, white T-shirt",
+      "Tailoring made relaxed: wide pleated trousers, a soft cardigan worn open over a white T-shirt and suede loafers.",
+      ["casual_outing", "weekend", "dinner"], ["smart_casual", "casual"], NOT_SUMMER,
+      [P("bottom", ["trousers", "chinos"], ["beige", "navy", "olive", "grey", "brown"], [], TAILORED_AVOID, requires=WIDE),
+       P("top", ["sweater"], ["brown", "olive", "navy", "beige", "cream"], ["cardigan"], requires=["cardigan"]),
+       P("shoes", ["shoes"], ["brown", "tan"], ["loafer", "suede"], ["running", "trail"]),
+       P("top", ["t-shirt"], ["white", "cream"], optional=True)], look="smart_weekend"),
+    R("T12", "Ecru jeans, rib knit, suede jacket",
+      "Ecru denim is softer than white and sits naturally with brown suede and a navy rib knit: a warm light-and-dark contrast.",
+      ["casual_outing", "weekend", "dinner"], ["smart_casual", "casual"], ["spring", "autumn"],
+      [P("bottom", ["jeans"], ["cream", "white", "beige"], ["denim"]),
+       P("top", ["sweater"], ["navy", "brown", "grey"], ["rib"], ["cable", "hoodie", "cardigan"]),
+       P("outerwear", ["jacket"], ["brown", "tan"], ["suede"], requires=["suede"]),
+       P("shoes", ["shoes"], ["brown", "tan"], ["suede", "chukka", "desert"], ["running", "trail"])], look="smart_weekend"),
+    R("T13", "Knit vest over an oxford shirt, jeans, loafers",
+      "A sleeveless knit over a button-down is a preppy classic. Keep the collar out, add dark jeans and loafers.",
+      ["work", "casual_outing"], ["smart_casual"], NOT_SUMMER,
+      [P("top", ["sweater"], ["brown", "navy", "grey", "cream", "green"], ["knit"], requires=["vest", "sleeveless"]),
+       P("bottom", ["jeans"], ["denim"], ["dark"], ["ripped", "light wash"]),
+       P("shoes", ["shoes"], ["brown"], ["loafer"], SMART_SHOES_AVOID),
+       P("top", ["shirt"], ["light blue", "white"], ["oxford"], optional=True)], look="office"),
+    R("T14", "Shawl-collar cardigan, flannel trousers, brown shoes",
+      "A shawl-collar cardigan is a soft alternative to a jacket. Over an oxford shirt with flannel trousers it is warm, textured and office-ready.",
+      ["work", "dinner"], ["smart_casual"], AUTUMN_WINTER,
+      [P("top", ["sweater"], ["brown", "navy", "grey", "cream"], ["wool"], requires=["shawl"]),
+       P("bottom", ["trousers"], ["grey", "charcoal"], ["flannel", "wool"], TAILORED_AVOID),
+       P("shoes", ["shoes"], ["brown"], ["brogue", "derby"], SMART_SHOES_AVOID),
+       P("top", ["shirt"], ["white", "light blue"], ["oxford"], optional=True)], look="office"),
+    R("T15", "Harrington jacket, oxford shirt, dark jeans",
+      "A short, clean-lined jacket keeps an oxford and dark jeans sharp; Chelsea boots make it suitable for an evening out.",
+      ["casual_outing", "dinner", "work"], ["smart_casual"], ["spring", "autumn"],
+      [P("outerwear", ["jacket"], ["navy", "beige", "olive", "khaki"], ["cotton"], requires=["harrington"]),
+       P("top", ["shirt"], ["light blue", "white"], ["oxford"], ["flannel"]),
+       P("bottom", ["jeans"], ["denim"], ["dark"], ["ripped"]),
+       P("shoes", ["shoes"], ["brown"], ["chelsea", "boot", "derby"], SMART_SHOES_AVOID)], look="smart_weekend"),
+    R("T16", "Breton sweater, navy trousers, peacoat",
+      "A striped sweater brings a nautical touch; with navy trousers and a peacoat the palette stays calm and the stripes do the talking.",
+      ["casual_outing", "weekend", "work"], ["smart_casual", "casual"], AUTUMN_WINTER,
+      [P("top", ["sweater"], ["cream", "white", "navy"], ["wool"], patterns=["striped"], requires=["breton", "stripe"]),
+       P("bottom", ["trousers", "chinos"], ["navy", "grey"], [], ["jogger", "cargo", "sweatpant"]),
+       P("outerwear", ["coat"], ["navy", "charcoal"], ["peacoat", "wool"], ["puffer", "down"], requires=["peacoat", "wool"]),
+       P("shoes", ["shoes"], ["brown", "black"], ["boot", "chelsea", "derby"], ["running", "trail"])], look="smart_weekend"),
+    R("T17", "Denim jacket over a knit polo, dark trousers",
+      "A denim jacket dresses down tailored trousers: a knitted polo keeps it smart, derbies or loafers finish it.",
+      ["dinner", "casual_outing"], ["smart_casual", "casual"], ["spring", "autumn"],
+      [P("outerwear", ["jacket"], ["denim"], ["denim"], requires=["denim", "trucker", "jean"]),
+       P("top", ["polo"], ["cream", "white", "navy"], ["knit"], requires=["knit"]),
+       P("bottom", ["trousers", "chinos"], ["black", "charcoal", "navy"], [], ["jogger", "cargo", "sweatpant", "corduroy"]),
+       P("shoes", ["shoes"], ["brown", "black"], ["derby", "loafer", "chelsea"], SMART_SHOES_AVOID)], look="evening"),
+    R("T18", "Rugby shirt, chinos, quilted vest",
+      "Preppy weekend layers: a rugby shirt over chinos with a quilted vest on top for cool mornings.",
+      ["weekend", "casual_outing"], ["casual", "smart_casual"], ["spring", "autumn"],
+      [P("top", ["polo", "shirt", "sweater"], [], ["cotton"], requires=["rugby"]),
+       P("bottom", ["chinos"], ["beige", "khaki", "navy", "olive"]),
+       P("outerwear", ["jacket"], ["navy", "olive", "khaki"], ["quilted"], requires=["quilted", "gilet", "vest"]),
+       P("shoes", ["shoes"], ["brown", "white"], ["suede", "sneaker"], ["running", "trail"])], look="smart_weekend"),
+
+    R("T30", "Patterned knit, plain trousers, parka, boots",
+      "A patterned knit is the star of the outfit, so everything else stays plain: straight trousers, a parka and sturdy boots.",
+      ["weekend", "casual_outing", "travel"], ["casual", "smart_casual"], AUTUMN_WINTER,
+      [P("top", ["sweater"], ["cream", "navy", "brown", "grey"], ["wool"], patterns=["patterned"], requires=["nordic", "fair isle", "pattern", "jacquard"]),
+       P("bottom", ["chinos", "trousers", "jeans"], ["beige", "brown", "olive", "navy", "denim"], [], ["jogger", "sweatpant", "corduroy"]),
+       P("outerwear", ["coat", "jacket"], ["olive", "khaki", "navy"], ["parka"], requires=["parka"]),
+       P("shoes", ["shoes"], ["brown", "tan"], ["boot"], ["running", "trail"])], look="rugged"),
+    R("T31", "Waxed jacket, chambray shirt, fatigue trousers",
+      "Country workwear in earthy tones: a waxed jacket, a chambray shirt and roomy fatigue trousers with brown leather shoes.",
+      ["weekend", "casual_outing", "travel"], ["casual", "smart_casual"], NOT_SUMMER,
+      [P("outerwear", ["jacket"], ["olive", "brown", "navy"], ["waxed"], requires=["waxed", "wax"]),
+       P("top", ["shirt"], ["denim", "light blue"], ["chambray"], requires=["chambray", "denim"]),
+       P("bottom", ["trousers", "chinos"], ["olive", "khaki", "beige"], [], requires=["fatigue", "utility", "army"]),
+       P("shoes", ["shoes"], ["brown", "tan"], ["derby", "boot"], ["running"])], look="rugged"),
+    R("T32", "Overshirt over a hoodie, jeans, sneakers",
+      "Layer a sturdy overshirt over a plain hoodie for an easy casual look; let the hood sit over the collar.",
+      ["weekend", "casual_outing"], ["casual"], NOT_SUMMER,
+      [P("outerwear", ["jacket"], ["olive", "brown", "navy", "khaki"], ["overshirt"], requires=["overshirt", "shirt jacket", "shacket"]),
+       P("top", ["hoodie"], ["grey", "navy", "cream", "black"]),
+       P("bottom", ["jeans"], ["denim", "black"]),
+       P("shoes", ["shoes"], ["white", "brown"], ["sneaker"], requires=["sneaker", "trainer"])], look="relaxed"),
+    R("T33", "Track jacket, white T-shirt, straight jeans",
+      "A retro track jacket with plain basics: a white T-shirt, straight jeans and clean sneakers.",
+      ["weekend", "casual_outing", "travel"], ["sporty", "casual"], NOT_SUMMER,
+      [P("outerwear", ["jacket"], ["navy", "black", "green", "burgundy"], [], requires=["track"]),
+       P("top", ["t-shirt"], ["white", "grey"], [], ["graphic"]),
+       P("bottom", ["jeans"], ["denim", "light blue", "black"]),
+       P("shoes", ["shoes"], ["white", "grey"], ["sneaker"], requires=["sneaker", "trainer"])], look="athleisure"),
+    R("T40", "Fleece, cargo trousers, trail shoes",
+      "For walks and cold weekends outdoors: a fleece over a T-shirt, cargo trousers and trail shoes in earthy tones.",
+      ["weekend", "travel"], ["sporty", "casual"], AUTUMN_WINTER,
+      [P("outerwear", ["jacket"], ["grey", "navy", "olive", "cream", "black"], [], requires=["fleece"]),
+       P("top", ["t-shirt", "sweater"], ["white", "grey", "navy", "olive"], [], ["merino", "cable", "turtleneck"]),
+       P("bottom", ["trousers"], ["olive", "khaki", "black", "grey"], ["cargo"], requires=["cargo", "utility"]),
+       P("shoes", ["shoes"], ["grey", "brown", "black"], ["trail", "hiking"], requires=["trail", "hiking", "running", "sneaker"])], look="outdoor"),
+]
+
 # --------------------------------------------------------------------------------------------------
 # 3. Generic capsule closet (sample closet), brand-free
 # --------------------------------------------------------------------------------------------------
@@ -547,6 +714,28 @@ CAPSULE = [
     # Added so every library recipe can be worn from the capsule
     C("C66", "Beige linen blazer", "blazer", "unstructured linen blazer", "beige", "linen", 4, SPRING_SUMMER, description="beige unstructured linen blazer, soft shoulders"),
     C("C67", "Navy sport shorts", "shorts", "sport shorts", "navy", "technical jersey", 1, SPRING_SUMMER, description="navy lightweight technical running shorts"),
+    # Silhouettes and layers from the style-guide templates
+    C("C68", "Grey high-waisted pleated trousers", "trousers", "high-rise pleated wide-leg trousers", "grey", "wool", 4, NOT_SUMMER, description="mid-grey wool high-waisted trousers with two front pleats and a wide straight leg"),
+    C("C69", "Beige pleated trousers", "trousers", "pleated wide-leg trousers", "beige", "cotton twill", 3, description="beige cotton twill pleated trousers with a relaxed wide leg"),
+    C("C70", "Ecru jeans", "jeans", "straight ecru jeans", "cream", "denim", 2, ["spring", "summer", "autumn"], description="ecru (off-white) straight-leg jeans"),
+    C("C71", "Brown shawl-collar cardigan", "sweater", "shawl collar cardigan", "brown", "wool", 3, AUTUMN_WINTER, description="brown chunky wool cardigan with a shawl collar and buttons"),
+    C("C72", "Brown knit vest", "sweater", "knitted sweater vest", "brown", "lambswool knit", 3, NOT_SUMMER, description="brown V-neck lambswool sleeveless sweater vest"),
+    C("C73", "Navy rib knit sweater", "sweater", "rib crew sweater", "navy", "wool rib knit", 3, NOT_SUMMER, description="navy ribbed wool crew-neck sweater"),
+    C("C74", "Breton striped sweater", "sweater", "breton stripe sweater", "cream", "wool", 3, AUTUMN_WINTER, "striped", "navy", "cream and navy Breton striped wool sweater"),
+    C("C75", "Cream knit polo", "polo", "long-sleeve knit polo", "cream", "knitted wool", 3, NOT_SUMMER, description="cream long-sleeve knitted wool polo shirt"),
+    C("C76", "Rugby shirt", "polo", "rugby shirt", "navy", "heavy cotton", 2, ["spring", "autumn"], "striped", "green", "navy and green hooped long-sleeve rugby shirt with a white collar"),
+    C("C77", "Navy quilted vest", "jacket", "quilted gilet vest", "navy", "quilted nylon", 2, ["spring", "autumn"], description="navy diamond-quilted sleeveless gilet"),
+    C("C78", "Beige Harrington jacket", "jacket", "harrington jacket", "beige", "cotton", 3, ["spring", "autumn"], description="beige cotton Harrington jacket with a stand collar"),
+    C("C79", "Olive waxed jacket", "jacket", "waxed cotton jacket", "olive", "waxed cotton", 2, NOT_SUMMER, description="olive waxed cotton country jacket with a corduroy collar"),
+    C("C80", "Olive parka", "coat", "hooded parka", "olive", "cotton parka", 2, AUTUMN_WINTER, description="olive hooded parka, thigh length"),
+    C("C81", "Olive fatigue trousers", "trousers", "fatigue trousers", "olive", "cotton sateen", 2, description="olive cotton fatigue trousers with a relaxed straight leg"),
+    C("C82", "Navy velvet jacket", "blazer", "velvet dinner jacket", "navy", "velvet", 5, AUTUMN_WINTER, description="navy cotton velvet single-breasted dinner jacket"),
+    C("C83", "Navy double-breasted blazer", "blazer", "double-breasted blazer", "navy", "wool", 4, description="navy wool double-breasted blazer with six buttons"),
+    C("C84", "Black wool trousers", "trousers", "wool trousers", "black", "wool", 4, description="black wool trousers with a front crease"),
+    C("C85", "Nordic pattern sweater", "sweater", "nordic pattern sweater", "cream", "wool", 2, AUTUMN_WINTER, "patterned", "navy", "cream and navy Nordic pattern wool sweater"),
+    C("C86", "Brown wool overshirt", "jacket", "wool overshirt", "brown", "wool", 3, AUTUMN_WINTER, description="brown wool overshirt with two chest pockets"),
+    C("C87", "Grey fleece jacket", "jacket", "fleece zip jacket", "grey", "fleece", 1, AUTUMN_WINTER, description="grey zip-up fleece jacket"),
+    C("C88", "Navy track jacket", "jacket", "track jacket", "navy", "polyester tricot", 1, NOT_SUMMER, description="navy retro zip track jacket with plain white piping"),
 ]
 
 
@@ -561,7 +750,15 @@ def main() -> None:
         "formalityKeywords": [{"keyword": k, "formality": f} for k, f in FORMALITY_KEYWORDS],
         "styleExclusions": [{"style": s, **v} for s, v in STYLE_EXCLUSIONS.items()],
         "principles": PRINCIPLES,
+        "fits": [{"fit": fit, "keywords": keywords} for fit, keywords in FITS],
+        "categoryFits": CATEGORY_FITS,
+        "volumeKeywords": VOLUME_KEYWORDS,
+        "looks": [{"id": look, "name": name} for look, name in LOOKS],
     }
+    known = {look for look, _ in LOOKS}
+    for recipe in RECIPES:
+        recipe.setdefault("look", LOOK_OF.get(recipe["id"]))
+        assert recipe["look"] in known, recipe["id"]
     (OUT / "knowledge.json").write_text(json.dumps(knowledge, indent=1, ensure_ascii=False), encoding="utf-8")
     (OUT / "recipes.json").write_text(json.dumps(RECIPES, indent=1, ensure_ascii=False), encoding="utf-8")
     (OUT / "capsule.json").write_text(json.dumps(CAPSULE, indent=1, ensure_ascii=False), encoding="utf-8")

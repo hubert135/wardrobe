@@ -45,36 +45,30 @@ extension StylebookRecipeDTO {
 }
 
 extension StylebookPieceDTO {
+    /// Keywords that make a piece what it is (a silhouette, a key layer or a key fabric). In a style-guide formula
+    /// they are required, so "high-waisted pleated trousers" are never filled with any pair of trousers.
+    static let definingKeywords = [
+        "pleat", "high-rise", "high-waisted", "wide", "cardigan", "shawl", "turtleneck", "roll", "velvet",
+        "corduroy", "cord", "cable", "nordic", "breton", "stripe", "rugby", "vest", "gilet", "quilted", "parka",
+        "waxed", "harrington", "overshirt", "double-breasted", "suit", "fatigue", "cargo", "chambray", "peacoat",
+        "trench", "troyer", "zip", "windbreaker", "suede", "leather",
+    ]
+
     var enginePiece: RecipePiece {
-        RecipePiece(
-            slot: Slot(rawValue: slot) ?? .accessory,
+        let keywords = (materials ?? []).map { $0.lowercased() }
+        let isOptional = optional ?? false
+        let slot = Slot(rawValue: slot) ?? .accessory
+        // Shoes and accessories stay flexible; they never define a look.
+        let defining = isOptional || slot == .shoes || slot == .accessory
+            ? [] : keywords.filter { keyword in Self.definingKeywords.contains { keyword.contains($0) } }
+        return RecipePiece(
+            slot: slot,
             categories: categories.compactMap(GarmentCategory.init(rawValue:)),
             colors: colors,
             patterns: (patterns ?? []).compactMap(Pattern.init(rawValue:)),
-            materials: materials ?? [],
-            optional: optional ?? false
-        )
-    }
-}
-
-extension RecipePiece {
-    /// Short description, e.g. "Black or navy sweater (turtleneck)".
-    var displayName: String {
-        let names = categories.map { $0.displayName.lowercased() }
-        let kind = names.isEmpty ? "piece" : names.prefix(2).joined(separator: " or ")
-        let color = colors.prefix(2).joined(separator: " or ")
-        let base = color.isEmpty ? kind : "\(color) \(kind)"
-        let detail = requires.first.map { " (\($0.trimmingCharacters(in: .whitespaces)))" } ?? ""
-        return base.prefix(1).uppercased() + String(base.dropFirst()) + detail
-    }
-
-    /// What to buy when the closet has nothing for this piece.
-    var hypotheticalItem: HypotheticalItem? {
-        guard let category = categories.first else { return nil }
-        return HypotheticalItem(
-            category: category, color: colors.first ?? "navy",
-            cut: requires.first?.trimmingCharacters(in: .whitespaces) ?? "",
-            material: materials.first ?? "", pattern: patterns.first ?? .solid
+            materials: keywords,
+            requires: defining,
+            optional: isOptional
         )
     }
 }

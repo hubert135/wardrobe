@@ -11,6 +11,8 @@ final class TodayViewModel {
     var style: Style = .smartCasual
     private(set) var phase: Phase = .idle
     private(set) var suggestions: [OutfitSuggestion] = []
+    /// When the closet can't make three genuinely different outfits: pieces that would unlock another look.
+    private(set) var unlocks: [UnlockSuggestion] = []
     private(set) var weather: WeatherResult?
     private(set) var isLoadingWeather = false
     private(set) var attribution: WeatherAttributionInfo?
@@ -66,9 +68,10 @@ final class TodayViewModel {
         phase = .loading
         if weather == nil { await loadWeather() }
         let context = makeContext(profile: profile)
-        let (outfits, origin) = await services.outfits.suggestions(
+        let (outfits, origin, unlocks) = await services.outfits.suggestionSet(
             closet: closet, context: context, count: 3, recentRecipeIDs: Self.recentRecipeIDs
         )
+        self.unlocks = unlocks
         Self.remember(shownRecipes: outfits.compactMap { $0.recipe?.id })
         suggestions = outfits.map { outfit in
             OutfitSuggestion(
@@ -83,6 +86,18 @@ final class TodayViewModel {
 
     func tiles(for suggestion: OutfitSuggestion) -> [CollageTile] {
         OutfitPresenter.tiles(for: suggestion.outfit, garments: garmentsByID)
+    }
+
+    func isOnShoppingList(_ unlock: UnlockSuggestion) -> Bool {
+        services.repository.wishlist().contains { $0.status == .open && $0.searchQuery == unlock.item.searchQuery }
+    }
+
+    func addToShoppingList(_ unlock: UnlockSuggestion) {
+        guard !isOnShoppingList(unlock) else { return }
+        let closet = garmentsByID.values.map(\.engineGarment)
+        let count = services.shop.unlockedCount(for: unlock.item, closet: closet, preferences: services.repository.profile().stylePreferences)
+        services.repository.insert(WishlistItem(item: unlock.item, unlockedOutfitCount: count))
+        message = "\(unlock.piece.displayName) added to your shopping list."
     }
 
     /// "From your style guide" for the e-book formulas, "Style recipe" for the built-in library.

@@ -26,7 +26,7 @@ final class RecipeOutfitBuilderTests: XCTestCase {
     )
     let weekend = StyleRecipe(
         id: "T3", title: "CREAM KNIT + JEANS + BROWN SHOES", summary: "Cream knit and jeans.",
-        occasions: [.weekend, .work], styles: [.smartCasual, .casual], seasons: [],
+        occasions: [.weekend], styles: [.smartCasual, .casual], seasons: [],
         pieces: [
             RecipePiece(slot: .top, categories: [.sweater], colors: ["cream"]),
             RecipePiece(slot: .bottom, categories: [.jeans], colors: ["denim"]),
@@ -76,7 +76,7 @@ final class RecipeOutfitBuilderTests: XCTestCase {
 
     func testOccasionRanksAndRotationBringsOtherRecipes() {
         let first = builder.suggestions(closet: closet, context: context(.work, .smartCasual), count: 1)
-        XCTAssertEqual(first.first?.recipe.id, "T1", "Fits work and is a perfect match")
+        XCTAssertEqual(first.first?.recipe.id, "T1", "Fits work and is a perfect match; T3 is for weekends")
         let next = builder.suggestions(closet: closet, context: context(.work, .smartCasual), count: 1, recentlyShown: ["T1"])
         XCTAssertEqual(next.first?.recipe.id, "T3", "Just shown recipes move down")
     }
