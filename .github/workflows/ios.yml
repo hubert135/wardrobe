@@ -59,9 +59,21 @@ jobs:
         run: brew install xcodegen xcbeautify
 
       - name: OutfitEngine tests
+        env:
+          VARIETY_REPORT_DIR: ${{ runner.temp }}/variety
         run: |
           set -o pipefail
           make test-engine 2>&1 | xcbeautify --renderer github-actions
+
+      - name: Outfit variety report
+        if: always()
+        run: |
+          for f in "$RUNNER_TEMP"/variety/*.txt; do
+            [ -f "$f" ] || continue
+            title=$(head -1 "$f")
+            body=$(tail -n +2 "$f" | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::notice title=${title}::${body}"
+          done
 
       - name: App unit and UI tests
         run: |
